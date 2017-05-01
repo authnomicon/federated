@@ -1,5 +1,5 @@
 {
-  "name": "@authnomicon/sso",
+  "name": "@authnomicon/federate",
   "version": "0.0.0",
   "description": "",
   "author": {
@@ -9,10 +9,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/authnomicon/nodex-sso.git"
+    "url": "git://github.com/authnomicon/federate.git"
   },
   "bugs": {
-    "url": "http://github.com/authnomicon/nodex-sso/issues"
+    "url": "http://github.com/authnomicon/federate/issues"
   },
   "license": "MIT",
   "licenses": [
@@ -22,6 +22,12 @@
     }
   ],
   "main": "./lib",
+  "assembly": {
+    "namespace": "federate",
+    "components": [
+      "createprovider"
+    ]
+  },
   "dependencies": {
   },
   "devDependencies": {
