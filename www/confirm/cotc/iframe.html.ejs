@@ -1,0 +1,44 @@
+<head>
+  <title>Check Origin IFrame</title>
+</head>
+<body>
+  <form method="post" action="/co/confirm/cotc">
+    <input type="hidden" name="state" value="<%= state %>"/>
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+  </form>
+  <script type="text/javascript">
+    (function(window, document) {
+      // TODO: Get origin from param
+      var iframe = 'http://localhost:3001/co/verify#origin=http://127.0.0.1:8080'
+        , targetOrigin = '<%= targetOrigin %>'
+        , id = '<%= id %>'
+        , node;
+      
+      window.addEventListener('message', function(evt) {
+        switch (evt.data.type) {
+        case 'ready':
+          evt.source.postMessage({ type: 'co_verifier_request', request: { id: id } }, targetOrigin);
+          break;
+          
+        case 'co_verifier_response':
+          if (evt.data.response && evt.data.response.verifier) {
+            node = document.createElement('input');
+            node.setAttribute('type', 'hidden');
+            node.setAttribute('name', 'verifier');
+            node.setAttribute('value', evt.data.response.verifier);
+            document.forms[0].appendChild(node);
+          }
+          document.forms[0].submit();
+          break;
+        }
+      });
+      
+      
+      // http://stackoverflow.com/questions/36499719/sending-postmessage-via-iframe-and-open-window-in-safari
+      
+      node = document.createElement('iframe');
+      node.setAttribute('src', iframe);
+      document.body.appendChild(node);
+    })(this, this.document);
+  </script>
+</body>
