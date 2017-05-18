@@ -25,11 +25,13 @@
   "assembly": {
     "namespace": "federate",
     "components": [
+      "http/cotc",
       "createprovider"
     ]
   },
   "dependencies": {
-    "ejs": "^2.5.6"
+    "ejs": "^2.5.6",
+    "express": "^4.15.3"
   },
   "devDependencies": {
     "make-node": "^0.3.0",
