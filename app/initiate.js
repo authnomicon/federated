@@ -9,5 +9,5 @@ exports = module.exports = function(initiateHandler) {
 
 exports['@implements'] = 'http://schemas.authnomicon.org/js/http/federation/InitiationService';
 exports['@require'] = [
-  './handlers/initiate'
+  './initiate/initiate'
 ];

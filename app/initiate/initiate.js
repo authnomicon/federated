@@ -21,7 +21,7 @@ exports = module.exports = function(createProvider, initialize, parse, authentic
 };
 
 exports['@require'] = [
-  '../../createprovider',
+  '../createprovider',
   'http://i.bixbyjs.org/http/middleware/initialize',
   'http://i.bixbyjs.org/http/middleware/parse',
   'http://i.bixbyjs.org/http/Authenticator'
