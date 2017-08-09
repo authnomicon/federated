@@ -25,7 +25,8 @@
   "assembly": {
     "namespace": "federate",
     "components": [
-      "initiate"
+      "initiate",
+      "oauth2"
     ]
   },
   "dependencies": {
