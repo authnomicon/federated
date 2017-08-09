@@ -7,7 +7,7 @@ exports = module.exports = function(redirectHandler) {
   return router;
 };
 
-exports['@implements'] = 'http://schemas.authnomicon.org/js/http/oauth2/RedirectionService';
+exports['@implements'] = 'http://schemas.authnomicon.org/js/oauth2/http/RedirectionService';
 exports['@require'] = [
   './oauth2/redirect'
 ];
