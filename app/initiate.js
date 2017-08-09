@@ -7,7 +7,7 @@ exports = module.exports = function(initiateHandler) {
   return router;
 };
 
-exports['@implements'] = 'http://schemas.authnomicon.org/js/http/federation/InitiationService';
+exports['@implements'] = 'http://schemas.authnomicon.org/js/federation/http/InitiationService';
 exports['@require'] = [
   './initiate/initiate'
 ];
