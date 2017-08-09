@@ -25,9 +25,7 @@
   "assembly": {
     "namespace": "federate",
     "components": [
-      "http/service",
-      "createprovider",
-      "handlers/redirect"
+      "http/service"
     ]
   },
   "dependencies": {
