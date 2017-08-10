@@ -1,6 +1,6 @@
 exports = module.exports = function(createProvider, initialize, parse, authenticator) {
   
-  function beginAuthentication(req, res, next) {
+  function beginFederate(req, res, next) {
     var identifier = req.query.provider;
     
     createProvider(identifier, function(err, provider) {
@@ -15,7 +15,7 @@ exports = module.exports = function(createProvider, initialize, parse, authentic
   return [
     initialize(),
     parse('application/x-www-form-urlencoded'),
-    beginAuthentication
+    beginFederate
   ];
 };
 

@@ -1,6 +1,6 @@
 exports = module.exports = function(createProvider, authenticator, initialize, loadState, authenticate, completeTask, failTask) {
 
-  function completeAuthentication(req, res, next) {
+  function completeFederate(req, res, next) {
     console.log('LOAD IDP');
     console.log(req.state)
     
@@ -48,9 +48,9 @@ exports = module.exports = function(createProvider, authenticator, initialize, l
     // FIXME: The following invalid, required state name causes an incorrect error in flowstate
     //ceremony.loadState({ name: 'sso/oauth2x', required: true }),
     loadState('oauth2-redirect', { required: true }),
-    completeAuthentication,
-    stashAccount,
     authenticate([ 'state', 'anonymous' ]),
+    completeFederate,
+    stashAccount,
     postProcess,
     completeTask('oauth2-redirect'),
     failTask('oauth2-redirect')
