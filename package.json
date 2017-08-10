@@ -27,7 +27,7 @@
     "namespace": "federate",
     "components": [
       "initiate",
-      "oauth2",
+      "oauth2/service",
       "oauth2/statestore"
     ]
   },

@@ -67,7 +67,7 @@ exports = module.exports = function(createProvider, authenticator, initialize, l
     // FIXME: The following invalid, required state name causes an incorrect error in flowstate
     //ceremony.loadState({ name: 'sso/oauth2x', required: true }),
     loadState('oauth2-redirect', { required: true }),
-    authenticate([ 'state', 'anonymous' ]),
+    authenticate([ 'www/state', 'anonymous' ]),
     stashAuthentication,
     completeFederate,
     restoreAuthentication,
@@ -79,7 +79,7 @@ exports = module.exports = function(createProvider, authenticator, initialize, l
 };
 
 exports['@require'] = [
-  '../createprovider',
+  '../../createprovider',
   'http://i.bixbyjs.org/http/Authenticator',
   'http://i.bixbyjs.org/http/middleware/initialize',
   'http://i.bixbyjs.org/http/middleware/loadState',

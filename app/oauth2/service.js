@@ -9,5 +9,5 @@ exports = module.exports = function(redirectHandler) {
 
 exports['@implements'] = 'http://schemas.authnomicon.org/js/oauth2/http/RedirectionService';
 exports['@require'] = [
-  './oauth2/redirect'
+  './handlers/redirect'
 ];
