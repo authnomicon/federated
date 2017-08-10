@@ -11,21 +11,11 @@ exports = module.exports = function(createProvider, authenticator, initialize, l
     }
     
     createProvider(opts, function(err, provider) {
-      console.log('GOT PROVIDER!');
-      console.log(err);
-      console.log(provider);
-      return;
-      
       if (err) { return next(err); }
-      req.locals.provider = provider;
-      next();
+      
+      // authenticator.authenticate('https://clef.io', { session: false, failWithError: true })(req, res, next);
+      authenticator.authenticate(provider, { session: false, failWithError: true })(req, res, next);
     });
-  }
-  
-  function authenticateAuthorizationResponse(req, res, next) {
-    authenticator.authenticate('https://clef.io', { session: false, failWithError: true })(req, res, next);
-    
-    //authenticator.authenticate(req.locals.provider, { session: false, failWithError: true })(req, res, next);
   }
   
   function stashAccount(req, res, next) {
@@ -58,7 +48,6 @@ exports = module.exports = function(createProvider, authenticator, initialize, l
     //ceremony.loadState({ name: 'sso/oauth2x', required: true }),
     loadState('oauth2-redirect', { required: true }),
     completeAuthentication,
-    authenticateAuthorizationResponse,
     stashAccount,
     authenticate([ 'state', 'anonymous' ]),
     postProcess,
