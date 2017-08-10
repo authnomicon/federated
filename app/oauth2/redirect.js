@@ -1,5 +1,14 @@
 exports = module.exports = function(createProvider, authenticator, initialize, loadState, authenticate, completeTask, failTask) {
 
+  function stashAuthentication(req, res, next) {
+    if (req.user) {
+      req.locals.user = req.user;
+      delete req.user;
+    }
+    
+    next();
+  }
+
   function completeFederate(req, res, next) {
     console.log('LOAD IDP');
     console.log(req.state)
@@ -18,19 +27,22 @@ exports = module.exports = function(createProvider, authenticator, initialize, l
     });
   }
   
-  function stashAccount(req, res, next) {
-    console.log('AUTHENTICATED USER!');
-    console.log(req.user)
-    console.log(req.authInfo);
-    return;
+  function restoreAuthentication(req, res, next) {
+    if (req.user) {
+      req.locals.account = req.user;
+    }
+    req.user = req.locals.user;
     
-    
-    req.locals.account = req.user;
-    delete req.user;
     next();
   }
 
   function postProcess(req, res, next) {
+    console.log('POST PROCESS!');
+    console.log(req.user);
+    console.log(req.locals.account);
+    
+    return;
+    
     // TODO Abstract this out into something common, shared between protocls
     // https://en.wikipedia.org/wiki/Federated_identity
     
@@ -49,8 +61,9 @@ exports = module.exports = function(createProvider, authenticator, initialize, l
     //ceremony.loadState({ name: 'sso/oauth2x', required: true }),
     loadState('oauth2-redirect', { required: true }),
     authenticate([ 'state', 'anonymous' ]),
+    stashAuthentication,
     completeFederate,
-    stashAccount,
+    restoreAuthentication,
     postProcess,
     completeTask('oauth2-redirect'),
     failTask('oauth2-redirect')

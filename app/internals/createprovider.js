@@ -5,9 +5,6 @@ exports = module.exports = function(authenticator) {
       options = { provider: options };
     }
     
-    console.log('CREAT PROVIDER!');
-    console.log(options);
-    
     var strategies = authenticator._strategies
       , names = Object.keys(strategies)
       , strategy, name, i, len;
