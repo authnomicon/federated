@@ -41,6 +41,13 @@ exports = module.exports = function(createProvider, authenticator, initialize, l
     console.log(req.user);
     console.log(req.locals.account);
     
+    // Fake provision a user
+    var user = { id: '5001' };
+    user.displayName = 'Federated ' + req.locals.account.displayName;
+    
+    req.user = user;
+    next();
+    
     return;
     
     // TODO Abstract this out into something common, shared between protocls
