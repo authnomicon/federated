@@ -1,14 +1,13 @@
 exports = module.exports = function(createProvider, initialize, parse, authenticator) {
   
-  function authenticate(req, res, next) {
-    var provider = req.query.provider;
+  function beginAuthentication(req, res, next) {
+    var identifier = req.query.provider;
     
-    
-    createProvider(provider, function(err, strategy) {
+    createProvider(identifier, function(err, provider) {
       if (err) { return next(err); }
       
       // TODO: Parse scope and other query options as normalized
-      authenticator.authenticate(strategy)(req, res, next);
+      authenticator.authenticate(provider)(req, res, next);
     });
   }
 
@@ -16,7 +15,7 @@ exports = module.exports = function(createProvider, initialize, parse, authentic
   return [
     initialize(),
     parse('application/x-www-form-urlencoded'),
-    authenticate
+    beginAuthentication
   ];
 };
 

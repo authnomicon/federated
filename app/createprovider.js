@@ -5,6 +5,5 @@ exports = module.exports = function(IoC) {
   return IoC.create('./internals/createprovider');
 };
 
-exports['@implements'] = 'http://schemas.authnomicon.org/js/sso/createProvider';
 exports['@singleton'] = true;
 exports['@require'] = [ '!container' ];
