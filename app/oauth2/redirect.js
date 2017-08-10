@@ -21,6 +21,7 @@ exports = module.exports = function(createProvider, authenticator, initialize, l
   function stashAccount(req, res, next) {
     console.log('AUTHENTICATED USER!');
     console.log(req.user)
+    console.log(req.authInfo);
     return;
     
     
