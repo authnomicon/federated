@@ -23,5 +23,5 @@ exports['@require'] = [
   '../createprovider',
   'http://i.bixbyjs.org/http/middleware/initialize',
   'http://i.bixbyjs.org/http/middleware/parse',
-  'http://i.bixbyjs.org/http/Authenticator'
+  //'http://i.bixbyjs.org/http/Authenticator'
 ];

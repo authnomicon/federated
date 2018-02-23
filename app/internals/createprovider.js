@@ -35,5 +35,5 @@ exports = module.exports = function(authenticator) {
 
 exports['@singleton'] = true;
 exports['@require'] = [
-  'http://i.bixbyjs.org/http/Authenticator'
+  //'http://i.bixbyjs.org/http/Authenticator'
 ];

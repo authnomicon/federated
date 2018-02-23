@@ -1,4 +1,4 @@
-exports = module.exports = function(createProvider, authenticator, initialize, loadState, authenticate, completeTask, failTask) {
+exports = module.exports = function(createProvider, /*authenticator,*/ initialize, loadState, authenticate, completeTask, failTask) {
 
   function stashAuthentication(req, res, next) {
     if (req.user) {
@@ -80,7 +80,7 @@ exports = module.exports = function(createProvider, authenticator, initialize, l
 
 exports['@require'] = [
   '../../createprovider',
-  'http://i.bixbyjs.org/http/Authenticator',
+  //'http://i.bixbyjs.org/http/Authenticator',
   'http://i.bixbyjs.org/http/middleware/initialize',
   'http://i.bixbyjs.org/http/middleware/loadState',
   'http://i.bixbyjs.org/http/middleware/authenticate',
