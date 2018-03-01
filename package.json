@@ -26,12 +26,17 @@
     "directory": "./app",
     "namespace": "federate",
     "components": [
+      "idp/main",
       "initiate",
       "oauth2/service",
       "oauth2/statestore"
     ]
   },
   "dependencies": {
+    "clone": "^2.1.1",
+    "decisions": "^0.2.0",
+    "express": "^4.16.2",
+    "fluidfactory": "^0.1.0",
     "oauth2-token": "^1.0.0"
   },
   "devDependencies": {
