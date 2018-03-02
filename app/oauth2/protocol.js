@@ -1,5 +1,6 @@
-exports = module.exports = function() {
-  var clone = require('clone');
+exports = module.exports = function(store) {
+  var clone = require('clone')
+    , providers = require('../../lib/oauth2/providers');
   
   
   return {
@@ -9,16 +10,18 @@ exports = module.exports = function() {
     },
     
     create: function(options) {
-      var issuer = options.identifier
-        , pkg = options.package
+      var provider = options.identifier
         , opts = clone(options)
+        , pkg = providers.getPackage(provider)
         , mod, Strategy;
-      delete opts.identifier;
-      delete opts.protocol;
-      delete opts.package;
       
       mod = require(pkg);
       Strategy = mod.Strategy;
+      
+      delete opts.protocol;
+      delete opts.identifier;
+      opts.provider = provider;
+      opts.store = store;
       
       return new Strategy(opts, function noop(){});
     }
@@ -26,4 +29,6 @@ exports = module.exports = function() {
 };
 
 exports['@protocol'] = 'oauth2';
-exports['@require'] = [];
+exports['@require'] = [
+  './statestore'
+];

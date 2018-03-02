@@ -1,7 +1,6 @@
 exports = module.exports = function(IoC, oauth2, logger) {
   var Factory = require('fluidfactory')
-    , merge = require('utils-merge')
-    , providers = require('../../lib/idp/registry');
+    , providers = require('../../lib/idp/providers');
   
   
   var factory = new Factory();
@@ -33,12 +32,7 @@ exports = module.exports = function(IoC, oauth2, logger) {
     })
     .then(function(factory) {
       return function(options) {
-        var xopts;
-        if (!options.protocol) {
-          xopts = providers[options.identifier];
-          merge(options, xopts);
-        }
-        
+        options.protocol = options.protocol || providers.getProtocol(options.identifier);
         return factory.create(options);
       };
     });
