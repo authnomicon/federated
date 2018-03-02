@@ -1,4 +1,4 @@
-exports = module.exports = function(createProvider, idp, initialize, parse, authenticate) {
+exports = module.exports = function(createProtocol, createProvider, idp, initialize, parse, authenticate) {
   
   function beginFederate(req, res, next) {
     console.log('BEGIN FEDERATE');
@@ -10,13 +10,12 @@ exports = module.exports = function(createProvider, idp, initialize, parse, auth
       console.log(err);
       console.log(config);
       
-      var Strategy = require('passport-google-oauth20').Strategy;
-      
-      var strategy = new Strategy(config, function noop(){});
-      console.log(strategy);
+      var protocol = createProtocol(config);
+      console.log('PROTOCOL IS:');
+      console.log(protocol)
       
       // FIXME: Remove the array index here, once passport.initialize is no longer needed
-      authenticate(strategy)[1](req, res, next);
+      authenticate(protocol)[1](req, res, next);
       //authenticate(strategy)(req, res, next);
     });
     
@@ -41,6 +40,7 @@ exports = module.exports = function(createProvider, idp, initialize, parse, auth
 };
 
 exports['@require'] = [
+  '../protocol/create',
   '../createprovider',
   'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/initialize',

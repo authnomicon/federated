@@ -37,7 +37,8 @@
     "decisions": "^0.2.0",
     "express": "^4.16.2",
     "fluidfactory": "^0.1.0",
-    "oauth2-token": "^1.0.0"
+    "oauth2-token": "^1.0.0",
+    "utils-merge": "^1.0.1"
   },
   "devDependencies": {
     "make-node": "^0.3.0",
