@@ -1,39 +1,23 @@
-exports = module.exports = function(createProvider, /*authenticator,*/ initialize, loadState, authenticate, completeTask, failTask) {
+exports = module.exports = function(protocolFactory, createProvider, /*authenticator,*/ initialize, loadState, authenticate, completeTask, failTask, idp) {
 
-  function stashAuthentication(req, res, next) {
-    if (req.user) {
-      req.locals.user = req.user;
-      delete req.user;
-    }
-    
-    next();
-  }
-
-  function completeFederate(req, res, next) {
-    console.log('LOAD IDP');
-    console.log(req.state)
-    
-    var opts = {
-      protocol: 'oauth2',
-      authorizationURL: req.state.authorizationURL,
-      clientID: req.state.clientID
-    }
-    
-    createProvider(opts, function(err, provider) {
+  function federate(req, res, next) {
+    var provider = req.state.provider;
+    // TODO: Past `host` as option
+    // TODO: Pass `idpID` as option, if available in state
+    // TODO: Pass `clientID` as option, if available
+    idp.resolve(provider, function(err, config) {
       if (err) { return next(err); }
       
-      // authenticator.authenticate('https://clef.io', { session: false, failWithError: true })(req, res, next);
-      authenticator.authenticate(provider, { session: false, failWithError: true })(req, res, next);
+      console.log('RESOLVED IDP');
+      console.log(err)
+      console.log(config)
+      
+      var protocol = protocolFactory.create(config);
+      console.log(protocol);
+      
+      // FIXME: Remove the array index here, once passport.initialize is no longer needed
+      authenticate(protocol, { assignProperty: 'federatedUser' })[1](req, res, next);
     });
-  }
-  
-  function restoreAuthentication(req, res, next) {
-    if (req.user) {
-      req.locals.account = req.user;
-    }
-    req.user = req.locals.user;
-    
-    next();
   }
 
   function postProcess(req, res, next) {
@@ -43,7 +27,7 @@ exports = module.exports = function(createProvider, /*authenticator,*/ initializ
     
     // Fake provision a user
     var user = { id: '5001' };
-    user.displayName = 'Federated ' + req.locals.account.displayName;
+    user.displayName = 'Federated ' + req.federatedUser.displayName;
     
     req.user = user;
     next();
@@ -67,10 +51,8 @@ exports = module.exports = function(createProvider, /*authenticator,*/ initializ
     // FIXME: The following invalid, required state name causes an incorrect error in flowstate
     //ceremony.loadState({ name: 'sso/oauth2x', required: true }),
     loadState('oauth2-redirect', { required: true }),
-    authenticate([ 'www/state', 'anonymous' ]),
-    stashAuthentication,
-    completeFederate,
-    restoreAuthentication,
+    authenticate([ 'state', 'anonymous' ]),
+    federate,
     postProcess,
     completeTask('oauth2-redirect'),
     failTask('oauth2-redirect')
@@ -79,11 +61,13 @@ exports = module.exports = function(createProvider, /*authenticator,*/ initializ
 };
 
 exports['@require'] = [
+  '../protocol',
   '../../createprovider',
   //'http://i.bixbyjs.org/http/Authenticator',
   'http://i.bixbyjs.org/http/middleware/initialize',
   'http://i.bixbyjs.org/http/middleware/loadState',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/completeTask',
-  'http://i.bixbyjs.org/http/middleware/failTask'
+  'http://i.bixbyjs.org/http/middleware/failTask',
+  'http://schemas.authnomicon.org/js/federation/idp'
 ];

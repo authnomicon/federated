@@ -1,4 +1,4 @@
-exports = module.exports = function(store) {
+exports = module.exports = function(verify, store) {
   var clone = require('clone')
     , providers = require('../../lib/oauth2/providers');
   
@@ -20,15 +20,16 @@ exports = module.exports = function(store) {
       
       delete opts.protocol;
       delete opts.identifier;
-      opts.provider = provider;
       opts.store = store;
       
-      return new Strategy(opts, function noop(){});
+      return new Strategy(opts, verify(provider));
     }
   };
 };
 
 exports['@protocol'] = 'oauth2';
+exports['@singleton'] = true;
 exports['@require'] = [
+  './middleware/verify',
   './statestore'
 ];
