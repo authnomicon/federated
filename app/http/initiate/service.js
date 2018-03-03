@@ -12,6 +12,4 @@ exports['@implements'] = [
   'http://schemas.authnomicon.org/js/http/federation/InitiationService'
 ];
 exports['@path'] = '/federate';
-exports['@require'] = [
-  './initiate/initiate'
-];
+exports['@require'] = [ './initiate' ];
