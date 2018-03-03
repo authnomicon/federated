@@ -21,9 +21,8 @@
       "url": "http://opensource.org/licenses/MIT"
     }
   ],
-  "main": "./lib",
+  "main": "./app",
   "assembly": {
-    "directory": "./app",
     "namespace": "federate",
     "components": [
       "idp/main",
