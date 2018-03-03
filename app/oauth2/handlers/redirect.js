@@ -1,4 +1,4 @@
-exports = module.exports = function(protocolFactory, createProvider, /*authenticator,*/ initialize, loadState, authenticate, completeTask, failTask, idp) {
+exports = module.exports = function(protocolFactory, idp, loadState, authenticate, completeTask, failTask) {
 
   function federate(req, res, next) {
     var provider = req.state.provider;
@@ -8,23 +8,13 @@ exports = module.exports = function(protocolFactory, createProvider, /*authentic
     idp.resolve(provider, function(err, config) {
       if (err) { return next(err); }
       
-      console.log('RESOLVED IDP');
-      console.log(err)
-      console.log(config)
-      
       var protocol = protocolFactory.create(config);
-      console.log(protocol);
-      
       // FIXME: Remove the array index here, once passport.initialize is no longer needed
       authenticate(protocol, { assignProperty: 'federatedUser' })[1](req, res, next);
     });
   }
 
   function postProcess(req, res, next) {
-    console.log('POST PROCESS!');
-    console.log(req.user);
-    console.log(req.locals.account);
-    
     // Fake provision a user
     var user = { id: '5001' };
     user.displayName = 'Federated ' + req.federatedUser.displayName;
@@ -46,15 +36,14 @@ exports = module.exports = function(protocolFactory, createProvider, /*authentic
   }
 
 
+  // FIXME: The following invalid, required state name causes an incorrect error in flowstate
+  //ceremony.loadState({ name: 'sso/oauth2x', required: true }),
   return [
-    initialize(),
-    // FIXME: The following invalid, required state name causes an incorrect error in flowstate
-    //ceremony.loadState({ name: 'sso/oauth2x', required: true }),
     loadState('oauth2-redirect', { required: true }),
     authenticate([ 'state', 'anonymous' ]),
     federate,
     postProcess,
-    completeTask('oauth2-redirect'),
+    completeTask('oauth2-redirect', { through: 'login' }),
     failTask('oauth2-redirect')
   ];
   
@@ -62,12 +51,9 @@ exports = module.exports = function(protocolFactory, createProvider, /*authentic
 
 exports['@require'] = [
   '../protocol',
-  '../../createprovider',
-  //'http://i.bixbyjs.org/http/Authenticator',
-  'http://i.bixbyjs.org/http/middleware/initialize',
+  'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/loadState',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/completeTask',
-  'http://i.bixbyjs.org/http/middleware/failTask',
-  'http://schemas.authnomicon.org/js/federation/idp'
+  'http://i.bixbyjs.org/http/middleware/failTask'
 ];

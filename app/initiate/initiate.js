@@ -1,9 +1,6 @@
-exports = module.exports = function(createProtocol, authenticate, idp) {
+exports = module.exports = function(createProtocol, idp, authenticate) {
   
   function federate(req, res, next) {
-    console.log('## INITIATING FEDERATION');
-    console.log(req.query)
-    
     var provider = req.query.provider;
     // TODO: Past `host` as option
     idp.resolve(provider, function(err, config) {
@@ -34,6 +31,6 @@ exports = module.exports = function(createProtocol, authenticate, idp) {
 
 exports['@require'] = [
   '../protocol/create',
-  'http://i.bixbyjs.org/http/middleware/authenticate',
-  'http://schemas.authnomicon.org/js/federation/idp'
+  'http://schemas.authnomicon.org/js/federation/idp',
+  'http://i.bixbyjs.org/http/middleware/authenticate'
 ];
