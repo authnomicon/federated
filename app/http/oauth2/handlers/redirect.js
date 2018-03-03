@@ -50,7 +50,7 @@ exports = module.exports = function(protocolFactory, idp, loadState, authenticat
 };
 
 exports['@require'] = [
-  '../protocol',
+  '../auth/protocol',
   'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/loadState',
   'http://i.bixbyjs.org/http/middleware/authenticate',

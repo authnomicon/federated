@@ -1,6 +1,6 @@
 exports = module.exports = function(verify, store) {
   var clone = require('clone')
-    , providers = require('../../lib/oauth2/providers');
+    , providers = require('../../../../lib/oauth2/providers');
   
   
   return {
@@ -31,5 +31,5 @@ exports['@protocol'] = 'oauth2';
 exports['@singleton'] = true;
 exports['@require'] = [
   './middleware/verify',
-  './statestore'
+  '../statestore'
 ];

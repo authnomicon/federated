@@ -27,8 +27,8 @@
     "components": [
       "idp/main",
       "http/initiate/service",
-      "oauth2/service",
-      "oauth2/statestore"
+      "http/oauth2/service",
+      "http/oauth2/statestore"
     ]
   },
   "dependencies": {

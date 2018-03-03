@@ -40,6 +40,6 @@ exports = module.exports = function(IoC, oauth2, logger) {
 
 exports['@require'] = [
   '!container',
-  '../oauth2/protocol',
+  '../http/oauth2/auth/protocol',
   'http://i.bixbyjs.org/Logger'
 ];
