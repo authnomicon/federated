@@ -1,23 +1,25 @@
 /* global describe, it */
 
 var expect = require('chai').expect;
-var pkg = require('..');
 
 
-describe('@authnomicon/sso', function() {
+describe('@authnomicon/federation', function() {
   
-  it('should export manifest', function() {
-    expect(pkg).to.be.an('object');
-    expect(pkg['createprovider']).to.be.a('function');
+  describe('package.json', function() {
+    var json = require('../package.json');
+    
+    it('should have assembly metadata', function() {
+      expect(json.assembly.namespace).to.equal('org.authnomicon/federation');
+      
+      expect(json.assembly.components).to.have.length(4);
+      expect(json.assembly.components).to.include('idp/main');
+    });
   });
   
-  describe('createprovider', function() {
-    var createprovider = pkg['createprovider'];
-    
-    it('should be annotated', function() {
-      expect(createprovider['@implements']).to.equal('http://schemas.authnomicon.org/js/sso/createProvider');
-      expect(createprovider['@singleton']).to.equal(true);
-    });
+  it('should throw if required', function() {
+    expect(function() {
+      var pkg = require('..');
+    }).to.throw(Error).with.property('code', 'MODULE_NOT_FOUND');
   });
   
 });

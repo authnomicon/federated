@@ -2,7 +2,7 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var factory = require('../../lib/handlers/redirect');
+var factory = require('../../app/oauth2/handlers/redirect');
 
 
 describe('handlers/redirect', function() {
