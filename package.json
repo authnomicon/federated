@@ -1,7 +1,14 @@
 {
   "name": "@authnomicon/federation",
   "version": "0.0.0",
-  "description": "",
+  "description": "Federation components for the Authnomicon project.",
+  "keywords": [
+    "federation",
+    "oauth",
+    "oauth2",
+    "oidc",
+    "openidconnect"
+  ],
   "author": {
     "name": "Jared Hanson",
     "email": "jaredhanson@gmail.com",
@@ -9,10 +16,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/authnomicon/federate.git"
+    "url": "git://github.com/authnomicon/federation.git"
   },
   "bugs": {
-    "url": "http://github.com/authnomicon/federate/issues"
+    "url": "http://github.com/authnomicon/federation/issues"
   },
   "license": "MIT",
   "licenses": [
