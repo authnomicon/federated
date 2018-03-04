@@ -27,6 +27,7 @@
     "components": [
       "idp/main",
       "http/initiate/service",
+      "http/oauth/service",
       "http/oauth2/service"
     ]
   },

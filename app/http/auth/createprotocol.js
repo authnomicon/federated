@@ -1,4 +1,4 @@
-exports = module.exports = function(IoC, oauth2, logger) {
+exports = module.exports = function(IoC, oauth2, oauth, logger) {
   var Factory = require('fluidfactory')
     , providers = require('../../../lib/idp/providers');
   
@@ -25,6 +25,7 @@ exports = module.exports = function(IoC, oauth2, logger) {
           });
           
           factory.use(create(oauth2));
+          factory.use(create(oauth));
         })
         .then(function() {
           return factory;
@@ -42,5 +43,6 @@ exports['@singleton'] = true;
 exports['@require'] = [
   '!container',
   '../oauth2/auth/protocol',
+  '../oauth/auth/protocol',
   'http://i.bixbyjs.org/Logger'
 ];
