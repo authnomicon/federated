@@ -1,6 +1,6 @@
 exports = module.exports = function(IoC, oauth2, logger) {
   var Factory = require('fluidfactory')
-    , providers = require('../../lib/idp/providers');
+    , providers = require('../../../lib/idp/providers');
   
   
   var factory = new Factory();
@@ -15,7 +15,7 @@ exports = module.exports = function(IoC, oauth2, logger) {
   
   return Promise.resolve(factory)
     .then(function(factory) {
-      var components = IoC.components('http://schemas.authnomicon.org/js/http/federation/Protocol');
+      var components = IoC.components('http://schemas.authnomicon.org/js/http/auth/FederationProtocol');
       
       return Promise.all(components.map(function(comp) { return comp.create(); } ))
         .then(function(plugins) {
@@ -40,6 +40,6 @@ exports = module.exports = function(IoC, oauth2, logger) {
 
 exports['@require'] = [
   '!container',
-  '../http/oauth2/auth/protocol',
+  '../oauth2/auth/protocol',
   'http://i.bixbyjs.org/Logger'
 ];

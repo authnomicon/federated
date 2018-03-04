@@ -30,7 +30,7 @@ exports = module.exports = function(createProtocol, idp, authenticate) {
 };
 
 exports['@require'] = [
-  '../../protocol/create',
+  '../auth/createprotocol',
   'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/authenticate'
 ];
