@@ -38,6 +38,7 @@ exports = module.exports = function(IoC, oauth2, logger) {
     });
 };
 
+exports['@singleton'] = true;
 exports['@require'] = [
   '!container',
   '../oauth2/auth/protocol',
