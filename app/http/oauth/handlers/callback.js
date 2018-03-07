@@ -1,4 +1,4 @@
-exports = module.exports = function(toHandle, protocolFactory, idp, authenticate, flow) {
+exports = module.exports = function(toHandle, protocolFactory, idp, flow, authenticate) {
 
   function getHandle(req) {
     return toHandle(req.params.host, req.query.oauth_token);
@@ -53,6 +53,6 @@ exports['@require'] = [
   '../state/tohandle',
   '../auth/protocol',
   'http://schemas.authnomicon.org/js/federation/idp',
-  'http://i.bixbyjs.org/http/middleware/authenticate',
-  'http://i.bixbyjs.org/http/middleware/state/flow'
+  'http://i.bixbyjs.org/http/middleware/state/flow',
+  'http://i.bixbyjs.org/http/middleware/authenticate'
 ];

@@ -1,4 +1,4 @@
-exports = module.exports = function(protocolFactory, idp, authenticate, flow) {
+exports = module.exports = function(protocolFactory, idp, flow, authenticate) {
 
   function federate(req, res, next) {
     var provider = req.state.provider;
@@ -51,6 +51,6 @@ exports = module.exports = function(protocolFactory, idp, authenticate, flow) {
 exports['@require'] = [
   '../auth/protocol',
   'http://schemas.authnomicon.org/js/federation/idp',
-  'http://i.bixbyjs.org/http/middleware/authenticate',
-  'http://i.bixbyjs.org/http/middleware/state/flow'
+  'http://i.bixbyjs.org/http/middleware/state/flow',
+  'http://i.bixbyjs.org/http/middleware/authenticate'
 ];
