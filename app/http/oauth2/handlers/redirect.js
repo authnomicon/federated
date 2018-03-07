@@ -1,4 +1,4 @@
-exports = module.exports = function(protocolFactory, idp, loadState, authenticate, completeTask, failTask) {
+exports = module.exports = function(protocolFactory, idp, authenticate, flow) {
 
   function federate(req, res, next) {
     var provider = req.state.provider;
@@ -38,22 +38,19 @@ exports = module.exports = function(protocolFactory, idp, loadState, authenticat
 
   // FIXME: The following invalid, required state name causes an incorrect error in flowstate
   //ceremony.loadState({ name: 'sso/oauth2x', required: true }),
-  return [
-    loadState('oauth2-redirect', { required: true }),
+  
+  // FIXME: Putting an invalid state name here causes an error that isn't descriptive
+  return flow('oauth2-redirect',
     authenticate([ 'state', 'anonymous' ]),
     federate,
     postProcess,
-    completeTask('oauth2-redirect', { through: 'login' }),
-    failTask('oauth2-redirect')
-  ];
+  { through: 'login', required: true });
   
 };
 
 exports['@require'] = [
   '../auth/protocol',
   'http://schemas.authnomicon.org/js/federation/idp',
-  'http://i.bixbyjs.org/http/middleware/loadState',
   'http://i.bixbyjs.org/http/middleware/authenticate',
-  'http://i.bixbyjs.org/http/middleware/completeTask',
-  'http://i.bixbyjs.org/http/middleware/failTask'
+  'http://i.bixbyjs.org/http/middleware/state/flow'
 ];
