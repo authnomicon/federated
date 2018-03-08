@@ -6,3 +6,5 @@ exports = module.exports = function() {
     return [ MAGIC, token ].join('_');
   };
 };
+
+exports['@singleton'] = true;
