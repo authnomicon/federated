@@ -11,5 +11,5 @@ exports['@implements'] = [
   'http://i.bixbyjs.org/http/Service',
   'http://schemas.authnomicon.org/js/http/oauth2/RedirectionService'
 ];
-exports['@path'] = '/oauth2';
+exports['@path'] = '/oauth2/redirect';
 exports['@require'] = [ './handlers/redirect' ];

@@ -16,7 +16,7 @@ describe('http/oauth2/service', function() {
       'http://i.bixbyjs.org/http/Service',
       'http://schemas.authnomicon.org/js/http/oauth2/RedirectionService'
     ]);
-    expect(factory['@path']).to.equal('/oauth2');
+    expect(factory['@path']).to.equal('/oauth2/redirect');
     expect(factory['@singleton']).to.be.undefined;
   });
   
