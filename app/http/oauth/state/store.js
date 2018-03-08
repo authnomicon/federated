@@ -8,5 +8,5 @@ exports = module.exports = function(toHandle, s) {
 
 exports['@require'] = [
   './tohandle',
-  'http://i.bixbyjs.org/http/workflow/StateStore'
+  'http://i.bixbyjs.org/http/state/Store'
 ];
