@@ -18,10 +18,10 @@ exports = module.exports = function(IoC, oauth2, oauth, logger) {
       var components = IoC.components('http://schemas.authnomicon.org/js/http/auth/FederationProtocol');
       
       return Promise.all(components.map(function(comp) { return comp.create(); } ))
-        .then(function(plugins) {
-          plugins.forEach(function(plugin, i) {
+        .then(function(protocols) {
+          protocols.forEach(function(protocol, i) {
             logger.info('Loaded HTTP federation protocol: ' + components[i].a['@protocol']);
-            factory.use(create(plugin));
+            factory.use(create(protocol));
           });
           
           factory.use(create(oauth2));

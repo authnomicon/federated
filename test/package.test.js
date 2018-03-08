@@ -12,6 +12,9 @@ describe('@authnomicon/federation', function() {
       expect(json.assembly.namespace).to.equal('org.authnomicon/federation');
       
       expect(json.assembly.components).to.have.length(4);
+      expect(json.assembly.components).to.include('http/initiate/service');
+      expect(json.assembly.components).to.include('http/oauth/service');
+      expect(json.assembly.components).to.include('http/oauth2/service');
       expect(json.assembly.components).to.include('idp/main');
     });
   });
