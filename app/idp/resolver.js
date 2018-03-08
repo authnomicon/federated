@@ -35,16 +35,20 @@ exports = module.exports = function(IoC, file, logger) {
         process.nextTick(function() {
           var url = 'file:///Users/jaredhanson/Projects/modulate/idd/etc/federation.toml';
           
-          var resolver = factory.create(url);
-          // TODO: hook up ready listener, and reject on error.
-          
-          resolver.once('ready', function() {
-            resolve(resolver);
-            // TODO: Remove error listener
-          });
-          
-          //resolve(adapter);
+          resolve(factory.create(url));
         })
+      });
+    })
+    .then(function(resolver) {
+      if (!resolver.initializing) { return resolver; }
+      
+      return new Promise(function(resolve, reject) {
+        resolver.once('ready', function() {
+          resolve(resolver);
+          // TODO: Remove error listener
+        });
+        
+        //resolve(adapter);
       });
     });
 };
