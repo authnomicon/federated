@@ -6,6 +6,7 @@ exports = module.exports = function(s) {
   return store;
 };
 
+exports['@singleton'] = true;
 exports['@require'] = [
   'http://i.bixbyjs.org/http/state/Store'
 ];
