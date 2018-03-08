@@ -53,6 +53,7 @@ exports = module.exports = function(IoC, file, logger) {
     });
 };
 
+exports['@singleton'] = true;
 exports['@require'] = [
   '!container',
   './resolver/file',

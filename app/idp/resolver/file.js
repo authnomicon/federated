@@ -29,4 +29,5 @@ exports = module.exports = function() {
 };
 
 exports['@name'] = 'file';
+exports['@singleton'] = true;
 exports['@require'] = [];
