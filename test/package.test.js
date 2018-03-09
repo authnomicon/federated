@@ -15,7 +15,7 @@ describe('@authnomicon/federation', function() {
       expect(json.assembly.components).to.include('http/initiate/service');
       expect(json.assembly.components).to.include('http/oauth/service');
       expect(json.assembly.components).to.include('http/oauth2/service');
-      expect(json.assembly.components).to.include('http/oauth2/state/yielders/login');
+      expect(json.assembly.components).to.include('http/oauth2/yielders/login');
       expect(json.assembly.components).to.include('idp/main');
     });
   });
