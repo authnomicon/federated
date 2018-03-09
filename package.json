@@ -35,6 +35,7 @@
       "http/initiate/service",
       "http/oauth/service",
       "http/oauth2/service",
+      "http/oauth2/state/yielders/login",
       "idp/main"
     ]
   },
