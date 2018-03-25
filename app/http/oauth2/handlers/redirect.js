@@ -1,4 +1,4 @@
-exports = module.exports = function(protocolFactory, idp, flow, authenticate) {
+exports = module.exports = function(protocolFactory, idp, flow, authenticate, errorLogging) {
 
   function federate(req, res, next) {
     var provider = req.state.provider;
@@ -34,6 +34,11 @@ exports = module.exports = function(protocolFactory, idp, flow, authenticate) {
     }
     next();
   }
+  
+  function errorHandler(err, req, res, next) {
+    console.log('OAUTH2-AUTHORIZE ERROR');
+    next(err);
+  }
 
 
   // FIXME: The following invalid, required state name causes an incorrect error in flowstate
@@ -44,6 +49,7 @@ exports = module.exports = function(protocolFactory, idp, flow, authenticate) {
     authenticate([ 'state', 'anonymous' ]),
     federate,
     postProcess,
+    errorHandler,
   { through: 'login', required: true });
   
 };
