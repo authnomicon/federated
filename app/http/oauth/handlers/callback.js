@@ -1,4 +1,4 @@
-exports = module.exports = function(toHandle, protocolFactory, idp, flow, authenticate) {
+exports = module.exports = function(toHandle, protocolFactory, idp, ceremony, authenticate) {
 
   function getHandle(req) {
     return toHandle(req.params.host, req.query.oauth_token);
@@ -41,7 +41,7 @@ exports = module.exports = function(toHandle, protocolFactory, idp, flow, authen
   }
 
 
-  return flow('oauth-callback',
+  return ceremony('oauth-callback',
     authenticate([ 'state', 'anonymous' ]),
     federate,
     postProcess,
@@ -53,6 +53,6 @@ exports['@require'] = [
   '../state/tohandle',
   '../auth/protocol',
   'http://schemas.authnomicon.org/js/federation/idp',
-  'http://i.bixbyjs.org/http/middleware/state/flow',
+  'http://i.bixbyjs.org/http/middleware/ceremony',
   'http://i.bixbyjs.org/http/middleware/authenticate'
 ];
