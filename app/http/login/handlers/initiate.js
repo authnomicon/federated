@@ -1,4 +1,4 @@
-exports = module.exports = function(parse, UIS, client) {
+exports = module.exports = function(ns, parse, UIS, client) {
   
   // https://docs.google.com/presentation/d/1I0pYw5xbxI8w0UuMBmj1q55mixhvV3vFHYgA6Y76Trc/edit#slide=id.gb08776a72_1_22
   
@@ -17,12 +17,23 @@ exports = module.exports = function(parse, UIS, client) {
   // Hostmeta:
   //   acct:paulej@packetizer.com
   function resolve(req, res, next) {
+    var identifier = req.body.identifier;
+    
+    ns.resolveServices(identifier, function(err, services) {
+      console.log('RESOLVED SERVICES!');
+      console.log(err);
+      console.log(services);
+      
+    });
+    
+    /*
     UIS.resolveServices(req.body.id, function(err, r) {
       console.log('GOT SERVICES:');
       console.log(err);
       console.log(r);
       
     });
+    */
   }
   
   function challenge(req, res, next) {
@@ -61,11 +72,13 @@ exports = module.exports = function(parse, UIS, client) {
   
   return [
     parse('application/x-www-form-urlencoded'),
-    logIt
+    logIt,
+    resolve
   ];
 };
 
 exports['@require'] = [
+  'http://schemas.authnomicon.org/js/ns',
   'http://i.bixbyjs.org/http/middleware/parse'
   //'http://i.bixbyjs.org/uis',
   //'http://schemas.modulate.io/js/opt/auth0/auth/Client'
