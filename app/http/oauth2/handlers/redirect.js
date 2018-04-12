@@ -47,7 +47,7 @@ exports = module.exports = function(protocolFactory, idp, ceremony, authenticate
   // FIXME: Putting an invalid state name here causes an error that isn't descriptive
   return ceremony('oauth2-redirect',
     authenticate([ 'state', 'anonymous' ]),
-    federate,
+    federate, // TODO: move all this into a common "federate" state...?
     postProcess,
     errorHandler,
   { through: 'login', required: true });
