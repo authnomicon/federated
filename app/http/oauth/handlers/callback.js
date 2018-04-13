@@ -50,7 +50,7 @@ exports = module.exports = function(toHandle, protocolFactory, idp, ceremony, au
 };
 
 exports['@require'] = [
-  '../state/tohandle',
+  '../auth/state/tohandle',
   '../auth/protocol',
   'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/ceremony',
