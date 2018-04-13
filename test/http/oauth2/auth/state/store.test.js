@@ -5,7 +5,7 @@ var sinon = require('sinon');
 var factory = require('../../../../../app/http/oauth2/auth/state/store');
 
 
-describe('http/oauth2/state/store', function() {
+describe('http/oauth2/auth/state/store', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');

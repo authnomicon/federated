@@ -1,5 +1,5 @@
 exports = module.exports = function(toHandle, s) {
-  var StateStore = require('../../../../lib/oauth/statestore');
+  var StateStore = require('../../../../../lib/oauth/statestore');
   
   
   var store = new StateStore(s, toHandle);
