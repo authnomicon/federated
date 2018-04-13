@@ -31,5 +31,5 @@ exports['@protocol'] = 'oauth2';
 exports['@singleton'] = true;
 exports['@require'] = [
   './middleware/verify',
-  '../state/store'
+  './state/store'
 ];
