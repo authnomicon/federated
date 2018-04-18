@@ -1,9 +1,7 @@
-exports = module.exports = function(toHandle, s) {
+exports = module.exports = function(toHandle, store) {
   var StateStore = require('../../../../../lib/oauth/statestore');
   
-  
-  var store = new StateStore(s, toHandle);
-  return store;
+  return new StateStore(store, toHandle);
 };
 
 exports['@singleton'] = true;
