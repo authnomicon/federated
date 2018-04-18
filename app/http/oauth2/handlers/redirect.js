@@ -44,6 +44,12 @@ exports = module.exports = function(protocolFactory, idp, ceremony, authenticate
   // FIXME: The following invalid, required state name causes an incorrect error in flowstate
   //ceremony.loadState({ name: 'sso/oauth2x', required: true }),
   
+  /*
+  return ceremony('oauth2/redirect',
+    federate, // TODO: move all this into a common "federate" state...?
+  { through: 'login', required: true });
+  */
+  
   // FIXME: Putting an invalid state name here causes an error that isn't descriptive
   return ceremony('oauth2/redirect',
     authenticate([ 'state', 'anonymous' ]),

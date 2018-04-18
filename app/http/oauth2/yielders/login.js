@@ -18,7 +18,7 @@ exports = module.exports = function() {
   
 };
 
-exports['@implements'] = 'http://i.bixbyjs.org/http/state/yielder';
+exports['@implements'] = 'http://i.bixbyjs.org/http/ceremony/Yield';
 exports['@result'] = 'oauth2/redirect';
-exports['@resume'] = 'login';
+exports['@state'] = 'login';
 exports['@require'] = [];
