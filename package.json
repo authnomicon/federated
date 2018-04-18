@@ -36,7 +36,7 @@
       "http/login/service",
       "http/oauth/service",
       "http/oauth2/service",
-      "http/oauth2/yielders/login",
+      "http/oauth2/yield/login",
       "idp/main"
     ]
   },
