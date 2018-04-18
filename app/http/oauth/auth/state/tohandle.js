@@ -1,9 +1,24 @@
 exports = module.exports = function() {
-  var MAGIC = 'oauth';
+  var uri = require('url')
+    , template = require('url-template');
   
-  return function(host, token) {
-    //return [ MAGIC, host, token ].join('_');
-    return [ MAGIC, token ].join('_');
+  
+  var MAGIC = 'oauth';
+  var HOST_CALLBACK_TEMPLATE = template.parse('/oauth/callback/{host}');
+  
+  return function(token, host, callbackURL) {
+    var h = [ MAGIC, token ]
+      , url, callbackPath, hostCallbackPath;
+    if (callbackURL) {
+      url = uri.parse(callbackURL);
+      callbackPath = url.pathname;
+      hostCallbackPath = HOST_CALLBACK_TEMPLATE.expand({ host: host });
+      
+      if (callbackPath == hostCallbackPath) {
+        h = [ MAGIC, host, token ];
+      }
+    }
+    return h.join('_');
   };
 };
 

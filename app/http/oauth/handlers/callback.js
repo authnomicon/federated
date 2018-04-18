@@ -1,7 +1,7 @@
 exports = module.exports = function(toHandle, protocolFactory, idp, authenticate, ceremony) {
 
   function getHandle(req) {
-    return toHandle(req.params.host, req.query.oauth_token);
+    return toHandle(req.query.oauth_token, req.params.host, req.originalUrl);
   }
 
 

@@ -2,7 +2,7 @@ exports = module.exports = function(callbackHandler) {
   var express = require('express');
   var router = new express.Router();
   
-  router.get('/', callbackHandler);
+  router.get('/:host?', callbackHandler);
   
   return router;
 };
