@@ -1,7 +1,7 @@
 {
-  "name": "@authnomicon/federation",
+  "name": "@authnomicon/sso",
   "version": "0.0.0",
-  "description": "Federation components for the Authnomicon project.",
+  "description": "Single sign-on components for the Authnomicon project.",
   "keywords": [
     "federation",
     "oauth",
@@ -16,10 +16,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/authnomicon/federation.git"
+    "url": "git://github.com/authnomicon/sso.git"
   },
   "bugs": {
-    "url": "http://github.com/authnomicon/federation/issues"
+    "url": "http://github.com/authnomicon/sso/issues"
   },
   "license": "MIT",
   "licenses": [
@@ -30,7 +30,7 @@
   ],
   "main": "./app",
   "assembly": {
-    "namespace": "org.authnomicon/federation",
+    "namespace": "org.authnomicon/sso",
     "components": [
       "http/initiate/service",
       "http/login/service",
