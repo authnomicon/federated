@@ -1,4 +1,4 @@
-exports = module.exports = function(protocolFactory, idp, authenticate, ceremony) {
+exports = module.exports = function(createProtocol, idp, authenticate, ceremony) {
 
   function federate(req, res, next) {
     var provider = req.state.provider;
@@ -8,7 +8,8 @@ exports = module.exports = function(protocolFactory, idp, authenticate, ceremony
     idp.resolve(provider, function(err, config) {
       if (err) { return next(err); }
       
-      var protocol = protocolFactory.create(config);
+      config.protocol = 'oauth2';
+      var protocol = createProtocol(config);
       // FIXME: Remove the array index here, once passport.initialize is no longer needed
       authenticate(protocol, { assignProperty: 'federatedUser' })[1](req, res, next);
     });

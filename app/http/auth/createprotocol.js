@@ -15,17 +15,17 @@ exports = module.exports = function(IoC, oauth2, oauth, logger) {
   
   return Promise.resolve(factory)
     .then(function(factory) {
-      var components = IoC.components('http://schemas.authnomicon.org/js/http/auth/FederationProtocol');
+      var components = IoC.components('http://schemas.authnomicon.org/js/http/auth/federation/ProtocolProvider');
       
       return Promise.all(components.map(function(comp) { return comp.create(); } ))
         .then(function(protocols) {
           protocols.forEach(function(protocol, i) {
-            logger.info('Loaded HTTP federation protocol: ' + components[i].a['@protocol']);
-            factory.use(create(protocol));
+            logger.info('Loaded HTTP single sign-on protocol: ' + components[i].a['@protocol']);
+            factory.use(protocol);
           });
           
-          factory.use(create(oauth2));
-          factory.use(create(oauth));
+          factory.use(oauth2);
+          factory.use(oauth);
         })
         .then(function() {
           return factory;
