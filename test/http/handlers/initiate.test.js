@@ -3,10 +3,10 @@
 var chai = require('chai');
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var factory = require('../../../../app/http/initiate/handlers/initiate');
+var factory = require('../../../app/http/handlers/initiate');
 
 
-describe('http/initiate/handlers/initiate', function() {
+describe('http/handlers/initiate', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
@@ -69,7 +69,7 @@ describe('http/initiate/handlers/initiate', function() {
       it('should prompt', function() {
         expect(response.statusCode).to.equal(200);
       });
-    }); // handling an unauthorized error
+    }); // initiating sso
     
   }); // handler
   
