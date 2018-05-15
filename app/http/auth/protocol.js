@@ -10,10 +10,10 @@ exports = module.exports = function(IoC, oauth2, oauth, logger) {
       var components = IoC.components('http://schemas.authnomicon.org/js/http/federation/sso/ProtocolProvider');
       
       return Promise.all(components.map(function(comp) { return comp.create(); } ))
-        .then(function(protocols) {
-          protocols.forEach(function(protocol, i) {
+        .then(function(providers) {
+          providers.forEach(function(provider, i) {
             logger.info('Loaded HTTP single sign-on protocol: ' + components[i].a['@protocol']);
-            factory.use(protocol);
+            factory.use(provider);
           });
           
           factory.use(oauth2);
