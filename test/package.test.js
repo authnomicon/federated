@@ -12,7 +12,7 @@ describe('@authnomicon/sso', function() {
       expect(json.assembly.namespace).to.equal('org.authnomicon/sso');
       
       expect(json.assembly.components).to.have.length(5);
-      expect(json.assembly.components).to.include('http/initiate/service');
+      expect(json.assembly.components).to.include('http/service');
       expect(json.assembly.components).to.include('http/oauth/service');
       expect(json.assembly.components).to.include('http/oauth2/service');
       expect(json.assembly.components).to.include('http/oauth2/yield/login');
