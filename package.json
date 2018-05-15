@@ -32,7 +32,7 @@
   "assembly": {
     "namespace": "org.authnomicon/sso",
     "components": [
-      "http/initiate/service",
+      "http/service",
       "http/oauth/service",
       "http/oauth2/service",
       "http/oauth2/yield/login",
