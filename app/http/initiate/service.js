@@ -9,7 +9,7 @@ exports = module.exports = function(initiateHandler) {
 
 exports['@implements'] = [
   'http://i.bixbyjs.org/http/Service',
-  'http://schemas.authnomicon.org/js/http/federation/InitiationService'
+  'http://schemas.authnomicon.org/js/http/sso/InitiationService'
 ];
 exports['@path'] = '/federate';
 exports['@require'] = [ './initiate' ];
