@@ -5,14 +5,6 @@ exports = module.exports = function(IoC, oauth2, oauth, logger) {
   
   var factory = new Factory();
   
-  function create(protocol) {
-    return function(options) {
-      if (protocol.canCreate(options)) {
-        return protocol.create(options);
-      }
-    };
-  }
-  
   return Promise.resolve(factory)
     .then(function(factory) {
       var components = IoC.components('http://schemas.authnomicon.org/js/http/auth/federation/ProtocolProvider');

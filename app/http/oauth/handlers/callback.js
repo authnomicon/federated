@@ -13,7 +13,6 @@ exports = module.exports = function(toHandle, createProtocol, idp, authenticate,
     idp.resolve(provider, function(err, config) {
       if (err) { return next(err); }
       
-      config.protocol = 'oauth';
       var protocol = createProtocol(config);
       // FIXME: Remove the array index here, once passport.initialize is no longer needed
       authenticate(protocol, { assignProperty: 'federatedUser' })[1](req, res, next);
