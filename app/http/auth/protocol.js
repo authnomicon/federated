@@ -7,7 +7,7 @@ exports = module.exports = function(IoC, oauth2, oauth, logger) {
   
   return Promise.resolve(factory)
     .then(function(factory) {
-      var components = IoC.components('http://schemas.authnomicon.org/js/http/auth/federation/ProtocolProvider');
+      var components = IoC.components('http://schemas.authnomicon.org/js/http/federation/sso/ProtocolProvider');
       
       return Promise.all(components.map(function(comp) { return comp.create(); } ))
         .then(function(protocols) {
