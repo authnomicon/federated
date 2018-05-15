@@ -2,10 +2,10 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var factory = require('../../../app/http/initiate/initiate');
+var factory = require('../../../../app/http/initiate/handlers/initiate');
 
 
-describe('http/initiate/initiate', function() {
+describe('http/initiate/handlers/initiate', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
