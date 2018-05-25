@@ -4,7 +4,7 @@ exports = module.exports = function(verify, store) {
   
   
   return function(options) {
-    if (options.protocol && options.protocol !== 'oauth') { return false; }
+    if (options.protocol && options.protocol !== 'oauth') { return; }
     
     var provider = options.identifier
       , opts = clone(options)
