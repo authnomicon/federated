@@ -12,10 +12,7 @@ describe('http/service', function() {
   });
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.deep.equal([
-      'http://i.bixbyjs.org/http/Service',
-      'http://schemas.authnomicon.org/js/http/sso/InitiationService'
-    ]);
+    expect(factory['@implements']).to.deep.equal('http://i.bixbyjs.org/http/Service');
     expect(factory['@path']).to.equal('/federate');
     expect(factory['@singleton']).to.be.undefined;
   });

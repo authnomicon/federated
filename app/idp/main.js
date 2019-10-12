@@ -1,6 +1,11 @@
 exports = module.exports = function(resolver) {
   var api = {};
   
+  // TODO: Add host/tenant argument
+  api.createProvider = function(issuer) {
+    return resolver.create(issuer);
+  };
+  
   api.resolve = function(provider, options, cb) {
     if (typeof options == 'function') {
       cb = options;
