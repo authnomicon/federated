@@ -1,8 +1,36 @@
-exports = module.exports = function(IoC, file, logger) {
+exports = module.exports = function(IoC, common, file, logger) {
+  //var Switch = require('../../lib/switch');
+
+
+
+  //return;
+
   var Factory = require('fluidfactory');
   
   
-  var factory = new Factory();
+  var factory = new Factory()
+    , modules = IoC.components('http://schemas.authnomicon.org/js/federation/idp/ProviderFactory');
+  
+  return Promise.all(modules.map(function(m) { return m.create(); }))
+    .then(function(impls) {
+      console.log('### SETUP IDP PROVIDER FACTORY');
+      
+      impls.forEach(function(impl, i) {
+        logger.info('Loaded IdP resolver provider: ' + components[i].a['@name']);
+        //factory.use(create(provider));
+      });
+      
+      factory.use(common);
+    })
+    .then(function() {
+      return factory;
+    });
+  
+  
+  
+  return;
+  
+  // TODO: remove below here.
   
   function create(provider) {
     return function(options) {
@@ -56,6 +84,7 @@ exports = module.exports = function(IoC, file, logger) {
 exports['@singleton'] = true;
 exports['@require'] = [
   '!container',
+  './resolver/default',
   './resolver/file',
   'http://i.bixbyjs.org/Logger'
 ];
