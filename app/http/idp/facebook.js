@@ -1,4 +1,4 @@
-exports = module.exports = function(keyring) {
+exports = module.exports = function(store, keyring) {
   var FacebookStrategy = require('passport-facebook');
   
   
@@ -11,6 +11,7 @@ exports = module.exports = function(keyring) {
           clientID: cred.username,
           clientSecret: cred.password,
           callbackURL: '/oauth2/redirect',
+          store: store
         },
         function(accessToken, refreshToken, profile, cb) {
     
@@ -25,5 +26,6 @@ exports = module.exports = function(keyring) {
 exports['@implements'] = 'http://i.authnomicon.org/federation/IIDProvider';
 exports['@provider'] = 'https://www.facebook.com';
 exports['@require'] = [
+  '../oauth2/auth/state/store',
   'http://i.bixbyjs.org/security/Keyring'
 ];
