@@ -35,7 +35,8 @@
       "http/service",
       "http/oauth/service",
       "http/oauth2/service",
-      "http/oauth2/yield/login"
+      "http/oauth2/yield/login",
+      "http/idp/facebook"
     ]
   },
   "dependencies": {
@@ -45,6 +46,7 @@
     "express": "^4.16.2",
     "fluidfactory": "^0.1.0",
     "oauth2-token": "^1.0.0",
+    "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
     "url-template": "^2.0.8"
   },
