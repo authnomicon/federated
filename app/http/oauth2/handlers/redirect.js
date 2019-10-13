@@ -1,10 +1,6 @@
-exports = module.exports = function(createProtocol, IDPFactory, /*idp,*/ authenticate, ceremony) {
+exports = module.exports = function(IDPFactory, authenticate, ceremony) {
 
   function federate(req, res, next) {
-    console.log('FEDERATE!');
-    console.log(req.query)
-    console.log(req.state);
-    
     var provider = req.state.provider;
     
     // TODO: Past `host` as option
@@ -69,7 +65,7 @@ exports = module.exports = function(createProtocol, IDPFactory, /*idp,*/ authent
   
   return ceremony('oauth2/redirect',
     federate,
-    resume
+    //resume
   );
   
   //return [
@@ -89,9 +85,7 @@ exports = module.exports = function(createProtocol, IDPFactory, /*idp,*/ authent
 };
 
 exports['@require'] = [
-  '../auth/protocol',
   '../../idpfactory',
-  //'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/ceremony'
 ];
