@@ -19,6 +19,16 @@ exports = module.exports = function(createProtocol, IDPFactory, /*idp,*/ authent
         next(err);
       });
   }
+  
+  function resume(req, res, next) {
+    console.log('RESUME THINGS....');
+    console.log(req.state);
+    
+    
+    var url = req.state.returnTo;
+    return res.redirect(url);
+  }
+  
 
   function postProcess(req, res, next) {
     // Fake provision a user
@@ -58,7 +68,8 @@ exports = module.exports = function(createProtocol, IDPFactory, /*idp,*/ authent
   
   
   return ceremony('oauth2/redirect',
-    federate
+    federate,
+    resume
   );
   
   //return [

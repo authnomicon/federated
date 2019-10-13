@@ -7,10 +7,17 @@ exports = module.exports = function(IDPFactory, authenticate) {
     IDPFactory.create(provider)
       .then(function(idp) {
         var options = {};
-        options.state = {
+        //options.state = {
           //provider: config,
-          state: req.query.state
+        //  state: req.query.state
+        //}
+        
+        options.state = {
+          provider: provider,
+          returnTo: req.header('referer'),
+          foo: 'bar'
         }
+        //options.state = 'foo'
         
         // TODO: Add a `context` option, used to pass the database ID of this IdP,
         //       which can be serialized into the state for faster resumption when
