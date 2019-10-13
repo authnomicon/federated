@@ -1,5 +1,5 @@
 exports = module.exports = function(store) {
-  var StateStore = require('../../../../../lib/oauth2/statestore');
+  var StateStore = require('../../../lib/oauth2/statestore');
   
   return new StateStore(store);
 };
