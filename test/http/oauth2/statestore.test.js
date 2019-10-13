@@ -2,10 +2,10 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var factory = require('../../../../../app/http/oauth2/auth/middleware/verify');
+var factory = require('../../../app/http/oauth2/statestore');
 
 
-describe('http/oauth2/auth/middleware/verify', function() {
+describe('http/oauth2/statestore', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
@@ -13,7 +13,7 @@ describe('http/oauth2/auth/middleware/verify', function() {
   
   it('should be annotated', function() {
     expect(factory['@implements']).to.be.undefined;
-    expect(factory['@singleton']).to.be.undefined;
+    expect(factory['@singleton']).to.equal(true);
   });
   
 });

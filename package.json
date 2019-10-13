@@ -35,7 +35,6 @@
       "http/service",
       "http/oauth/service",
       "http/oauth2/service",
-      "http/oauth2/yield/login",
       "http/idp/facebook",
       "http/idp/twitter"
     ]
