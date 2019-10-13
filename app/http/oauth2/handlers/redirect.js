@@ -1,17 +1,23 @@
-exports = module.exports = function(createProtocol, idp, authenticate, ceremony) {
+exports = module.exports = function(createProtocol, IDPFactory, /*idp,*/ authenticate, ceremony) {
 
   function federate(req, res, next) {
+    console.log('FEDERATE!');
+    console.log(req.query)
+    console.log(req.state);
+    
     var provider = req.state.provider;
+    
     // TODO: Past `host` as option
     // TODO: Pass `idpID` as option, if available in state
     // TODO: Pass `clientID` as option, if available
-    idp.resolve(provider, function(err, config) {
-      if (err) { return next(err); }
-      
-      var protocol = createProtocol(config);
-      // FIXME: Remove the array index here, once passport.initialize is no longer needed
-      authenticate(protocol, { assignProperty: 'federatedUser' })[1](req, res, next);
-    });
+    IDPFactory.create(provider)
+      .then(function(idp) {
+        // FIXME: Remove the array index here, once passport.initialize is no longer needed
+        authenticate(idp, { assignProperty: 'federatedUser' })[1](req, res, next);
+      })
+      .catch(function(err) {
+        next(err);
+      });
   }
 
   function postProcess(req, res, next) {
@@ -50,19 +56,31 @@ exports = module.exports = function(createProtocol, idp, authenticate, ceremony)
   { through: 'login', required: true });
   */
   
+  
+  return ceremony('oauth2/redirect',
+    federate
+  );
+  
+  //return [
+  //  federate
+  //];
+  
   // FIXME: Putting an invalid state name here causes an error that isn't descriptive
+  /*
   return ceremony('oauth2/redirect',
     authenticate([ 'state', 'anonymous' ]),
     federate, // TODO: move all this into a common "federate" state...?
     postProcess,
     errorHandler,
   { through: 'login', required: true });
+  */
   
 };
 
 exports['@require'] = [
   '../auth/protocol',
-  'http://schemas.authnomicon.org/js/federation/idp',
+  '../../idpfactory',
+  //'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/ceremony'
 ];
