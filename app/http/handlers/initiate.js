@@ -20,9 +20,6 @@ exports = module.exports = function(IDPFactory, authenticate) {
         authenticate(idp, options)[1](req, res, next);
       })
       .catch(function(err) {
-        console.log('IDP ERROR');
-        console.log(err)
-        
         next(err);
       });
   }
