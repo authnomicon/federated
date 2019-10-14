@@ -1,4 +1,4 @@
-exports = module.exports = function(toHandle, createProtocol, IDPFactory, /*idp,*/ authenticate, ceremony) {
+exports = module.exports = function(toHandle, IDPFactory, /*idp,*/ authenticate, ceremony) {
 
   function getHandle(req) {
     return toHandle(req.query.oauth_token, req.params.host, req.originalUrl);
@@ -79,7 +79,6 @@ exports = module.exports = function(toHandle, createProtocol, IDPFactory, /*idp,
 
 exports['@require'] = [
   '../auth/state/tohandle',
-  '../auth/protocol',
   '../../idpfactory',
   //'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/authenticate',
