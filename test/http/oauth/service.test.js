@@ -12,10 +12,7 @@ describe('http/oauth/service', function() {
   });
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.deep.equal([
-      'http://i.bixbyjs.org/http/Service',
-      'http://schemas.authnomicon.org/js/http/oauth/CallbackService'
-    ]);
+    expect(factory['@implements']).to.equal('http://i.bixbyjs.org/http/Service');
     expect(factory['@path']).to.equal('/oauth/callback');
     expect(factory['@singleton']).to.be.undefined;
   });

@@ -7,9 +7,6 @@ exports = module.exports = function(callbackHandler) {
   return router;
 };
 
-exports['@implements'] = [
-  'http://i.bixbyjs.org/http/Service',
-  'http://schemas.authnomicon.org/js/http/oauth/CallbackService'
-];
+exports['@implements'] = 'http://i.bixbyjs.org/http/Service';
 exports['@path'] = '/oauth/callback';
 exports['@require'] = [ './handlers/callback' ];

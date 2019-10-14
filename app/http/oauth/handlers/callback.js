@@ -1,4 +1,4 @@
-exports = module.exports = function(toHandle, createProtocol, idp, authenticate, ceremony) {
+exports = module.exports = function(toHandle, createProtocol, IDPFactory, /*idp,*/ authenticate, ceremony) {
 
   function getHandle(req) {
     return toHandle(req.query.oauth_token, req.params.host, req.originalUrl);
@@ -6,6 +6,27 @@ exports = module.exports = function(toHandle, createProtocol, idp, authenticate,
 
 
   function federate(req, res, next) {
+    console.log('!!! OAUTH1 CALLBACK!');
+    console.log(req.state);
+    //return;
+    
+    var provider = req.state.provider;
+    
+    // TODO: Past `host` as option
+    // TODO: Pass `idpID` as option, if available in state
+    // TODO: Pass `clientID` as option, if available
+    IDPFactory.create(provider)
+      .then(function(idp) {
+        // FIXME: Remove the array index here, once passport.initialize is no longer needed
+        authenticate(idp, { assignProperty: 'federatedUser' })[1](req, res, next);
+      })
+      .catch(function(err) {
+        next(err);
+      });
+  }
+
+
+  function old_federate(req, res, next) {
     var provider = req.state.provider;
     // TODO: Past `host` as option
     // TODO: Pass `idpID` as option, if available in state
@@ -42,17 +63,25 @@ exports = module.exports = function(toHandle, createProtocol, idp, authenticate,
 
 
   return ceremony('oauth/callback',
+    federate,
+    //resume
+  { getHandle: getHandle });
+
+  /*
+  return ceremony('oauth/callback',
     authenticate([ 'state', 'anonymous' ]),
     federate,
     postProcess,
   { through: 'login', required: true, getHandle: getHandle });
+  */
   
 };
 
 exports['@require'] = [
   '../auth/state/tohandle',
   '../auth/protocol',
-  'http://schemas.authnomicon.org/js/federation/idp',
+  '../../idpfactory',
+  //'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/ceremony'
 ];
