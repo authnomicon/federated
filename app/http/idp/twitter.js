@@ -1,4 +1,4 @@
-exports = module.exports = function(keyring) {
+exports = module.exports = function(store, keyring) {
   var TwitterStrategy = require('passport-twitter');
   
   
@@ -11,6 +11,7 @@ exports = module.exports = function(keyring) {
           consumerKey: cred.username,
           consumerSecret: cred.password,
           callbackURL: '/oauth/callback',
+          requestTokenStore: store
         },
         function(token, tokenSecret, profile, cb) {
     
@@ -25,5 +26,6 @@ exports = module.exports = function(keyring) {
 exports['@implements'] = 'http://i.authnomicon.org/federation/IIDProvider';
 exports['@provider'] = 'https://twitter.com';
 exports['@require'] = [
+  '../oauth/auth/state/store',
   'http://i.bixbyjs.org/security/Keyring'
 ];
