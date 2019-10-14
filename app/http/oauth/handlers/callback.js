@@ -1,4 +1,6 @@
-exports = module.exports = function(toHandle, IDPFactory, /*idp,*/ authenticate, ceremony) {
+exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, ceremony) {
+  var toHandle = require('../../../../lib/oauth/state/handle');
+
 
   function getHandle(req) {
     return toHandle(req.query.oauth_token, req.params.host, req.originalUrl);
@@ -78,7 +80,6 @@ exports = module.exports = function(toHandle, IDPFactory, /*idp,*/ authenticate,
 };
 
 exports['@require'] = [
-  '../auth/state/tohandle',
   '../../idpfactory',
   //'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/authenticate',
