@@ -26,6 +26,6 @@ exports = module.exports = function(store, keyring) {
 exports['@implements'] = 'http://i.authnomicon.org/federation/IIDProvider';
 exports['@provider'] = 'https://www.facebook.com';
 exports['@require'] = [
-  'http://i.authnomicon.org/federation/http/oauth2/StateStore',
+  '../oauth2/statestore',
   'http://i.bixbyjs.org/security/Keyring'
 ];
