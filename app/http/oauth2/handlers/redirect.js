@@ -16,11 +16,8 @@ exports = module.exports = function(IDPFactory, authenticate, ceremony) {
       });
   }
   
+  // TODO: Remove this, its in flowstate now.
   function resume(req, res, next) {
-    console.log('RESUME THINGS....');
-    console.log(req.state);
-    
-    
     var url = req.state.returnTo;
     return res.redirect(url);
   }
@@ -53,9 +50,6 @@ exports = module.exports = function(IDPFactory, authenticate, ceremony) {
   }
 
 
-  // FIXME: The following invalid, required state name causes an incorrect error in flowstate
-  //ceremony.loadState({ name: 'sso/oauth2x', required: true }),
-  
   /*
   return ceremony('oauth2/redirect',
     federate, // TODO: move all this into a common "federate" state...?
@@ -63,7 +57,8 @@ exports = module.exports = function(IDPFactory, authenticate, ceremony) {
   */
   
   
-  return ceremony('oauth2/redirect',
+  //return ceremony('oauth2/redirect',
+  return ceremony(
     federate,
     //resume
   );
