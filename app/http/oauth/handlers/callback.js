@@ -64,7 +64,8 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, ceremony)
   }
 
 
-  return ceremony('oauth/callback',
+  //return ceremony('oauth/callback',
+  return ceremony(
     federate,
     //resume
   { getHandle: getHandle });
