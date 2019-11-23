@@ -8,10 +8,6 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, ceremony)
 
 
   function federate(req, res, next) {
-    console.log('!!! OAUTH1 CALLBACK!');
-    console.log(req.state);
-    //return;
-    
     var provider = req.state.provider;
     
     // TODO: Past `host` as option
