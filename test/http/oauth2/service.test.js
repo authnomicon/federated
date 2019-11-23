@@ -12,7 +12,7 @@ describe('http/oauth2/service', function() {
   });
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.deep.equal('http://i.bixbyjs.org/http/Service');
+    expect(factory['@implements']).to.equal('http://i.bixbyjs.org/http/Service');
     expect(factory['@path']).to.equal('/oauth2/redirect');
     expect(factory['@singleton']).to.be.undefined;
   });
