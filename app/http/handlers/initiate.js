@@ -11,8 +11,7 @@ exports = module.exports = function(IDPFactory, authenticate) {
           returnTo: req.header('referer')
         }
         
-        // FIXME: rename "parent" to "state"
-        if (req.query.state) { state.parent = req.query.state; }
+        if (req.query.state) { state.state = req.query.state; }
         
         // TODO: Add a `context` option, used to pass the database ID of this IdP,
         //       which can be serialized into the state for faster resumption when
