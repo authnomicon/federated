@@ -16,56 +16,24 @@ exports = module.exports = function(IDPFactory, authenticate, ceremony) {
       });
   }
   
-  // TODO: Remove this, its in flowstate now.
-  function resume(req, res, next) {
-    var url = req.state.returnTo;
-    return res.redirect(url);
+  function establishSession(req, res, next) {
+    req.login(req.federatedUser, function(err) {
+      if (err) { return next(err); }
+      return next();
+    });
   }
   
-
-  function postProcess(req, res, next) {
-    // Fake provision a user
-    var user = { id: '5001' };
-    user.displayName = 'Federated ' + req.federatedUser.displayName;
-    
-    req.user = user;
-    next();
-    
-    return;
-    
-    // TODO Abstract this out into something common, shared between protocls
-    // https://en.wikipedia.org/wiki/Federated_identity
-    
-    if (!req.user) {
-      // TODO: Local account provisioning w/ initial linked account
-    } else {
-      // TODO: Account linking, storing access and refresh tokens, etc.
-    }
-    next();
-  }
-  
+  // TODO: Put error handing in here
   function errorHandler(err, req, res, next) {
     console.log('OAUTH2-AUTHORIZE ERROR');
     next(err);
   }
-
-
-  /*
-  return ceremony('oauth2/redirect',
-    federate, // TODO: move all this into a common "federate" state...?
-  { through: 'login', required: true });
-  */
   
   
-  //return ceremony('oauth2/redirect',
   return ceremony(
-    federate,
-    //resume
+    [ federate ],
+    [ establishSession ]
   );
-  
-  //return [
-  //  federate
-  //];
   
   // FIXME: Putting an invalid state name here causes an error that isn't descriptive
   /*
