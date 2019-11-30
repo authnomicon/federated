@@ -22,6 +22,13 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, ceremony)
         next(err);
       });
   }
+  
+  function establishSession(req, res, next) {
+    req.login(req.federatedUser, function(err) {
+      if (err) { return next(err); }
+      return next();
+    });
+  }
 
 
   function old_federate(req, res, next) {
@@ -62,8 +69,8 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, ceremony)
 
   //return ceremony('oauth/callback',
   return ceremony(
-    federate,
-    //resume
+    [ federate ],
+    [ establishSession ],
   { getHandle: getHandle });
 
   /*
