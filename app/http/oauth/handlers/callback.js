@@ -69,7 +69,7 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, ceremony)
 
   //return ceremony('oauth/callback',
   return ceremony(
-    [ federate ],
+    federate,
     [ establishSession ],
   { getHandle: getHandle });
 

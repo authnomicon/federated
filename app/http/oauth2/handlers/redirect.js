@@ -31,7 +31,7 @@ exports = module.exports = function(IDPFactory, authenticate, ceremony) {
   
   
   return ceremony(
-    [ federate ],
+    federate,
     [ establishSession ]
   );
   
