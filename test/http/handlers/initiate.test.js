@@ -18,6 +18,12 @@ describe('http/handlers/initiate', function() {
   });
   
   describe('handler', function() {
+    
+  });
+  
+  
+  /*
+  describe('handler', function() {
     var idp = {
       resolve: function(){}
     }
@@ -91,5 +97,6 @@ describe('http/handlers/initiate', function() {
     }); // initiating sso
     
   }); // handler
+  */
   
 });
