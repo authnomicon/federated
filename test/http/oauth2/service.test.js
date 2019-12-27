@@ -17,4 +17,13 @@ describe('http/oauth2/service', function() {
     expect(factory['@singleton']).to.be.undefined;
   });
   
+  it('should construct service', function() {
+    function redirectHandler() {};
+  
+    var service = factory(redirectHandler);
+    
+    expect(service).to.be.a('function');
+    expect(service.length).to.equal(3);
+  });
+  
 });

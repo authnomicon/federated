@@ -17,4 +17,13 @@ describe('http/oauth/service', function() {
     expect(factory['@singleton']).to.be.undefined;
   });
   
+  it('should construct service', function() {
+    function callbackHandler() {};
+  
+    var service = factory(callbackHandler);
+    
+    expect(service).to.be.a('function');
+    expect(service.length).to.equal(3);
+  });
+  
 });
