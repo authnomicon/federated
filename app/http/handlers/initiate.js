@@ -10,7 +10,6 @@ exports = module.exports = function(IDPFactory, authenticate) {
           provider: provider,
           returnTo: req.header('referer')
         }
-        
         if (req.query.state) { state.state = req.query.state; }
         
         // TODO: Add a `context` option, used to pass the database ID of this IdP,
