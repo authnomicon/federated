@@ -99,6 +99,47 @@ describe('http/oauth2/handlers/redirect', function() {
       });
     }); // signing on
     
+    describe('error due to unsupported identity provider', function() {
+      var error, request, response;
+      
+      before(function() {
+        sinon.stub(IDPFactory, 'create').rejects(new Error('Unsupported identity provider'));
+      });
+      
+      before(function(done) {
+        var handler = factory(IDPFactory, authenticate, ceremony);
+        
+        chai.express.handler(handler)
+          .req(function(req) {
+            request = req;
+            request.state = { provider: 'http://server.example.com' };
+            request.session = {};
+          })
+          .res(function(res) {
+            response = res;
+          })
+          .next(function(err) {
+            error = err;
+            done();
+          })
+          .dispatch();
+      });
+      
+      it('should not authenticate', function() {
+        expect(request.federatedUser).to.be.undefined;
+        expect(request.authInfo).to.be.undefined;
+      });
+      
+      it('should not establish session', function() {
+        expect(request.session.user).to.be.undefined;
+      });
+      
+      it('should error', function() {
+        expect(error).to.be.an.instanceof(Error);
+        expect(error.message).to.equal('Unsupported identity provider');
+      });
+    }); // error due to unsupported identity provider
+    
   });
   
 });
