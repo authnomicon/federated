@@ -1,6 +1,12 @@
 /* global describe, it */
 
 var expect = require('chai').expect;
+var sinon = require('sinon');
+
+
+afterEach(function() {
+  sinon.restore();
+});
 
 
 describe('@authnomicon/sso', function() {

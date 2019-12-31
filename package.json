@@ -41,7 +41,6 @@
     ]
   },
   "dependencies": {
-    "chai-express-handler": "0.0.3",
     "clone": "^2.1.1",
     "decisions": "^0.2.0",
     "express": "^4.16.2",
@@ -54,9 +53,11 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "chai-express-handler": "0.0.3",
     "make-node": "^0.3.0",
     "mocha": "^6.2.2",
-    "sinon": "^8.0.2"
+    "sinon": "^8.0.2",
+    "sinon-chai": "^3.4.0"
   },
   "scripts": {
     "test": "node_modules/.bin/mocha test/*.test.js"
