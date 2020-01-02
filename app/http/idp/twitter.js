@@ -23,7 +23,7 @@ exports = module.exports = function(store, keyring) {
   });
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/federation/IIDProvider';
+exports['@implements'] = 'http://i.authnomicon.org/sso/IDProvider';
 exports['@provider'] = 'https://twitter.com';
 exports['@require'] = [
   '../oauth/statestore',
