@@ -21,9 +21,15 @@ describe('http/oauth/handlers/callback', function() {
   describe('handler', function() {
     
     function ceremony(stack) {
-      var stack = Array.prototype.slice.call(arguments, 0);
+      var stack = Array.prototype.slice.call(arguments, 0), options;
+      if (typeof stack[stack.length - 1] == 'object' && !Array.isArray(stack[stack.length - 1])) {
+        options = stack.pop();
+      }
+      options = options || {};
       
-      return function foo(req, res, next) {
+      return function(req, res, next) {
+        var h = options.getHandle(req);
+        req.state = req.session.state[h];
         utils.dispatch(stack)(null, req, res, next);
       };
     }
@@ -64,8 +70,10 @@ describe('http/oauth/handlers/callback', function() {
         chai.express.handler(handler)
           .req(function(req) {
             request = req;
-            request.state = { provider: 'http://server.example.com' };
+            request.query = { oauth_token: 'XXXXXXXX', oauth_verifier: 'VVVVVVVV' };
             request.session = {};
+            request.session.state = {};
+            request.session.state['oauth_XXXXXXXX'] = { provider: 'http://server.example.com' };
           })
           .res(function(res) {
             response = res;

@@ -23,7 +23,7 @@ describe('http/oauth2/handlers/redirect', function() {
     function ceremony(stack) {
       var stack = Array.prototype.slice.call(arguments, 0);
       
-      return function foo(req, res, next) {
+      return function(req, res, next) {
         utils.dispatch(stack)(null, req, res, next);
       };
     }
