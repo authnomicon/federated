@@ -12,7 +12,7 @@ describe('http/oauth/auth/state/store', function() {
   });
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.be.undefined;
+    expect(factory['@implements']).to.equal('http://i.authnomicon.org/sso/oauth/http/RequestTokenStore');
     expect(factory['@singleton']).to.equal(true);
   });
   

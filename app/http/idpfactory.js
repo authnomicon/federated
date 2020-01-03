@@ -1,12 +1,12 @@
 exports = module.exports = function(IoC) {
   
   
-  return IoC.create('http://i.authnomicon.org/sso/IDProviderFactory')
+  return IoC.create('http://i.authnomicon.org/sso/http/IDProviderFactory')
     .catch(function(err) {
       
       return {
         create: function(provider) {
-          var mods = IoC.components('http://i.authnomicon.org/sso/IDProvider')
+          var mods = IoC.components('http://i.authnomicon.org/sso/http/IDProvider')
             , mod, i, len;
           for (i = 0, len = mods.length; i < len; ++i) {
             mod = mods[i];

@@ -17,9 +17,10 @@ describe('@authnomicon/sso', function() {
     it('should have assembly metadata', function() {
       expect(json.assembly.namespace).to.equal('org.authnomicon/federate');
       
-      expect(json.assembly.components).to.have.length(6);
+      expect(json.assembly.components).to.have.length(7);
       expect(json.assembly.components).to.include('http/service');
       expect(json.assembly.components).to.include('http/oauth/service');
+      expect(json.assembly.components).to.include('http/oauth/statestore');
       expect(json.assembly.components).to.include('http/oauth2/service');
       expect(json.assembly.components).to.include('http/oauth2/statestore');
       expect(json.assembly.components).to.include('http/idp/facebook');

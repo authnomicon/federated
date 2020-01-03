@@ -12,7 +12,7 @@ describe('http/oauth2/statestore', function() {
   });
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.equal('http://i.authnomicon.org/federation/http/oauth2/StateStore');
+    expect(factory['@implements']).to.equal('http://i.authnomicon.org/sso/oauth2/http/StateStore');
     expect(factory['@singleton']).to.equal(true);
   });
   

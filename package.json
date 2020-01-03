@@ -34,6 +34,7 @@
     "components": [
       "http/service",
       "http/oauth/service",
+      "http/oauth/statestore",
       "http/oauth2/service",
       "http/oauth2/statestore",
       "http/idp/facebook",

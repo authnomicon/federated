@@ -23,9 +23,9 @@ exports = module.exports = function(store, keyring) {
   });
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/sso/IDProvider';
+exports['@implements'] = 'http://i.authnomicon.org/sso/http/IDProvider';
 exports['@provider'] = 'https://twitter.com';
 exports['@require'] = [
-  '../oauth/statestore',
+  'http://i.authnomicon.org/sso/oauth/http/RequestTokenStore',
   'http://i.bixbyjs.org/security/Keyring'
 ];

@@ -23,9 +23,9 @@ exports = module.exports = function(store, keyring) {
   });
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/sso/IDProvider';
+exports['@implements'] = 'http://i.authnomicon.org/sso/http/IDProvider';
 exports['@provider'] = 'https://www.facebook.com';
 exports['@require'] = [
-  '../oauth2/statestore',
+  'http://i.authnomicon.org/sso/oauth2/http/StateStore',
   'http://i.bixbyjs.org/security/Keyring'
 ];
