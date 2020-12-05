@@ -1,10 +1,11 @@
-exports = module.exports = function(IDPFactory, authenticate) {
+exports = module.exports = function(IDPFactory, authenticate, state) {
   
   function federate(req, res, next) {
-    var provider = req.query.provider;
+    var provider = req.state.provider || req.query.provider
+      , protocol = req.query.protocol;
     
     // TODO: Past `host` as option
-    IDPFactory.create(provider)
+    IDPFactory.create(provider, protocol, req.state)
       .then(function(idp) {
         var state = {
           provider: provider,
@@ -30,11 +31,15 @@ exports = module.exports = function(IDPFactory, authenticate) {
 
 
   return [
-    federate
+    // FIXME: make it possible to just add state without handlers, like normal middleware
+    state(
+      federate
+    )
   ];
 };
 
 exports['@require'] = [
   '../idpfactory',
-  'http://i.bixbyjs.org/http/middleware/authenticate'
+  'http://i.bixbyjs.org/http/middleware/authenticate',
+  'http://i.bixbyjs.org/http/middleware/state'
 ];
