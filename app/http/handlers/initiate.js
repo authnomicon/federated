@@ -4,7 +4,9 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
   
   
   function federate(req, res, next) {
-    var provider = req.state.provider || req.query.provider
+    console.log('FEDERATE!');
+    
+    var provider = (req.state && req.state.provider) || req.query.provider
       , protocol = req.query.protocol
       , options = merge({}, req.state);
       
@@ -22,7 +24,7 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
       .then(function(idp) {
         var state = merge({}, req.state);
         state.provider = provider;
-        state.protocol = protocol;
+        //state.protocol = protocol;
         
         // NOTE: fixes other demo
         //state.returnTo = req.header('referer');
