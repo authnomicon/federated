@@ -24,6 +24,7 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
       .then(function(idp) {
         var state = merge({}, req.state);
         state.provider = provider;
+        //delete state.protocol;
         //state.protocol = protocol;
         
         // NOTE: fixes other demo
