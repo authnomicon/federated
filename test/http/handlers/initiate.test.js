@@ -220,7 +220,7 @@ describe.only('http/handlers/initiate', function() {
       });
     }); // federating with provider from state
     
-    describe.skip('federating with provider and protocol from state', function() {
+    describe('federating with provider and protocol from state', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp)

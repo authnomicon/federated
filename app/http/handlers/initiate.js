@@ -4,14 +4,13 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
   
   
   function federate(req, res, next) {
-    console.log('FEDERATE!');
-    
     var provider = (req.state && req.state.provider) || req.query.provider
-      , protocol = req.query.protocol
+      , protocol = (req.state && req.state.protocol) || req.query.protocol
       , options = merge({}, req.state);
       
     delete options.provider;
     delete options.protocol;  
+    // TODO: Test cases for deleting these properties, once they are settled
     delete options.returnTo;
     // TODO: delete options.state? or whatever parent is
     
@@ -24,11 +23,7 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
       .then(function(idp) {
         var state = merge({}, req.state);
         state.provider = provider;
-        //delete state.protocol;
-        //state.protocol = protocol;
-        
-        // NOTE: fixes other demo
-        //state.returnTo = req.header('referer');
+        delete state.protocol;
         
         // TODO: Handle return to better here, same as FIXME comment below
         
@@ -39,26 +34,11 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
         }
         */
         
-        // FIXME: relate to parent state more, since internal state store is doing equiv of req.state.push
-        if (req.query.state) { state.state = req.query.state; }
-        
-        // TODO: Add a `context` option, used to pass the database ID of this IdP,
-        //       which can be serialized into the state for faster resumption when
-        //       the IdP redirects back.
-        
         var options = {
           state: state
         };
         
-        console.log('INIT AUTH WITH!');
-        console.log(state)
-        
-        //return;
-        
         utils.dispatch(authenticate(idp, options))(null, req, res, next);
-        
-        // FIXME: Remove the array index here, once passport.initialize is no longer needed
-        //authenticate(idp, options)[1](req, res, next);
       })
       .catch(function(err) {
         console.log(err)
