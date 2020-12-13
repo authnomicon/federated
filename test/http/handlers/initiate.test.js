@@ -290,6 +290,74 @@ describe.only('http/handlers/initiate', function() {
       });
     }); // federating with provider and protocol from state
     
+    describe('federating with provider and parameters in state', function() {
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().resolves(idp)
+      
+      function authenticate(idp, options) {
+        return function(req, res, next) {
+          res.redirect('https://example.myshopify.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+        };
+      }
+      
+      function state() {
+        return function(req, res, next) {
+          req.state = new Object();
+          req.state.provider = 'https://myshopify.com';
+          req.state.shop = 'example';
+          next();
+        };
+      }
+      
+      var authenticateSpy = sinon.spy(authenticate);
+      var stateSpy = sinon.spy(state);
+      
+      
+      var request, response;
+      
+      before(function(done) {
+        var handler = factory(idpFactory, authenticateSpy, stateSpy);
+        
+        chai.express.handler(handler)
+          .req(function(req) {
+            request = req;
+            req.query = {};
+          })
+          .res(function(res) {
+            response = res;
+          })
+          .end(function() {
+            done();
+          })
+          .dispatch();
+      });
+      
+      it('should setup middleware', function() {
+        expect(stateSpy).to.be.calledOnce;
+      });
+      
+      it('should create identity provider', function() {
+        expect(idpFactory.create).to.be.calledOnce;
+        expect(idpFactory.create).to.be.calledWithExactly('https://myshopify.com', undefined, { shop: 'example' });
+      });
+      
+      it('should authenticate with identity provider', function() {
+        expect(authenticateSpy).to.be.calledOnce;
+        expect(authenticateSpy).to.be.calledWithExactly(idp, {
+          state: {
+            provider: 'https://myshopify.com',
+            shop: 'example'
+          }
+        });
+      });
+      
+      it('should redirect', function() {
+        expect(response.statusCode).to.equal(302);
+        expect(response.getHeader('Location')).to.equal('https://example.myshopify.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+      });
+    }); // federating with provider from state
+    
     
   });
   

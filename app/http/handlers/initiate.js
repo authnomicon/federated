@@ -21,24 +21,14 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
     // TODO: Past `host` as option
     IDPFactory.create(provider, protocol, options)
       .then(function(idp) {
-        var state = merge({}, req.state);
+        var state = merge({}, options);
         state.provider = provider;
-        delete state.protocol;
         
-        // TODO: Handle return to better here, same as FIXME comment below
-        
-        /*
-        var state = {
-          provider: provider,
-          returnTo: req.header('referer')
-        }
-        */
-        
-        var options = {
-          state: state
-        };
-        
-        utils.dispatch(authenticate(idp, options))(null, req, res, next);
+        utils.dispatch(
+          authenticate(idp, {
+            state: state
+          })
+        )(null, req, res, next);
       })
       .catch(function(err) {
         console.log(err)
