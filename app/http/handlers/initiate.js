@@ -1,4 +1,5 @@
 exports = module.exports = function(IDPFactory, authenticate, state) {
+  var utils = require('../../../lib/utils');
   var merge = require('utils-merge');
   
   
@@ -51,11 +52,14 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
         
         //return;
         
+        utils.dispatch(authenticate(idp, options))(null, req, res, next);
         
         // FIXME: Remove the array index here, once passport.initialize is no longer needed
-        authenticate(idp, options)[1](req, res, next);
+        //authenticate(idp, options)[1](req, res, next);
       })
       .catch(function(err) {
+        console.log(err)
+        
         next(err);
       });
   }
