@@ -356,8 +356,7 @@ describe.only('http/handlers/initiate', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('https://example.myshopify.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
       });
-    }); // federating with provider from state
-    
+    }); // federating with provider and parameters in state
     
   });
   
