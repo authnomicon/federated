@@ -5,33 +5,25 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
 
 
   function federate(req, res, next) {
-    console.log('OAUTH2 REDIRECT');
-    //console.log(req.session);
-    //console.log(req.state);
-    //return
-    
-    
     var provider = req.state.provider
-      , protocol = req.state.protocol || 'oauth2'
       , options = merge({}, req.state);
     
     delete options.provider;
-    delete options.protocol;  
+    delete options.protocol;
+    // TODO: Test cases for deleting these properties, once they are settled
     delete options.returnTo;
     // TODO: delete options.state? or whatever parent is
-    delete options.state;
+    //delete options.state;
     
     // TODO: Past `host` as option
     // TODO: Pass `idpID` as option, if available in state
     // TODO: Pass `clientID` as option, if available
-    IDPFactory.create(provider, protocol, options)
+    IDPFactory.create(provider, 'oauth2', options)
       .then(function(idp) {
-        console.log('CREATED IDP!');
-        
         // FIXME: Remove the array index here, once passport.initialize is no longer needed
-        utils.dispatch(authenticate(idp, { assignProperty: 'federatedUser' }))(null, req, res, next);
-        
-        //authenticate(idp, { assignProperty: 'federatedUser' })[1](req, res, next);
+        utils.dispatch(
+          authenticate(idp, { assignProperty: 'federatedUser' })
+        )(null, req, res, next);
       })
       .catch(function(err) {
         next(err);
@@ -39,25 +31,18 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
   }
   
   function establishSession(req, res, next) {
-    console.log('ESTABLISHING SESSION!');
-    console.log(req.federatedUser)
-    //return
-    
-    //res.redirect('/')
-    
-    
     req.login(req.federatedUser, function(err) {
       if (err) { return next(err); }
-      //return next();
-      
+      // TODO: Pass next to resumeState, for default behavior
       return res.resumeState();
     });
   }
   
-  function defBe() {
+  function redirect() {
     res.redirect('/');
   }
   
+  // FIXME: If passport session serialization isn't set up, this isn't being called.  Why?
   // TODO: Put error handing in here
   function errorHandler(err, req, res, next) {
     console.log('OAUTH2-AUTHORIZE ERROR');
@@ -70,7 +55,7 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
     state(),
     federate,
     establishSession,
-    defBe
+    redirect
   ];
   
   // FIXME: Putting an invalid state name here causes an error that isn't descriptive
