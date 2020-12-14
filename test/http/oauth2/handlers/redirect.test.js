@@ -27,9 +27,6 @@ describe.only('http/oauth2/handlers/redirect', function() {
       
       function authenticate(idp, options) {
         return function(req, res, next) {
-          console.log('AUTHENTICATE');
-          
-          
           req.login = function(user, cb) {
             process.nextTick(function() {
               req.session.user = user;
@@ -37,7 +34,7 @@ describe.only('http/oauth2/handlers/redirect', function() {
             });
           };
           
-          req.federatedUser = { id: '248289761001', provider: 'http://server.example.com' };
+          req.federatedUser = { id: '248289761001', displayName: 'Jane Doe' };
           next();
         };
       }
@@ -68,9 +65,9 @@ describe.only('http/oauth2/handlers/redirect', function() {
           .res(function(res) {
             response = res;
             
-            res.resumeState = function() {
+            res.resumeState = sinon.spy(function() {
               this.redirect(request.state.returnTo);
-            };
+            });
           })
           .end(function() {
             done();
@@ -90,6 +87,17 @@ describe.only('http/oauth2/handlers/redirect', function() {
       it('should authenticate with identity provider', function() {
         expect(authenticateSpy).to.be.calledOnce;
         expect(authenticateSpy).to.be.calledWithExactly(idp, { assignProperty: 'federatedUser' });
+      });
+      
+      it('should establish session', function() {
+        expect(request.session.user).to.deep.equal({
+          id: '248289761001',
+          displayName: 'Jane Doe'
+        });
+      });
+      
+      it('should resume state', function() {
+        expect(response.resumeState).to.be.calledOnceWith();
       });
       
       it('should redirect', function() {
