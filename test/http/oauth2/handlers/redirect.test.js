@@ -7,7 +7,7 @@ var factory = require('../../../../app/http/oauth2/handlers/redirect');
 var utils = require('../../../utils');
 
 
-describe('http/oauth2/handlers/redirect', function() {
+describe.only('http/oauth2/handlers/redirect', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
@@ -20,6 +20,86 @@ describe('http/oauth2/handlers/redirect', function() {
   
   describe('handler', function() {
     
+    describe('federating with provider and establishing session', function() {
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().resolves(idp)
+      
+      function authenticate(idp, options) {
+        return function(req, res, next) {
+          console.log('AUTHENTICATE');
+          
+          
+          req.login = function(user, cb) {
+            process.nextTick(function() {
+              req.session.user = user;
+              cb();
+            });
+          };
+          
+          req.federatedUser = { id: '248289761001', provider: 'http://server.example.com' };
+          next();
+        };
+      }
+      
+      function state() {
+        return function(req, res, next) {
+          req.state = new Object();
+          req.state.provider = 'https://server.example.com';
+          req.state.returnTo = '/home';
+          next();
+        };
+      }
+      
+      var authenticateSpy = sinon.spy(authenticate);
+      var stateSpy = sinon.spy(state);
+      
+      
+      var request, response;
+      
+      before(function(done) {
+        var handler = factory(idpFactory, authenticateSpy, stateSpy);
+        
+        chai.express.handler(handler)
+          .req(function(req) {
+            request = req;
+            req.session = {};
+          })
+          .res(function(res) {
+            response = res;
+            
+            res.resumeState = function() {
+              this.redirect(request.state.returnTo);
+            };
+          })
+          .end(function() {
+            done();
+          })
+          .dispatch();
+      });
+      
+      it('should setup middleware', function() {
+        expect(stateSpy).to.be.calledOnce;
+      });
+      
+      it('should create identity provider', function() {
+        expect(idpFactory.create).to.be.calledOnce;
+        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2', {});
+      });
+      
+      it('should authenticate with identity provider', function() {
+        expect(authenticateSpy).to.be.calledOnce;
+        expect(authenticateSpy).to.be.calledWithExactly(idp, { assignProperty: 'federatedUser' });
+      });
+      
+      it('should redirect', function() {
+        expect(response.statusCode).to.equal(302);
+        expect(response.getHeader('Location')).to.equal('/home');
+      });
+    });
+    
+    
+    /*
     function ceremony(stack) {
       var stack = Array.prototype.slice.call(arguments, 0);
       
@@ -47,8 +127,9 @@ describe('http/oauth2/handlers/redirect', function() {
     var IDPFactory = {
       create: function(){}
     }
+    */
     
-    
+    /*
     describe('signing on', function() {
       var request, response
         , idp;
@@ -98,7 +179,9 @@ describe('http/oauth2/handlers/redirect', function() {
         expect(response.statusCode).to.equal(200);
       });
     }); // signing on
+    */
     
+    /*
     describe('error due to unsupported identity provider', function() {
       var error, request, response;
       
@@ -139,6 +222,7 @@ describe('http/oauth2/handlers/redirect', function() {
         expect(error.message).to.equal('Unsupported identity provider');
       });
     }); // error due to unsupported identity provider
+    */
     
   });
   

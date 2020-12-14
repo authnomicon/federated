@@ -6,7 +6,7 @@ var sinon = require('sinon');
 var factory = require('../../../app/http/handlers/initiate');
 
 
-describe.only('http/handlers/initiate', function() {
+describe('http/handlers/initiate', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
