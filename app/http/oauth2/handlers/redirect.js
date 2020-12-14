@@ -9,7 +9,6 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
       , options = merge({}, req.state);
     
     delete options.provider;
-    delete options.protocol;
     // TODO: Test cases for deleting these properties, once they are settled
     delete options.returnTo;
     // TODO: delete options.state? or whatever parent is
@@ -45,6 +44,7 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
   }
   
   // FIXME: If passport session serialization isn't set up, this isn't being called.  Why?
+  //        ^ its not in the middleware stack returned below, duh!
   // TODO: Put error handing in here
   function errorHandler(err, req, res, next) {
     console.log('OAUTH2-AUTHORIZE ERROR');
