@@ -20,7 +20,7 @@ describe.only('http/oauth2/handlers/redirect', function() {
   
   describe('handler', function() {
     
-    describe('federating with provider and establishing session', function() {
+    describe('federating with provider', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp)
@@ -104,7 +104,94 @@ describe.only('http/oauth2/handlers/redirect', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('/home');
       });
-    });
+    }); // federating with provider
+    
+    describe('federating with provider and parameters in state', function() {
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().resolves(idp)
+      
+      function authenticate(idp, options) {
+        return function(req, res, next) {
+          req.login = function(user, cb) {
+            process.nextTick(function() {
+              req.session.user = user;
+              cb();
+            });
+          };
+          
+          req.federatedUser = { id: '248289761001', displayName: 'Jane Doe' };
+          next();
+        };
+      }
+      
+      function state() {
+        return function(req, res, next) {
+          req.state = new Object();
+          req.state.provider = 'https://myshopify.com';
+          req.state.shop = 'example';
+          req.state.returnTo = '/home';
+          next();
+        };
+      }
+      
+      var authenticateSpy = sinon.spy(authenticate);
+      var stateSpy = sinon.spy(state);
+      
+      
+      var request, response;
+      
+      before(function(done) {
+        var handler = factory(idpFactory, authenticateSpy, stateSpy);
+        
+        chai.express.handler(handler)
+          .req(function(req) {
+            request = req;
+            req.session = {};
+          })
+          .res(function(res) {
+            response = res;
+            
+            res.resumeState = sinon.spy(function() {
+              this.redirect(request.state.returnTo);
+            });
+          })
+          .end(function() {
+            done();
+          })
+          .dispatch();
+      });
+      
+      it('should setup middleware', function() {
+        expect(stateSpy).to.be.calledOnce;
+      });
+      
+      it('should create identity provider', function() {
+        expect(idpFactory.create).to.be.calledOnce;
+        expect(idpFactory.create).to.be.calledWithExactly('https://myshopify.com', 'oauth2', { shop: 'example' });
+      });
+      
+      it('should authenticate with identity provider', function() {
+        expect(authenticateSpy).to.be.calledOnce;
+        expect(authenticateSpy).to.be.calledWithExactly(idp, { assignProperty: 'federatedUser' });
+      });
+      
+      it('should establish session', function() {
+        expect(request.session.user).to.deep.equal({
+          id: '248289761001',
+          displayName: 'Jane Doe'
+        });
+      });
+      
+      it('should resume state', function() {
+        expect(response.resumeState).to.be.calledOnceWith();
+      });
+      
+      it('should redirect', function() {
+        expect(response.statusCode).to.equal(302);
+        expect(response.getHeader('Location')).to.equal('/home');
+      });
+    }); // federating with provider and parameters in state
     
     
     /*

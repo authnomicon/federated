@@ -30,6 +30,8 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
       });
   }
   
+  // TODO: Need some account linking/provisioning service here
+  
   function establishSession(req, res, next) {
     req.login(req.federatedUser, function(err) {
       if (err) { return next(err); }
