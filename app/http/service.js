@@ -5,15 +5,21 @@
  * federated identity provider (IdP).
  *
  * Authentication occurs via a protocol such as [OpenID Connect][1], in which
- * the end-user's user agent is redirected to the IdP.  The IdP then redirects
- * the end-user back to the web application, with an assertion regarding the
+ * the user's web browser is redirected to the IdP.  The IdP then redirects
+ * the user back to the application, with an assertion regarding the
  * authentication that was performed.  This package includes support for OpenID
  * Connect, [OAuth 2.0][2], and [OAuth 1.0][3].  Support for other protocols,
  * such as [SAML][4], can be obtained by installing other packages.
  *
+ * "Authentication" is a bit of a misnomer in this context, as authentication is
+ * performed by the IdP, rather than the application.  In other words,
+ * authentication is delegated to the IdP.  The application authenticates an
+ * assertion issued by the IdP, and relies on the claims within to establish the
+ * authentication context.
+ *
  * It should be noted that this service is responsible only for initiating
- * authentication, by redirecting to the IdP.  The redirect back to the
- * application will be handled by a protocol-specific service.
+ * authentication, by redirecting to the IdP.  The redirect from the IdP back to
+ * the application will be handled by a protocol-specific service.
  *
  * By default, this service will be mounted under the path `/login/federated`.
  * This name was chosen for consistency with the terminology of [Credential
