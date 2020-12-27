@@ -1,3 +1,14 @@
+/**
+ * OAuth 2.0 redirection handler.
+ *
+ * This component provides an HTTP handler that implements the OAuth 2.0
+ * [redirection endpoint][1].  The user is redirected to this endpoint by the
+ * authorization server, after it has completed any interaction with the user.
+ *
+ * [1]: https://tools.ietf.org/html/rfc6749#section-3.1.2
+ *
+ * @returns {Function}
+ */
 exports = module.exports = function(IDPFactory, authenticate, state) {
   var utils = require('../../../../lib/utils');
   var merge = require('utils-merge')
