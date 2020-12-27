@@ -1,12 +1,11 @@
 exports = module.exports = function(IDPFactory, authenticate, state) {
   var utils = require('../../../lib/utils');
-  var merge = require('utils-merge');
   
   
   function federate(req, res, next) {
     var provider = (req.state && req.state.provider) || req.query.provider
       , protocol = (req.state && req.state.protocol) || req.query.protocol
-      , options = merge({}, req.state);
+      , options = utils.merge({}, req.state);
       
     delete options.provider;
     delete options.protocol;  
@@ -21,8 +20,10 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
     // TODO: Past `host` as option
     IDPFactory.create(provider, protocol, options)
       .then(function(idp) {
-        var state = merge({}, options);
+        var state = utils.merge({}, options);
         state.provider = provider;
+        
+        // WIP: Make sure state store is correctly pushing and verifying state with latest changes
         
         utils.dispatch(
           authenticate(idp, {
