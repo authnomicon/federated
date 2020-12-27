@@ -46,11 +46,11 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
     req.login(req.federatedUser, function(err) {
       if (err) { return next(err); }
       // TODO: Pass next to resumeState, for default behavior
-      return res.resumeState();
+      return res.resumeState(next);
     });
   }
   
-  function redirect() {
+  function go(req, res, next) {
     res.redirect('/');
   }
   
@@ -68,7 +68,7 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
     state(),
     federate,
     establishSession,
-    redirect
+    go
   ];
   
   // FIXME: Putting an invalid state name here causes an error that isn't descriptive

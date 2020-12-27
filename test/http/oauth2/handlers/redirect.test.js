@@ -7,7 +7,7 @@ var factory = require('../../../../app/http/oauth2/handlers/redirect');
 var utils = require('../../../utils');
 
 
-describe.only('http/oauth2/handlers/redirect', function() {
+describe('http/oauth2/handlers/redirect', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
@@ -21,6 +21,95 @@ describe.only('http/oauth2/handlers/redirect', function() {
   describe('handler', function() {
     
     describe('federating with provider', function() {
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().resolves(idp)
+      
+      function authenticate(idp, options) {
+        return function(req, res, next) {
+          req.login = function(user, cb) {
+            process.nextTick(function() {
+              req.session.user = user;
+              cb();
+            });
+          };
+          
+          req.federatedUser = { id: '248289761001', displayName: 'Jane Doe' };
+          next();
+        };
+      }
+      
+      function state() {
+        return function(req, res, next) {
+          req.state = new Object();
+          req.state.provider = 'https://server.example.com';
+          next();
+        };
+      }
+      
+      var authenticateSpy = sinon.spy(authenticate);
+      var stateSpy = sinon.spy(state);
+      
+      
+      var request, response;
+      
+      before(function(done) {
+        var handler = factory(idpFactory, authenticateSpy, stateSpy);
+        
+        chai.express.handler(handler)
+          .req(function(req) {
+            request = req;
+            req.session = {};
+          })
+          .res(function(res) {
+            response = res;
+            
+            res.resumeState = sinon.spy(function(cb) {
+              if (request.state.returnTo) {
+                return this.redirect(request.state.returnTo);
+              }
+              
+              process.nextTick(cb);
+            });
+          })
+          .end(function() {
+            done();
+          })
+          .dispatch();
+      });
+      
+      it('should setup middleware', function() {
+        expect(stateSpy).to.be.calledOnce;
+      });
+      
+      it('should create identity provider', function() {
+        expect(idpFactory.create).to.be.calledOnce;
+        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2', {});
+      });
+      
+      it('should authenticate with identity provider', function() {
+        expect(authenticateSpy).to.be.calledOnce;
+        expect(authenticateSpy).to.be.calledWithExactly(idp, { assignProperty: 'federatedUser' });
+      });
+      
+      it('should establish session', function() {
+        expect(request.session.user).to.deep.equal({
+          id: '248289761001',
+          displayName: 'Jane Doe'
+        });
+      });
+      
+      it('should resume state', function() {
+        expect(response.resumeState).to.be.calledOnceWith();
+      });
+      
+      it('should redirect', function() {
+        expect(response.statusCode).to.equal(302);
+        expect(response.getHeader('Location')).to.equal('/');
+      });
+    }); // federating with provider
+    
+    describe('federating with provider and returning to location', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp)
@@ -65,8 +154,12 @@ describe.only('http/oauth2/handlers/redirect', function() {
           .res(function(res) {
             response = res;
             
-            res.resumeState = sinon.spy(function() {
-              this.redirect(request.state.returnTo);
+            res.resumeState = sinon.spy(function(cb) {
+              if (request.state.returnTo) {
+                return this.redirect(request.state.returnTo);
+              }
+              
+              process.nextTick(cb);
             });
           })
           .end(function() {
@@ -104,7 +197,7 @@ describe.only('http/oauth2/handlers/redirect', function() {
         expect(response.statusCode).to.equal(302);
         expect(response.getHeader('Location')).to.equal('/home');
       });
-    }); // federating with provider
+    }); // federating with provider and returning to location
     
     describe('federating with provider and parameters in state', function() {
       var idp = new Object();
@@ -153,7 +246,11 @@ describe.only('http/oauth2/handlers/redirect', function() {
             response = res;
             
             res.resumeState = sinon.spy(function() {
-              this.redirect(request.state.returnTo);
+              if (request.state.returnTo) {
+                return this.redirect(request.state.returnTo);
+              }
+              
+              process.nextTick(cb);
             });
           })
           .end(function() {
