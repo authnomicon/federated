@@ -40,7 +40,6 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
 
 
   return [
-    // FIXME: make it possible to just add state without handlers, like normal middleware
     state(),
     federate
   ];
