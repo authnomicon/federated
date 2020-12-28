@@ -131,6 +131,63 @@ describe('http/oauth2/statestore', function() {
       }); // failing to store state
       
     }); // #store
+    
+    describe('#verify', function() {
+      
+      describe('verifying state', function() {
+        var req = new Object();
+        req.state = {
+          location: 'https://client.example.com/cb',
+          provider: 'https://server.example.com'
+        };
+        req.state.destroy = sinon.spy(function(cb) {
+          process.nextTick(function() {
+            cb();
+          })
+        });
+      
+        var ok;
+      
+        before(function(done) {
+          store.verify(req, 'xyz', function(err, rv) {
+            if (err) { return done(err); }
+            ok = rv;
+            done();
+          });
+        });
+      
+        it('should destroy state', function() {
+          expect(req.state.destroy).to.have.been.calledOnce;
+        });
+      
+        it('should verify', function() {
+          expect(ok).to.be.true;
+        });
+      }); // verifying state
+      
+      describe('failing to verify state due to lack of state', function() {
+        var req = new Object();
+      
+        var ok, info;
+      
+        before(function(done) {
+          store.verify(req, 'xyz', function(err, rv, i) {
+            if (err) { return done(err); }
+            ok = rv;
+            info = i;
+            done();
+          });
+        });
+      
+        it('should fail', function() {
+          expect(ok).to.be.false;
+          expect(info).to.deep.equal({
+            message: 'Unable to verify authorization request state.'
+          });
+        });
+      }); // failing to verify state due to lack of state
+      
+    }); // #verify
   
   }); // StateStore
   
