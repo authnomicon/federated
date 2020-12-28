@@ -41,12 +41,11 @@ describe('http/oauth2/statestore', function() {
   
     describe('#store', function() {
       
-      
-      describe.only('with something', function() {
+      describe('storing state', function() {
         var req = new Object();
         req.state = new Object();
         req.state.push = sinon.spy();
-        req.state.save = sinon.stub(function(cb) {
+        req.state.save = sinon.spy(function(cb) {
           process.nextTick(function() {
             req.state.handle = 'xyz';
             cb();
@@ -68,14 +67,22 @@ describe('http/oauth2/statestore', function() {
             if (err) { return done(err); }
             handle = h;
             done();
-          })
+          });
         });
       
-        it('should do something', function() {
+        it('should push state for redirection endpoint', function() {
+          expect(req.state.push).to.have.been.calledOnceWith({
+            location: 'https://client.example.com/cb',
+            provider: 'https://server.example.com'
+          });
+          expect(req.state.save).to.have.been.calledOnce;
+        });
+      
+        it('should yield state handle', function() {
           expect(handle).to.equal('xyz');
         });
         
-      });
+      }); // storing state
       
       
     });

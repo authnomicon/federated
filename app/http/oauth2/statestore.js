@@ -1,11 +1,9 @@
-exports = module.exports = function(store) {
+exports = module.exports = function() {
   var StateStore = require('../../../lib/oauth2/statestore');
   
-  return new StateStore(store);
+  return new StateStore();
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/federated/oauth2/http/StateStore';
 exports['@singleton'] = true;
-exports['@require'] = [
-  'http://i.bixbyjs.org/http/state/Store'
-];
+exports['@implements'] = 'http://i.authnomicon.org/federated/oauth2/http/StateStore';
+exports['@require'] = [];

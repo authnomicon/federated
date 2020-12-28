@@ -25,6 +25,11 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
     // TODO: delete options.state? or whatever parent is
     //delete options.state;
     
+    
+    // TODO: Move this into handler
+    // TODO: need to complete the state (if it was strictly for this endpoint)
+    //req.state.complete();
+    
     // TODO: Past `host` as option
     // TODO: Pass `idpID` as option, if available in state
     // TODO: Pass `clientID` as option, if available
