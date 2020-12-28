@@ -81,11 +81,56 @@ describe('http/oauth2/statestore', function() {
         it('should yield state handle', function() {
           expect(handle).to.equal('xyz');
         });
-        
       }); // storing state
       
+      describe('failing to store state', function() {
+        var req = new Object();
+        req.state = new Object();
+        req.state.push = sinon.spy();
+        req.state.save = sinon.spy(function(cb) {
+          process.nextTick(function() {
+            //req.state.handle = 'xyz';
+            cb(new Error('something went wrong'));
+          })
+        });
       
-    });
+        var handle, error;
+      
+        before(function(done) {
+          var state = { provider: 'https://server.example.com' };
+          var meta = {
+            authorizationURL: 'https://server.example.com/authorize',
+            tokenURL: 'https://server.example.com/token',
+            clientID: 's6BhdRkqt3',
+            callbackURL: 'https://client.example.com/cb'
+          }
+          
+          store.store(req, state, meta, function(err, h) {
+            error = err;
+            handle = h;
+            done();
+          });
+        });
+      
+        it('should push state for redirection endpoint', function() {
+          expect(req.state.push).to.have.been.calledOnceWith({
+            location: 'https://client.example.com/cb',
+            provider: 'https://server.example.com'
+          });
+          expect(req.state.save).to.have.been.calledOnce;
+        });
+      
+        it('should not yield state handle', function() {
+          expect(handle).to.be.undefined;
+        });
+        
+        it('should yield error', function() {
+          expect(error).to.be.an.instanceOf(Error);
+          expect(error.message).to.equal('something went wrong');
+        });
+      }); // failing to store state
+      
+    }); // #store
   
   }); // StateStore
   
