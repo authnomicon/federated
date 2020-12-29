@@ -32,7 +32,7 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, state) {
   function establishSession(req, res, next) {
     req.login(req.federatedUser, function(err) {
       if (err) { return next(err); }
-      return next();
+      return res.resumeState(next);
     });
   }
   
