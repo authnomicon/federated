@@ -136,6 +136,13 @@ describe('http/oauth2/statestore', function() {
       
       describe('verifying state', function() {
         var req = new Object();
+        req.params = {
+          hostname: 'server.example.com'
+        };
+        req.query = {
+          code: 'SplxlOBeZQQYbYS6WxSbIA',
+          state: 'xyz'
+        };
         req.state = {
           location: 'https://client.example.com/cb',
           provider: 'https://server.example.com'
@@ -186,6 +193,39 @@ describe('http/oauth2/statestore', function() {
           });
         });
       }); // failing to verify state due to lack of state
+      
+      describe('failing to verify state due to mix-up attack', function() {
+        var req = new Object();
+        req.params = {
+          hostname: 'server.example.net'
+        };
+        req.query = {
+          code: 'SplxlOBeZQQYbYS6WxSbIA',
+          state: 'xyz'
+        };
+        req.state = {
+          location: 'https://client.example.com/cb',
+          provider: 'https://server.example.com'
+        };
+      
+        var ok, info;
+      
+        before(function(done) {
+          store.verify(req, 'xyz', function(err, rv, i) {
+            if (err) { return done(err); }
+            ok = rv;
+            info = i;
+            done();
+          });
+        });
+      
+        it('should fail', function() {
+          expect(ok).to.be.false;
+          expect(info).to.deep.equal({
+            message: 'Authorization response received from incorrect authorization server.'
+          });
+        });
+      }); // failing to verify state due to mix-up attack
       
     }); // #verify
   

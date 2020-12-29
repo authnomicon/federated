@@ -10,7 +10,7 @@ exports = module.exports = function(store, keyring) {
       var strategy = new FacebookStrategy({
           clientID: cred.username,
           clientSecret: cred.password,
-          callbackURL: '/oauth2/redirect',
+          callbackURL: '/oauth2/redirect/www.facebook.com',
           store: store
         },
         function(accessToken, refreshToken, profile, cb) {

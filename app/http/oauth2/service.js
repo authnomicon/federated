@@ -24,7 +24,7 @@ exports = module.exports = function(redirectHandler) {
   var express = require('express');
   var router = new express.Router();
   
-  router.get('/', redirectHandler);
+  router.get('/:hostname?', redirectHandler);
   
   return router;
 };
