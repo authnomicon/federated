@@ -1,5 +1,8 @@
-exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, ceremony) {
+exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, state) {
+  var utils = require('../../../../lib/utils');
+  var merge = require('utils-merge');
   var toHandle = require('../../../../lib/oauth/state/handle');
+  var dispatch = require('../../../../lib/dispatch');
 
 
   function getHandle(req) {
@@ -8,7 +11,8 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, ceremony)
 
 
   function federate(req, res, next) {
-    var provider = req.state.provider;
+    var provider = req.state.provider
+      , options = merge({}, req.state);
     
     // TODO: Past `host` as option
     // TODO: Pass `idpID` as option, if available in state
@@ -16,7 +20,9 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, ceremony)
     IDPFactory.create(provider)
       .then(function(idp) {
         // FIXME: Remove the array index here, once passport.initialize is no longer needed
-        authenticate(idp, { assignProperty: 'federatedUser' })[1](req, res, next);
+        //authenticate(idp, { assignProperty: 'federatedUser' })[1](req, res, next);
+        
+        utils.dispatch(authenticate(idp, { assignProperty: 'federatedUser' }))(null, req, res, next);
       })
       .catch(function(err) {
         next(err);
@@ -30,11 +36,16 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, ceremony)
     });
   }
   
+  function go(req, res, next) {
+    res.redirect('/');
+  }
   
-  return ceremony(
+  return [
+    state({ getHandle: getHandle }),
     federate,
-    [ establishSession ],
-  { getHandle: getHandle });
+    establishSession,
+    go
+  ];
 
   /*
   return ceremony('oauth/callback',
@@ -50,5 +61,5 @@ exports['@require'] = [
   '../../idpfactory',
   //'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/authenticate',
-  'http://i.bixbyjs.org/http/middleware/ceremony'
+  'http://i.bixbyjs.org/http/middleware/state'
 ];
