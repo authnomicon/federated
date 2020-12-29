@@ -14,10 +14,17 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, state) {
     var provider = req.state.provider
       , options = merge({}, req.state);
     
+    delete options.provider;
+    // TODO: Test cases for deleting these properties, once they are settled
+    delete options.returnTo;
+    // TODO: delete options.state? or whatever parent is
+    //delete options.state;
+    
     // TODO: Past `host` as option
     // TODO: Pass `idpID` as option, if available in state
     // TODO: Pass `clientID` as option, if available
-    IDPFactory.create(provider)
+      
+    IDPFactory.create(provider, 'oauth', options)
       .then(function(idp) {
         // FIXME: Remove the array index here, once passport.initialize is no longer needed
         //authenticate(idp, { assignProperty: 'federatedUser' })[1](req, res, next);
