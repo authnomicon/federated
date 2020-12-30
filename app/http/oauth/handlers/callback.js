@@ -1,4 +1,4 @@
-exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, state) {
+exports = module.exports = function(IDPFactory, authenticate, state) {
   var utils = require('../../../../lib/utils');
   var merge = require('utils-merge');
   var toHandle = require('../../../../lib/oauth/state/handle');
@@ -26,10 +26,9 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, state) {
       
     IDPFactory.create(provider, 'oauth', options)
       .then(function(idp) {
-        // FIXME: Remove the array index here, once passport.initialize is no longer needed
-        //authenticate(idp, { assignProperty: 'federatedUser' })[1](req, res, next);
-        
-        utils.dispatch(authenticate(idp, { assignProperty: 'federatedUser' }))(null, req, res, next);
+        utils.dispatch(
+          authenticate(idp, { assignProperty: 'federatedUser' })
+        )(null, req, res, next);
       })
       .catch(function(err) {
         next(err);
@@ -66,7 +65,6 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, state) {
 
 exports['@require'] = [
   '../../idpfactory',
-  //'http://schemas.authnomicon.org/js/federation/idp',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/state'
 ];

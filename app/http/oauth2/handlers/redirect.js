@@ -35,7 +35,6 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
     // TODO: Pass `clientID` as option, if available
     IDPFactory.create(provider, 'oauth2', options)
       .then(function(idp) {
-        // FIXME: Remove the array index here, once passport.initialize is no longer needed
         utils.dispatch(
           authenticate(idp, { assignProperty: 'federatedUser' })
         )(null, req, res, next);
