@@ -10,7 +10,7 @@ exports = module.exports = function(store, keyring) {
       var strategy = new TwitterStrategy({
           consumerKey: cred.username,
           consumerSecret: cred.password,
-          callbackURL: '/oauth/callback',
+          callbackURL: '/oauth/callback/twitter.com',
           requestTokenStore: store
         },
         function(token, tokenSecret, profile, cb) {
