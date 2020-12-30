@@ -2,8 +2,7 @@ exports = module.exports = function(callbackHandler) {
   var express = require('express');
   var router = new express.Router();
   
-  // TODO: Make this non-optional
-  router.get('/:hostname?', callbackHandler);
+  router.get('/:hostname', callbackHandler);
   
   return router;
 };
