@@ -6,7 +6,7 @@ exports = module.exports = function(IDPFactory, /*idp,*/ authenticate, state) {
 
 
   function getHandle(req) {
-    return toHandle(req.query.oauth_token, req.params.host, req.originalUrl);
+    return toHandle(req.query.oauth_token, req.params.hostname);
   }
 
 
