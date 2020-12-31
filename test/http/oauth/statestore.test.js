@@ -40,9 +40,43 @@ describe('http/oauth/auth/state/store', function() {
   
   describe('StateStore', function() {
     
+    describe('#get', function() {
+      var store = new StateStore();
+      
+      describe('getting token secret', function() {
+        var req = new Object();
+        req.params = {
+          hostname: 'sp.example.com'
+        };
+        req.query = {
+          oauth_token: 'hh5s93j4hdidpola',
+        };
+        req.state = {
+          location: 'https://client.example.com/cb',
+          provider: 'https://server.example.com',
+          tokenSecret: 'hdhd0244k9j7ao03'
+        };
+      
+        var tokenSecret;
+      
+        before(function(done) {
+          store.get(req, 'hh5s93j4hdidpola', function(err, ts) {
+            if (err) { return done(err); }
+            tokenSecret = ts;
+            done();
+          });
+        });
+      
+        it('should yield token secret', function() {
+          expect(tokenSecret).to.equal('hdhd0244k9j7ao03')
+        });
+      }); // getting token secret
+      
+    }); // #get
+    
     describe('#set', function() {
       
-      describe('setting state', function() {
+      describe('setting token secret', function() {
         var _store = new Object();
         _store.save = sinon.spy(function(req, state, options, cb) {
           process.nextTick(function() {
@@ -82,9 +116,9 @@ describe('http/oauth/auth/state/store', function() {
         it('should save state with handle', function() {
           expect(_store.save).to.have.been.calledOnceWith(req, req.state, { handle: 'oauth:sp.example.com:hh5s93j4hdidpola' });
         });
-      }); // setting state
+      }); // setting token secret
       
-      describe('setting state with provider', function() {
+      describe('setting token secret with provider', function() {
         var _store = new Object();
         _store.save = sinon.spy(function(req, state, options, cb) {
           process.nextTick(function() {
@@ -125,9 +159,9 @@ describe('http/oauth/auth/state/store', function() {
         it('should save state with handle', function() {
           expect(_store.save).to.have.been.calledOnceWith(req, req.state, { handle: 'oauth:sp.example.com:hh5s93j4hdidpola' });
         });
-      }); // setting state with provider
+      }); // setting token secret with provider
       
-      describe('failing to set state', function() {
+      describe('failing to set token secret', function() {
         var _store = new Object();
         _store.save = sinon.spy(function(req, state, options, cb) {
           process.nextTick(function() {
@@ -170,7 +204,7 @@ describe('http/oauth/auth/state/store', function() {
           expect(error).to.be.an.instanceOf(Error);
           expect(error.message).to.equal('something went wrong');
         });
-      }); // failing to set state
+      }); // failing to set token secret
       
     }); // #set
   });
