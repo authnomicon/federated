@@ -108,7 +108,7 @@ describe('http/oauth/auth/state/store', function() {
             callbackURL: 'http://client.example.com/request_token_ready'
           }
           
-          store.set(req, 'hh5s93j4hdidpola', 'hdhd0244k9j7ao03', state, meta, function(err, h) {
+          store.set(req, 'hh5s93j4hdidpola', 'hdhd0244k9j7ao03', state, meta, function(err) {
             if (err) { return done(err); }
             done();
           });
@@ -125,7 +125,52 @@ describe('http/oauth/auth/state/store', function() {
         it('should save state with handle', function() {
           expect(_store.save).to.have.been.calledOnceWith(req, req.state, { handle: 'oauth:sp.example.com:hh5s93j4hdidpola' });
         });
-      }); // setting state with providers
+      }); // setting state with provider
+      
+      describe('failing to set state', function() {
+        var _store = new Object();
+        _store.save = sinon.spy(function(req, state, options, cb) {
+          process.nextTick(function() {
+            cb(new Error('something went wrong'));
+          })
+        });
+        
+        var store = new StateStore(_store);
+        
+        var req = new Object();
+        req.state = new Object();
+        req.state.push = sinon.spy();
+      
+        var error;
+      
+        before(function(done) {
+          var state = {};
+          var meta = {
+            requestTokenURL: 'https://sp.example.com/request_token',
+            accessTokenURL: 'https://sp.example.com/access_token',
+            userAuthorizationURL: 'http://sp.example.com/authorize',
+            consumerKey: 'dpf43f3p2l4k3l03',
+            callbackURL: 'http://client.example.com/request_token_ready'
+          }
+          
+          store.set(req, 'hh5s93j4hdidpola', 'hdhd0244k9j7ao03', state, meta, function(err) {
+            error = err;
+            done();
+          });
+        });
+      
+        it('should push state for callback endpoint', function() {
+          expect(req.state.push).to.have.been.calledOnceWith({
+            location: 'http://client.example.com/request_token_ready',
+            tokenSecret: 'hdhd0244k9j7ao03'
+          });
+        });
+      
+        it('should yield error', function() {
+          expect(error).to.be.an.instanceOf(Error);
+          expect(error.message).to.equal('something went wrong');
+        });
+      }); // failing to set state
       
     }); // #set
   });

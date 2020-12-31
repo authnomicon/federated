@@ -89,7 +89,6 @@ describe('http/oauth2/statestore', function() {
         req.state.push = sinon.spy();
         req.state.save = sinon.spy(function(cb) {
           process.nextTick(function() {
-            //req.state.handle = 'xyz';
             cb(new Error('something went wrong'));
           })
         });
