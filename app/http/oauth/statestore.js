@@ -5,8 +5,8 @@ exports = module.exports = function(store) {
   return new StateStore(store, toHandle);
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/sso/oauth/http/RequestTokenStore';
+exports['@implements'] = 'http://i.authnomicon.org/federated/oauth/http/RequestTokenStore';
 exports['@singleton'] = true;
 exports['@require'] = [
-  'http://i.bixbyjs.org/http/state/Store'
+  'http://i.bixbyjs.org/http/StateStore'
 ];
