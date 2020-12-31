@@ -72,6 +72,28 @@ describe('http/oauth/auth/state/store', function() {
         });
       }); // getting token secret
       
+      describe('failing to get token secret due to lack of state', function() {
+        var req = new Object();
+      
+        var tokenSecret, info;
+      
+        before(function(done) {
+          store.get(req, 'hh5s93j4hdidpola', function(err, ts, i) {
+            if (err) { return done(err); }
+            tokenSecret = ts;
+            info = i;
+            done();
+          });
+        });
+      
+        it('should fail', function() {
+          expect(tokenSecret).to.be.false;
+          expect(info).to.deep.equal({
+            message: 'Unable to obtain request token secret.'
+          });
+        });
+      }); // failing to get token secret due to lack of state
+      
     }); // #get
     
     describe('#set', function() {
