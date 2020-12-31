@@ -35,8 +35,8 @@
       "http/service",
       "http/oauth/service",
       "http/oauth/statestore",
-      "http/oauth2/service",
-      "http/oauth2/statestore",
+      "oauth2/http/service",
+      "oauth2/http/statestore",
       "http/idp/facebook",
       "http/idp/twitter"
     ]
