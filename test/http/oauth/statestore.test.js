@@ -37,12 +37,55 @@ describe('http/oauth/auth/state/store', function() {
     });
   }); // creating with defaults
   
+  
   describe('StateStore', function() {
-    var store = new StateStore();
     
-    describe('#store', function() {
+    describe('#set', function() {
       
-    });
+      describe('setting state', function() {
+        var _store = new Object();
+        _store.save = sinon.spy(function(req, state, options, cb) {
+          process.nextTick(function() {
+            cb(null, 'XXXXXXXX');
+          })
+        });
+        
+        var store = new StateStore(_store);
+        
+        var req = new Object();
+        req.state = new Object();
+        req.state.push = sinon.spy();
+      
+        before(function(done) {
+          var state = { provider: 'http://sp.example.com' };
+          var meta = {
+            requestTokenURL: 'https://sp.example.com/request_token',
+            accessTokenURL: 'https://sp.example.com/access_token',
+            userAuthorizationURL: 'http://sp.example.com/authorize',
+            consumerKey: 'dpf43f3p2l4k3l03',
+            callbackURL: 'http://client.example.com/request_token_ready'
+          }
+          
+          store.set(req, 'hh5s93j4hdidpola', 'hdhd0244k9j7ao03', state, meta, function(err, h) {
+            if (err) { return done(err); }
+            done();
+          });
+        });
+      
+        it('should push state for callback endpoint', function() {
+          expect(req.state.push).to.have.been.calledOnceWith({
+            location: 'http://client.example.com/request_token_ready',
+            provider: 'http://sp.example.com',
+            tokenSecret: 'hdhd0244k9j7ao03'
+          });
+        });
+      
+        it('should save state with handle', function() {
+          expect(_store.save).to.have.been.calledOnceWith(req, req.state, { handle: 'oauth:sp.example.com:hh5s93j4hdidpola' });
+        });
+      }); // storing state
+      
+    }); // #set
   });
   
 });
