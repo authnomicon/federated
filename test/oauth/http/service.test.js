@@ -1,10 +1,10 @@
 /* global describe, it, expect */
 
 var expect = require('chai').expect;
-var factory = require('../../../app/http/oauth/service');
+var factory = require('../../../app/oauth/http/service');
 
 
-describe('http/oauth/service', function() {
+describe('oauth/http/service', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');

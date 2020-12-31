@@ -19,8 +19,8 @@ describe('@authnomicon/sso', function() {
       
       expect(json.assembly.components).to.have.length(7);
       expect(json.assembly.components).to.include('http/service');
-      expect(json.assembly.components).to.include('http/oauth/service');
-      expect(json.assembly.components).to.include('http/oauth/statestore');
+      expect(json.assembly.components).to.include('oauth/http/service');
+      expect(json.assembly.components).to.include('oauth/http/statestore');
       expect(json.assembly.components).to.include('oauth2/http/service');
       expect(json.assembly.components).to.include('oauth2/http/statestore');
       expect(json.assembly.components).to.include('http/idp/facebook');

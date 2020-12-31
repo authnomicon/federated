@@ -3,11 +3,11 @@
 var chai = require('chai');
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var factory = require('../../../../app/http/oauth/handlers/callback');
+var factory = require('../../../../app/oauth/http/handlers/callback');
 var utils = require('../../../utils');
 
 
-describe('http/oauth/handlers/callback', function() {
+describe('oauth/http/handlers/callback', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
