@@ -14,6 +14,10 @@ exports = module.exports = function(store, keyring) {
           requestTokenStore: store
         },
         function(token, tokenSecret, profile, cb) {
+          // TODO: Delete provider property?
+          //if (profile && profile.provider) {
+          //  delete profile.provider;
+          //}
     
           return cb(null, profile);
         });
