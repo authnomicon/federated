@@ -14,6 +14,16 @@ exports = module.exports = function(store, keyring) {
           store: store
         },
         function(accessToken, refreshToken, profile, cb) {
+          // TODO: consider this stuff
+          //if (profile && profile.provider) {
+          //  delete profile.provider;
+          //}
+          
+          // Token = Token || require('oauth2-token');
+          //var info = { issuer: issuer };
+          //info.protocol = 'oauth2';
+          //info.credentials = [ Token.parse(params) ];
+    
     
           return cb(null, profile);
         });
