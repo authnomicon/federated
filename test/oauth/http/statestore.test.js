@@ -7,7 +7,7 @@ var factory = require('../../../app/oauth/http/statestore');
 var StateStore = require('../../../lib/oauth/statestore');
 
 
-describe('oauth/http/auth/state/store', function() {
+describe('oauth/http/requesttokenstore', function() {
   
   it('should export factory function', function() {
     expect(factory).to.be.a('function');
