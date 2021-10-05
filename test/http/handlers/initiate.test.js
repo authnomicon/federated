@@ -51,6 +51,8 @@ describe('http/handlers/initiate', function() {
             req.query = {
               provider: 'https://server.example.com'
             };
+            //req.state = new Object();
+            //req.state.complete = sinon.spy();
           })
           .res(function(res) {
             response = res;

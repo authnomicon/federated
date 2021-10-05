@@ -19,6 +19,11 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
     var provider = req.state.provider
       , options = merge({}, req.state);
     
+    console.log('COMPLETEING OAUTH 2');
+    console.log(req.state);
+    console.log(provider);
+    console.log(options);
+    
     delete options.provider;
     // TODO: Test cases for deleting these properties, once they are settled
     delete options.returnTo;
@@ -67,9 +72,22 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
   }
   
   
+  function stateLoad() {
+    console.log('SPECIAL STATE LOAD!');
+  }
   
+  
+  // TODO: Make it possible to pass in the state store here...
+  // This implies passing it to oauth2/StateStore as well, and not depending on
+  // req._store / req.state.save??? (Maybe?)   Perhaps it could allow us to depend
+  // on it in both oauth1 and 2
   return [
-    state(),
+    function(req, res, next) {
+      console.log('LOADING STATE FOR REDIRECT.,,,,');
+      console.log(req.query);
+      next();
+    },
+    state({ xget: stateLoad }),
     federate,
     establishSession,
     go
