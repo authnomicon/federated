@@ -1,5 +1,5 @@
 {
-  "name": "@authnomicon/federate",
+  "name": "@authnomicon/federated",
   "version": "0.0.0",
   "description": "Single sign-on components for the Authnomicon project.",
   "keywords": [
