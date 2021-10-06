@@ -1,4 +1,4 @@
-exports = module.exports = function(IDPFactory, authenticate, state) {
+exports = module.exports = function(IDPFactory, authenticate, state, session) {
   var utils = require('../../../lib/utils');
   
   
@@ -50,6 +50,7 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
 
 
   return [
+    session(),
     state(),
     federate
   ];
@@ -58,5 +59,6 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
 exports['@require'] = [
   '../idpfactory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
-  'http://i.bixbyjs.org/http/middleware/state'
+  'http://i.bixbyjs.org/http/middleware/state',
+  'http://i.bixbyjs.org/http/middleware/session'
 ];

@@ -9,7 +9,7 @@
  *
  * @returns {Function}
  */
-exports = module.exports = function(IDPFactory, authenticate, state) {
+exports = module.exports = function(IDPFactory, federatedIDs, users, authenticate, state, session) {
   var utils = require('../../../../lib/utils');
   var merge = require('utils-merge')
     , dispatch = require('../../../../lib/dispatch')
@@ -52,10 +52,47 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
   // TODO: Need some account linking/provisioning service here
   
   function establishSession(req, res, next) {
-    req.login(req.federatedUser, function(err) {
+    federatedIDs.find(req.federatedUser.id, req.state.provider, function(err, federatedID, user) {
+      console.log('FOUND FEDERATED ID');
+      console.log(err);
+      console.log(federatedID);
+      
       if (err) { return next(err); }
-      // TODO: Pass next to resumeState, for default behavior
-      return res.resumeState(next);
+      
+      if (federatedID) {
+        // Load the user, already JIT'ed
+        
+        console.log('LOAD USER:');
+        console.log(user);
+        
+        
+        users.read(user.id, function(err, user) {
+          if (err) { return next(err); }
+          console.log(user);
+          req.login(user, function(err) {
+            if (err) { return next(err); }
+            // TODO: Pass next to resumeState, for default behavior
+            return res.resumeState(next);
+          });
+        });
+      } else {
+        // JIT the user
+        users.create(req.federatedUser, function(err, user) {
+          if (err) { return next(err); }
+          console.log(user);
+          
+          federatedIDs.create(req.federatedUser.id, req.state.provider, user, function(err, federatedID) {
+            if (err) { return next(err); }
+            console.log(federatedID);
+            
+            req.login(user, function(err) {
+              if (err) { return next(err); }
+              // TODO: Pass next to resumeState, for default behavior
+              return res.resumeState(next);
+            });
+          });
+        });
+      }
     });
   }
   
@@ -82,6 +119,7 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
   // req._store / req.state.save??? (Maybe?)   Perhaps it could allow us to depend
   // on it in both oauth1 and 2
   return [
+    session(),
     function(req, res, next) {
       console.log('LOADING STATE FOR REDIRECT.,,,,');
       console.log(req.query);
@@ -107,6 +145,9 @@ exports = module.exports = function(IDPFactory, authenticate, state) {
 
 exports['@require'] = [
   '../../../http/idpfactory',
+  'http://i.authnomicon.org/credentials/FederatedIDService',
+  'http://i.authnomicon.org/ds/UserDirectory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
-  'http://i.bixbyjs.org/http/middleware/state'
+  'http://i.bixbyjs.org/http/middleware/state',
+  'http://i.bixbyjs.org/http/middleware/session'
 ];
