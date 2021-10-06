@@ -1,1 +1,1 @@
-# nodex-sso
+# @authnomicon/federated
