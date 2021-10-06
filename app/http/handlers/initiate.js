@@ -8,43 +8,20 @@ exports = module.exports = function(idpFactory, authenticate, state, session) {
       , options = utils.merge({}, req.state);
       
     delete options.provider;
-    delete options.protocol;  
-    // TODO: Test cases for deleting these properties, once they are settled
-    delete options.returnTo;
-    // TODO: delete options.state? or whatever parent is
+    delete options.protocol;
     
-    
-      // TODO: Bind provider into the URL to avoid attacks
-      // or into the state store key, check how pkce store works...
-    
-    console.log('INIT FEDERATION');
-    console.log(req.state)
-    console.log(provider);
-    console.log(protocol);
-    console.log(options);
-    
-    // TODO: Document this better.  Meant to complete any state that is passed
-    //  in as protected data to initiate.
-    // FIXME: Is this actually needed here?
-    //req.state.complete();
-    
-    // TODO: Past `host` as option
+    // TODO: Past `host` as option, for multi-tenancy
     idpFactory.create(provider, protocol, options)
       .then(function(idp) {
         var state = utils.merge({}, options);
         state.provider = provider;
-        
-        // WIP: Make sure state store is correctly pushing and verifying state with latest changes
         
         utils.dispatch(
           authenticate(idp, {
             state: state
           })
         )(null, req, res, next);
-      })
-      .catch(function(err) {
-        console.log(err)
-        
+      }, function(err) {
         next(err);
       });
   }
