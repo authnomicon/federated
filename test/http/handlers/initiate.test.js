@@ -36,14 +36,21 @@ describe('http/handlers/initiate', function() {
         };
       }
       
+      function session() {
+        return function(req, res, next) {
+          next();
+        };
+      }
+      
       var authenticateSpy = sinon.spy(authenticate);
       var stateSpy = sinon.spy(state);
+      var sessionSpy = sinon.spy(session);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(idpFactory, authenticateSpy, stateSpy);
+        var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
         chai.express.handler(handler)
           .req(function(req) {
@@ -51,8 +58,6 @@ describe('http/handlers/initiate', function() {
             req.query = {
               provider: 'https://server.example.com'
             };
-            //req.state = new Object();
-            //req.state.complete = sinon.spy();
           })
           .res(function(res) {
             response = res;
@@ -64,6 +69,7 @@ describe('http/handlers/initiate', function() {
       });
       
       it('should setup middleware', function() {
+        expect(sessionSpy).to.be.calledOnce;
         expect(stateSpy).to.be.calledOnce;
       });
       
@@ -104,14 +110,21 @@ describe('http/handlers/initiate', function() {
         };
       }
       
+      function session() {
+        return function(req, res, next) {
+          next();
+        };
+      }
+      
       var authenticateSpy = sinon.spy(authenticate);
       var stateSpy = sinon.spy(state);
+      var sessionSpy = sinon.spy(session);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(idpFactory, authenticateSpy, stateSpy);
+        var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
         chai.express.handler(handler)
           .req(function(req) {
@@ -131,6 +144,7 @@ describe('http/handlers/initiate', function() {
       });
       
       it('should setup middleware', function() {
+        expect(sessionSpy).to.be.calledOnce;
         expect(stateSpy).to.be.calledOnce;
       });
       
@@ -173,14 +187,21 @@ describe('http/handlers/initiate', function() {
         };
       }
       
+      function session() {
+        return function(req, res, next) {
+          next();
+        };
+      }
+      
       var authenticateSpy = sinon.spy(authenticate);
       var stateSpy = sinon.spy(state);
+      var sessionSpy = sinon.spy(session);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(idpFactory, authenticateSpy, stateSpy);
+        var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
         chai.express.handler(handler)
           .req(function(req) {
@@ -199,6 +220,7 @@ describe('http/handlers/initiate', function() {
       });
       
       it('should setup middleware', function() {
+        expect(sessionSpy).to.be.calledOnce;
         expect(stateSpy).to.be.calledOnce;
       });
       
@@ -237,19 +259,26 @@ describe('http/handlers/initiate', function() {
         return function(req, res, next) {
           req.state = new Object();
           req.state.provider = 'https://server.example.net';
-          req.state.protocol = 'x-example';
+          req.state.protocol = 'openidconnect';
+          next();
+        };
+      }
+      
+      function session() {
+        return function(req, res, next) {
           next();
         };
       }
       
       var authenticateSpy = sinon.spy(authenticate);
       var stateSpy = sinon.spy(state);
+      var sessionSpy = sinon.spy(session);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(idpFactory, authenticateSpy, stateSpy);
+        var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
         chai.express.handler(handler)
           .req(function(req) {
@@ -269,12 +298,13 @@ describe('http/handlers/initiate', function() {
       });
       
       it('should setup middleware', function() {
+        expect(sessionSpy).to.be.calledOnce;
         expect(stateSpy).to.be.calledOnce;
       });
       
       it('should create identity provider', function() {
         expect(idpFactory.create).to.be.calledOnce;
-        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.net', 'x-example', {});
+        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.net', 'openidconnect', {});
       });
       
       it('should authenticate with identity provider', function() {
@@ -312,14 +342,21 @@ describe('http/handlers/initiate', function() {
         };
       }
       
+      function session() {
+        return function(req, res, next) {
+          next();
+        };
+      }
+      
       var authenticateSpy = sinon.spy(authenticate);
       var stateSpy = sinon.spy(state);
+      var sessionSpy = sinon.spy(session);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(idpFactory, authenticateSpy, stateSpy);
+        var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
         chai.express.handler(handler)
           .req(function(req) {
@@ -336,6 +373,7 @@ describe('http/handlers/initiate', function() {
       });
       
       it('should setup middleware', function() {
+        expect(sessionSpy).to.be.calledOnce;
         expect(stateSpy).to.be.calledOnce;
       });
       

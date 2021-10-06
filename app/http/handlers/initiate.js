@@ -1,4 +1,4 @@
-exports = module.exports = function(IDPFactory, authenticate, state, session) {
+exports = module.exports = function(idpFactory, authenticate, state, session) {
   var utils = require('../../../lib/utils');
   
   
@@ -25,10 +25,11 @@ exports = module.exports = function(IDPFactory, authenticate, state, session) {
     
     // TODO: Document this better.  Meant to complete any state that is passed
     //  in as protected data to initiate.
-    req.state.complete();
+    // FIXME: Is this actually needed here?
+    //req.state.complete();
     
     // TODO: Past `host` as option
-    IDPFactory.create(provider, protocol, options)
+    idpFactory.create(provider, protocol, options)
       .then(function(idp) {
         var state = utils.merge({}, options);
         state.provider = provider;
