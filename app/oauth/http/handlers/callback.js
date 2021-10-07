@@ -1,4 +1,4 @@
-exports = module.exports = function(actions, IDPFactory, authenticate, state, session) {
+exports = module.exports = function(actions, idpFactory, authenticate, state, session) {
   var utils = require('../../../../lib/utils');
   var merge = require('utils-merge');
   var toHandle = require('../../../../lib/oauth/state/handle');
@@ -24,7 +24,7 @@ exports = module.exports = function(actions, IDPFactory, authenticate, state, se
     // TODO: Pass `idpID` as option, if available in state
     // TODO: Pass `clientID` as option, if available
       
-    IDPFactory.create(provider, 'oauth', options)
+    idpFactory.create(provider, 'oauth', options)
       .then(function(idp) {
         utils.dispatch(
           authenticate(idp, { assignProperty: 'federatedUser' })
