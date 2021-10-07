@@ -16,7 +16,7 @@ exports = module.exports = function(actions, IDPFactory, authenticate, state, se
     
     delete options.provider;
     // TODO: Test cases for deleting these properties, once they are settled
-    delete options.returnTo;
+    //delete options.returnTo;
     // TODO: delete options.state? or whatever parent is
     //delete options.state;
     
@@ -35,39 +35,23 @@ exports = module.exports = function(actions, IDPFactory, authenticate, state, se
       });
   }
   
-  function establishSession(req, res, next) {
-    console.log('DO ACTION');
-    //req.state;
-    console.log(req.state);
-    //console.log(req.federatedUser);
-    //console.log(req.authInfo);
-    //return;
-    
-    
+  function execute(req, res, next) {
     var action = req.state.action || 'login';
     actions.dispatch(action, null, req, res, next);
   }
   
-  function go(req, res, next) {
+  function redirect(req, res, next) {
     res.redirect('/');
   }
+  
   
   return [
     session(),
     state({ getHandle: getHandle }),
     federate,
-    establishSession,
-    go
+    execute,
+    redirect
   ];
-
-  /*
-  return ceremony('oauth/callback',
-    authenticate([ 'state', 'anonymous' ]),
-    federate,
-    postProcess,
-  { through: 'login', required: true, getHandle: getHandle });
-  */
-  
 };
 
 exports['@require'] = [

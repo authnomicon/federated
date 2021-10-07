@@ -21,20 +21,17 @@ describe('oauth/http/handlers/callback', function() {
   describe('handler', function() {
     
     describe('federating with provider', function() {
+      var actions = new Object();
+      actions.dispatch = sinon.spy(function(name, err, req, res, next) {
+        next();
+      });
+      
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp)
       
       function authenticate(idp, options) {
         return function(req, res, next) {
-          req.login = function(user, cb) {
-            process.nextTick(function() {
-              req.session.user = user;
-              cb();
-            });
-          };
-          
-          req.federatedUser = { id: '248289761001', displayName: 'Jane Doe' };
           next();
         };
       }
@@ -47,14 +44,21 @@ describe('oauth/http/handlers/callback', function() {
         };
       }
       
+      function session() {
+        return function(req, res, next) {
+          next();
+        };
+      }
+      
       var authenticateSpy = sinon.spy(authenticate);
       var stateSpy = sinon.spy(state);
+      var sessionSpy = sinon.spy(session);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(idpFactory, authenticateSpy, stateSpy);
+        var handler = factory(actions, idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
         chai.express.handler(handler)
           .req(function(req) {
@@ -67,14 +71,6 @@ describe('oauth/http/handlers/callback', function() {
           })
           .res(function(res) {
             response = res;
-            
-            res.resumeState = sinon.spy(function(cb) {
-              if (request.state.returnTo) {
-                return this.redirect(request.state.returnTo);
-              }
-              
-              process.nextTick(cb);
-            });
           })
           .end(function() {
             done();
@@ -83,6 +79,7 @@ describe('oauth/http/handlers/callback', function() {
       });
       
       it('should setup middleware', function() {
+        expect(sessionSpy).to.be.calledOnce;
         expect(stateSpy).to.be.calledOnce;
       });
       
@@ -96,15 +93,9 @@ describe('oauth/http/handlers/callback', function() {
         expect(authenticateSpy).to.be.calledWithExactly(idp, { assignProperty: 'federatedUser' });
       });
       
-      it('should establish session', function() {
-        expect(request.session.user).to.deep.equal({
-          id: '248289761001',
-          displayName: 'Jane Doe'
-        });
-      });
-      
-      it('should resume state', function() {
-        expect(response.resumeState).to.be.calledOnceWith();
+      it('should dispatch action', function() {
+        expect(actions.dispatch).to.be.calledOnce;
+        expect(actions.dispatch).to.be.calledWith('login', null, request, response);
       });
       
       it('should redirect', function() {

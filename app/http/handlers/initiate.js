@@ -9,6 +9,10 @@ exports = module.exports = function(idpFactory, authenticate, state, session) {
       
     delete options.provider;
     delete options.protocol;
+    // TODO: Test cases for deleting these properties, once they are settled
+    //delete options.returnTo;
+    // TODO: delete options.state? or whatever parent is
+    //delete options.state;
     
     // TODO: Past `host` as option, for multi-tenancy
     idpFactory.create(provider, protocol, options)
