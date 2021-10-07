@@ -9,7 +9,7 @@
  *
  * @returns {Function}
  */
-exports = module.exports = function(IDPFactory, federatedIDs, users, authenticate, state, session) {
+exports = module.exports = function(actions, idpFactory, authenticate, state, session) {
   var utils = require('../../../../lib/utils');
   var merge = require('utils-merge')
     , dispatch = require('../../../../lib/dispatch')
@@ -19,26 +19,16 @@ exports = module.exports = function(IDPFactory, federatedIDs, users, authenticat
     var provider = req.state.provider
       , options = merge({}, req.state);
     
-    console.log('COMPLETEING OAUTH 2');
-    console.log(req.state);
-    console.log(provider);
-    console.log(options);
-    
     delete options.provider;
     // TODO: Test cases for deleting these properties, once they are settled
-    delete options.returnTo;
+    //delete options.returnTo;
     // TODO: delete options.state? or whatever parent is
     //delete options.state;
-    
-    
-    // TODO: Move this into handler
-    // TODO: need to complete the state (if it was strictly for this endpoint)
-    //req.state.complete();
     
     // TODO: Past `host` as option
     // TODO: Pass `idpID` as option, if available in state
     // TODO: Pass `clientID` as option, if available
-    IDPFactory.create(provider, 'oauth2', options)
+    idpFactory.create(provider, 'oauth2', options)
       .then(function(idp) {
         utils.dispatch(
           authenticate(idp, { assignProperty: 'federatedUser' })
@@ -49,54 +39,12 @@ exports = module.exports = function(IDPFactory, federatedIDs, users, authenticat
       });
   }
   
-  // TODO: Need some account linking/provisioning service here
-  
-  function establishSession(req, res, next) {
-    federatedIDs.find(req.federatedUser.id, req.state.provider, function(err, federatedID, user) {
-      console.log('FOUND FEDERATED ID');
-      console.log(err);
-      console.log(federatedID);
-      
-      if (err) { return next(err); }
-      
-      if (federatedID) {
-        // Load the user, already JIT'ed
-        
-        console.log('LOAD USER:');
-        console.log(user);
-        
-        
-        users.read(user.id, function(err, user) {
-          if (err) { return next(err); }
-          console.log(user);
-          req.login(user, function(err) {
-            if (err) { return next(err); }
-            // TODO: Pass next to resumeState, for default behavior
-            return res.resumeState(next);
-          });
-        });
-      } else {
-        // JIT the user
-        users.create(req.federatedUser, function(err, user) {
-          if (err) { return next(err); }
-          console.log(user);
-          
-          federatedIDs.create(req.federatedUser.id, req.state.provider, user, function(err, federatedID) {
-            if (err) { return next(err); }
-            console.log(federatedID);
-            
-            req.login(user, function(err) {
-              if (err) { return next(err); }
-              // TODO: Pass next to resumeState, for default behavior
-              return res.resumeState(next);
-            });
-          });
-        });
-      }
-    });
+  function execute(req, res, next) {
+    var action = req.state.action || 'login';
+    actions.dispatch(action, null, req, res, next);
   }
   
-  function go(req, res, next) {
+  function redirect(req, res, next) {
     res.redirect('/');
   }
   
@@ -109,44 +57,18 @@ exports = module.exports = function(IDPFactory, federatedIDs, users, authenticat
   }
   
   
-  function stateLoad() {
-    console.log('SPECIAL STATE LOAD!');
-  }
-  
-  
-  // TODO: Make it possible to pass in the state store here...
-  // This implies passing it to oauth2/StateStore as well, and not depending on
-  // req._store / req.state.save??? (Maybe?)   Perhaps it could allow us to depend
-  // on it in both oauth1 and 2
   return [
     session(),
-    function(req, res, next) {
-      console.log('LOADING STATE FOR REDIRECT.,,,,');
-      console.log(req.query);
-      next();
-    },
-    state({ xget: stateLoad }),
+    state(),
     federate,
-    establishSession,
-    go
+    execute,
+    redirect
   ];
-  
-  // FIXME: Putting an invalid state name here causes an error that isn't descriptive
-  /*
-  return ceremony('oauth2/redirect',
-    authenticate([ 'state', 'anonymous' ]),
-    federate, // TODO: move all this into a common "federate" state...?
-    postProcess,
-    errorHandler,
-  { through: 'login', required: true });
-  */
-  
 };
 
 exports['@require'] = [
+  '../../../http/actions',
   '../../../http/idpfactory',
-  'http://i.authnomicon.org/credentials/FederatedIDService',
-  'http://i.authnomicon.org/ds/UserDirectory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/state',
   'http://i.bixbyjs.org/http/middleware/session'
