@@ -1,4 +1,4 @@
-exports = module.exports = function(IDPFactory, federatedIDs, users, authenticate, state, session) {
+exports = module.exports = function(actions, IDPFactory, authenticate, state, session) {
   var utils = require('../../../../lib/utils');
   var merge = require('utils-merge');
   var toHandle = require('../../../../lib/oauth/state/handle');
@@ -37,51 +37,15 @@ exports = module.exports = function(IDPFactory, federatedIDs, users, authenticat
   
   function establishSession(req, res, next) {
     console.log('DO ACTION');
-    //console.log(req.user);
+    //req.state;
+    console.log(req.state);
     //console.log(req.federatedUser);
     //console.log(req.authInfo);
     //return;
     
-    federatedIDs.find(req.federatedUser.id, req.state.provider, function(err, federatedID, user) {
-      console.log('FOUND FEDERATED ID');
-      console.log(err);
-      console.log(federatedID);
-      
-      if (err) { return next(err); }
-      
-      if (federatedID) {
-        // Load the user, already JIT'ed
-        
-        console.log('LOAD USER:');
-        console.log(user);
-        
-        
-        users.read(user.id, function(err, user) {
-          if (err) { return next(err); }
-          console.log(user);
-          req.login(user, function(err) {
-            if (err) { return next(err); }
-            return res.resumeState(next);
-          });
-        });
-      } else {
-        // JIT the user
-        users.create(req.federatedUser, function(err, user) {
-          if (err) { return next(err); }
-          console.log(user);
-          
-          federatedIDs.create(req.federatedUser.id, req.state.provider, user, function(err, federatedID) {
-            if (err) { return next(err); }
-            console.log(federatedID);
-            
-            req.login(user, function(err) {
-              if (err) { return next(err); }
-              return res.resumeState(next);
-            });
-          });
-        });
-      }
-    });
+    
+    var action = req.state.action || 'login';
+    actions.dispatch(action, null, req, res, next);
   }
   
   function go(req, res, next) {
@@ -107,9 +71,8 @@ exports = module.exports = function(IDPFactory, federatedIDs, users, authenticat
 };
 
 exports['@require'] = [
+  '../../../http/actions',
   '../../../http/idpfactory',
-  'http://i.authnomicon.org/credentials/FederatedIDService',
-  'http://i.authnomicon.org/ds/UserDirectory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/state',
   'http://i.bixbyjs.org/http/middleware/session'
