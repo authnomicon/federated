@@ -40,5 +40,5 @@ exports = module.exports = function(federatedIDs, directory) {
 
 exports['@require'] = [
   'http://i.authnomicon.org/credentials/FederatedIDService',
-  'http://i.authnomicon.org/ds/UserDirectory'
+  'http://i.authnomicon.org/Directory'
 ];
