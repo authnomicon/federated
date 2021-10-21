@@ -12,20 +12,24 @@
   "author": {
     "name": "Jared Hanson",
     "email": "jaredhanson@gmail.com",
-    "url": "http://www.jaredhanson.net/"
+    "url": "https://www.jaredhanson.me/"
   },
   "repository": {
     "type": "git",
     "url": "git://github.com/authnomicon/sso.git"
   },
   "bugs": {
-    "url": "http://github.com/authnomicon/sso/issues"
+    "url": "https://github.com/authnomicon/sso/issues"
+  },
+  "funding": {
+    "type": "github",
+    "url": "https://github.com/sponsors/jaredhanson"
   },
   "license": "MIT",
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://opensource.org/licenses/MIT"
+      "url": "https://opensource.org/licenses/MIT"
     }
   ],
   "main": "./app",
