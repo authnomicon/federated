@@ -18,10 +18,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/authnomicon/sso.git"
+    "url": "git://github.com/authnomicon/federated.git"
   },
   "bugs": {
-    "url": "https://github.com/authnomicon/sso/issues"
+    "url": "https://github.com/authnomicon/federated/issues"
   },
   "funding": {
     "type": "github",
