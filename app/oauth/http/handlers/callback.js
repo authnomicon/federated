@@ -26,6 +26,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
       
     idpFactory.create(provider, 'oauth', options)
       .then(function(idp) {
+        // TODO: Remove utils.dispatch here
         utils.dispatch(
           authenticate(idp, { assignProperty: 'federatedUser' })
         )(null, req, res, next);

@@ -11,7 +11,7 @@ exports = module.exports = function(store, vault) {
           consumerKey: cred.username,
           consumerSecret: cred.password,
           callbackURL: '/oauth/callback/twitter.com',
-          requestTokenStore: store
+          store: store
         },
         function(token, tokenSecret, profile, cb) {
           // TODO: Delete provider property?

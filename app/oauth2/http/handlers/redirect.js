@@ -30,6 +30,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
     // TODO: Pass `clientID` as option, if available
     idpFactory.create(provider, 'oauth2', options)
       .then(function(idp) {
+        // TODO: Remove utils.dispatch here
         utils.dispatch(
           authenticate(idp, { assignProperty: 'federatedUser' })
         )(null, req, res, next);
@@ -52,7 +53,6 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
   //        ^ its not in the middleware stack returned below, duh!
   // TODO: Put error handing in here
   function errorHandler(err, req, res, next) {
-    console.log('OAUTH2-AUTHORIZE ERROR');
     next(err);
   }
   
