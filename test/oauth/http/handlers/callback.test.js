@@ -60,22 +60,21 @@ describe('oauth/http/handlers/callback', function() {
       before(function(done) {
         var handler = factory(actions, idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
-        chai.express.handler(handler)
-          .req(function(req) {
+        chai.express.use(handler)
+          .request(function(req, res) {
             request = req;
             request.params = { hostname: 'twitter.com' };
             request.query = { oauth_token: 'XXXXXXXX' };
             request.session = {};
             request.session.state = {};
             request.session.state['oauth:twitter.com:XXXXXXXX'] = { provider: 'http://sp.example.com' };
-          })
-          .res(function(res) {
+            
             response = res;
           })
-          .end(function() {
+          .finish(function() {
             done();
           })
-          .dispatch();
+          .listen();
       });
       
       it('should setup middleware', function() {
