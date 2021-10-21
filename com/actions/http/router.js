@@ -1,5 +1,5 @@
 exports = module.exports = function(C) {
-  var actions = require('../../lib/actions');
+  var actions = require('../../../lib/actions');
   
   
   var router = new actions.Router();
@@ -36,7 +36,7 @@ exports = module.exports = function(C) {
     .then(function(router) {
 
       // load built-in actions
-      return C.create('./actions/login')
+      return C.create('./login')
         .then(function(handler) {
           // TODO: Only use it if login handler wasn't supplied as plugin by app above
           
