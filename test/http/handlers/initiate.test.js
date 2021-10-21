@@ -52,20 +52,19 @@ describe('http/handlers/initiate', function() {
       before(function(done) {
         var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
-        chai.express.handler(handler)
-          .req(function(req) {
+        chai.express.use(handler)
+          .request(function(req, res) {
             request = req;
             req.query = {
               provider: 'https://server.example.com'
             };
-          })
-          .res(function(res) {
+            
             response = res;
           })
-          .end(function() {
+          .finish(function() {
             done();
           })
-          .dispatch();
+          .listen();
       });
       
       it('should setup middleware', function() {
@@ -126,21 +125,20 @@ describe('http/handlers/initiate', function() {
       before(function(done) {
         var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
-        chai.express.handler(handler)
-          .req(function(req) {
+        chai.express.use(handler)
+          .request(function(req, res) {
             request = req;
             req.query = {
               provider: 'https://server.example.com',
               protocol: 'oauth2'
             };
-          })
-          .res(function(res) {
+            
             response = res;
           })
-          .end(function() {
+          .finish(function() {
             done();
           })
-          .dispatch();
+          .listen();
       });
       
       it('should setup middleware', function() {
@@ -203,20 +201,19 @@ describe('http/handlers/initiate', function() {
       before(function(done) {
         var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
-        chai.express.handler(handler)
-          .req(function(req) {
+        chai.express.use(handler)
+          .request(function(req, res) {
             request = req;
             req.query = {
               provider: 'https://server.example.com'
             };
-          })
-          .res(function(res) {
+            
             response = res;
           })
-          .end(function() {
+          .finish(function() {
             done();
           })
-          .dispatch();
+          .listen();
       });
       
       it('should setup middleware', function() {
@@ -280,21 +277,20 @@ describe('http/handlers/initiate', function() {
       before(function(done) {
         var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
-        chai.express.handler(handler)
-          .req(function(req) {
+        chai.express.use(handler)
+          .request(function(req, res) {
             request = req;
             req.query = {
               provider: 'https://server.example.com',
               protocol: 'oauth2'
             };
-          })
-          .res(function(res) {
+            
             response = res;
           })
-          .end(function() {
+          .finish(function() {
             done();
           })
-          .dispatch();
+          .listen();
       });
       
       it('should setup middleware', function() {
@@ -358,18 +354,17 @@ describe('http/handlers/initiate', function() {
       before(function(done) {
         var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
         
-        chai.express.handler(handler)
-          .req(function(req) {
+        chai.express.use(handler)
+          .request(function(req, res) {
             request = req;
             req.query = {};
-          })
-          .res(function(res) {
+            
             response = res;
           })
-          .end(function() {
+          .finish(function() {
             done();
           })
-          .dispatch();
+          .listen();
       });
       
       it('should setup middleware', function() {
