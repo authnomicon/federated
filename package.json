@@ -48,15 +48,10 @@
     ]
   },
   "dependencies": {
-    "clone": "^2.1.1",
-    "decisions": "^0.2.0",
-    "express": "^4.16.2",
-    "fluidfactory": "^0.1.0",
-    "oauth2-token": "^1.0.0",
+    "express": "^4.17.1",
     "passport-facebook": "^3.0.0",
     "passport-google-oauth20": "^2.0.0",
     "passport-twitter": "^1.0.4",
-    "url-template": "^2.0.8",
     "utils-merge": "^1.0.1"
   },
   "devDependencies": {
