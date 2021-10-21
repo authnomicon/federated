@@ -7,7 +7,7 @@ exports = module.exports = function(C) {
   return Promise.resolve(router)
     .then(function(router) {
       return new Promise(function(resolve, reject) {
-        var components = C.components('http://i.authnomicon.org/federated/actions/www/Handler');
+        var components = C.components('http://i.authnomicon.org/federated/actions/http/Handler');
       
         (function iter(i) {
           var component = components[i];

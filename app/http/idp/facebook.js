@@ -1,10 +1,10 @@
-exports = module.exports = function(store, keyring) {
+exports = module.exports = function(store, vault) {
   var FacebookStrategy = require('passport-facebook');
   
   
   return new Promise(function(resolve, reject) {
     
-    keyring.get('graph.facebook.com', function(err, cred) {
+    vault.get('graph.facebook.com', function(err, cred) {
       if (err) { return reject(err); }
       
       var strategy = new FacebookStrategy({
@@ -33,9 +33,9 @@ exports = module.exports = function(store, keyring) {
   });
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/sso/http/IDProvider';
+exports['@implements'] = 'http://i.authnomicon.org/federated/http/IDProvider';
 exports['@provider'] = 'https://www.facebook.com';
 exports['@require'] = [
   'http://i.authnomicon.org/federated/oauth2/http/StateStore',
-  'http://i.bixbyjs.org/security/Keyring'
+  'http://i.bixbyjs.org/security/credentials/PasswordVault'
 ];

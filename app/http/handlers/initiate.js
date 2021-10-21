@@ -20,6 +20,7 @@ exports = module.exports = function(idpFactory, authenticate, state, session) {
         var state = utils.merge({}, options);
         state.provider = provider;
         
+        // TODO: Remove utils.dispatch here
         utils.dispatch(
           authenticate(idp, {
             state: state
