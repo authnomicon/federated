@@ -40,7 +40,7 @@ exports = module.exports = function(idpFactory, authenticate, state, session) {
 };
 
 exports['@require'] = [
-  '../idpfactory',
+  '../../idp/http/factory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/state',
   'http://i.bixbyjs.org/http/middleware/session'

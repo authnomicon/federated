@@ -43,8 +43,8 @@
       "oauth/http/statestore",
       "oauth2/http/service",
       "oauth2/http/statestore",
-      "http/idp/facebook",
-      "http/idp/twitter"
+      "idp/http/facebook",
+      "idp/http/twitter"
     ]
   },
   "directories": {

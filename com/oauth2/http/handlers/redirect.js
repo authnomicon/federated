@@ -68,7 +68,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
 
 exports['@require'] = [
   '../../../http/actions',
-  '../../../http/idpfactory',
+  '../../../idp/http/factory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/state',
   'http://i.bixbyjs.org/http/middleware/session'
