@@ -3,7 +3,7 @@
 var $require = require('proxyquire');
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var factory = require('../../../app/oauth2/http/statestore');
+var factory = require('../../../com/oauth2/http/statestore');
 var StateStore = require('../../../lib/oauth2/statestore');
 
 
@@ -20,7 +20,7 @@ describe('oauth2/http/statestore', function() {
   
   describe('creating with defaults', function() {
     var StateStoreSpy = sinon.spy(StateStore);
-    var factory = $require('../../../app/oauth2/http/statestore',
+    var factory = $require('../../../com/oauth2/http/statestore',
       { '../../../lib/oauth2/statestore': StateStoreSpy });
     
     var store = factory();

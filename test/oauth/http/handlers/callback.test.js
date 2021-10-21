@@ -3,7 +3,7 @@
 var chai = require('chai');
 var expect = require('chai').expect;
 var sinon = require('sinon');
-var factory = require('../../../../app/oauth/http/handlers/callback');
+var factory = require('../../../../com/oauth/http/handlers/callback');
 var utils = require('../../../utils');
 
 

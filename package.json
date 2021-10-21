@@ -47,6 +47,9 @@
       "http/idp/twitter"
     ]
   },
+  "directories": {
+    "com": "com"
+  },
   "dependencies": {
     "express": "^4.17.1",
     "passport-facebook": "^3.0.0",
