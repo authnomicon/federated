@@ -224,8 +224,7 @@ describe('oauth2/http/handlers/redirect', function() {
       
       it('should redirect', function() {
         expect(response.statusCode).to.equal(302);
-        //expect(response.getHeader('Location')).to.equal('/home');
-        expect(response.getHeader('Location')).to.equal('/');
+        expect(response.getHeader('Location')).to.equal('/home');
       });
     }); // federating with provider and returning to location
     
@@ -331,8 +330,7 @@ describe('oauth2/http/handlers/redirect', function() {
       
       it('should redirect', function() {
         expect(response.statusCode).to.equal(302);
-        //expect(response.getHeader('Location')).to.equal('/home');
-        expect(response.getHeader('Location')).to.equal('/');
+        expect(response.getHeader('Location')).to.equal('/home');
       });
     }); // federating with provider and parameters in state
     

@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 
+- Support for dispatching to multiple actions from OAuth 2.0 redirect endpoint.
 - Added OpenID Connect `StateStore` component at `openidconnect/http/statestore`.
 
 ### Fixed
