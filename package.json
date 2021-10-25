@@ -43,6 +43,7 @@
       "oauth/http/statestore",
       "oauth2/http/service",
       "oauth2/http/statestore",
+      "openidconnect/http/statestore",
       "idp/http/facebook",
       "idp/http/twitter"
     ]
