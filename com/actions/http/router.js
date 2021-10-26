@@ -41,6 +41,14 @@ exports = module.exports = function(C) {
           // TODO: Only use it if login handler wasn't supplied as plugin by app above
           
           router.use('login', handler);
+          return C.create('./authorize')
+        }, function(err) {
+          // TODO: error handling and rethrow if not IMPLEMENTATION_NOT_FOUND
+        })
+        .then(function(handler) {
+          // TODO: Only use it if login handler wasn't supplied as plugin by app above
+          
+          router.use('authorize', handler);
         }, function(err) {
           // TODO: error handling and rethrow if not IMPLEMENTATION_NOT_FOUND
         })
