@@ -37,8 +37,23 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
   }
   
   function execute(req, res, next) {
-    var action = req.state.action || 'login';
-    actions.dispatch(action, null, req, res, next);
+    var acts = req.state.action || [ 'login' ];
+    if (!Array.isArray(acts)) {
+      acts = [ acts ];
+    }
+    
+    var i = 0;
+    (function iter(err) {
+      if (err) { return next(err); }
+      
+      var act = acts[i++];
+      if (!act) { return next(); }
+      actions.dispatch(act, null, req, res, iter);
+    })();
+  }
+  
+  function resume(req, res, next) {
+    res.resumeState(next);
   }
   
   function redirect(req, res, next) {
@@ -51,6 +66,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
     state({ getHandle: getHandle }),
     federate,
     execute,
+    resume,
     redirect
   ];
 };

@@ -41,7 +41,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
   }
   
   function execute(req, res, next) {
-    var acts = req.state.action || 'login';
+    var acts = req.state.action || [ 'login' ];
     if (!Array.isArray(acts)) {
       acts = [ acts ];
     }

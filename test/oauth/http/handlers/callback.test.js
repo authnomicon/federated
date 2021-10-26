@@ -69,6 +69,14 @@ describe('oauth/http/handlers/callback', function() {
             request.session.state = {};
             request.session.state['oauth:twitter.com:XXXXXXXX'] = { provider: 'http://sp.example.com' };
             
+            res.resumeState = sinon.spy(function(cb) {
+              if (request.state.returnTo) {
+                return this.redirect(request.state.returnTo);
+              }
+              
+              process.nextTick(cb);
+            });
+            
             response = res;
           })
           .finish(function() {
