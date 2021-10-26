@@ -11,7 +11,7 @@ exports = module.exports = function(federatedIDs, directory) {
           
           req.login(user, function(err) {
             if (err) { return next(err); }
-            return res.resumeState(next);
+            return next();
           });
         });
       } else {
@@ -24,7 +24,7 @@ exports = module.exports = function(federatedIDs, directory) {
             
             req.login(user, function(err) {
               if (err) { return next(err); }
-              return res.resumeState(next);
+              return next();
             });
           });
         });

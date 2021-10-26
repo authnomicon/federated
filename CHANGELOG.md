@@ -10,6 +10,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for dispatching to multiple actions from OAuth 2.0 redirect endpoint.
 - Added OpenID Connect `StateStore` component at `openidconnect/http/statestore`.
 
+### Changed
+
+- Login action no longer resumes state, instead calls next middleware in stack
+to support subsequent actions after login.
+
 ### Fixed
 
 - `repository` and `bugs` URLs in `package.json` pointed to correct GitHub
