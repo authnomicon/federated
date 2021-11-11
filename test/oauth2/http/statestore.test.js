@@ -44,6 +44,8 @@ describe('oauth2/http/statestore', function() {
       describe('storing state', function() {
         var req = new Object();
         req.state = new Object();
+        req.pushState = sinon.stub().yieldsAsync(null, 'xyz');
+        /*
         req.state.push = sinon.spy();
         req.state.save = sinon.spy(function(cb) {
           process.nextTick(function() {
@@ -51,6 +53,8 @@ describe('oauth2/http/statestore', function() {
             cb();
           })
         });
+        */
+        
       
         var handle;
       
@@ -71,11 +75,10 @@ describe('oauth2/http/statestore', function() {
         });
       
         it('should push state for redirection endpoint', function() {
-          expect(req.state.push).to.have.been.calledOnceWith({
-            location: 'https://client.example.com/cb',
+          expect(req.pushState).to.have.been.calledOnceWith({
             provider: 'https://server.example.com'
-          });
-          expect(req.state.save).to.have.been.calledOnce;
+          }, 'https://client.example.com/cb');
+          //expect(req.state.save).to.have.been.calledOnce;
         });
       
         it('should yield state handle', function() {
@@ -86,12 +89,14 @@ describe('oauth2/http/statestore', function() {
       describe('failing to store state', function() {
         var req = new Object();
         req.state = new Object();
-        req.state.push = sinon.spy();
+        req.pushState = sinon.stub().yieldsAsync(new Error('something went wrong'));
+        /*
         req.state.save = sinon.spy(function(cb) {
           process.nextTick(function() {
             cb(new Error('something went wrong'));
           })
         });
+        */
       
         var handle, error;
       
@@ -112,11 +117,10 @@ describe('oauth2/http/statestore', function() {
         });
       
         it('should push state for redirection endpoint', function() {
-          expect(req.state.push).to.have.been.calledOnceWith({
-            location: 'https://client.example.com/cb',
+          expect(req.pushState).to.have.been.calledOnceWith({
             provider: 'https://server.example.com'
-          });
-          expect(req.state.save).to.have.been.calledOnce;
+          }, 'https://client.example.com/cb');
+          //expect(req.state.save).to.have.been.calledOnce;
         });
       
         it('should not yield state handle', function() {
@@ -146,6 +150,8 @@ describe('oauth2/http/statestore', function() {
           location: 'https://client.example.com/cb',
           provider: 'https://server.example.com'
         };
+        req.state.complete = sinon.spy();
+        
         req.state.destroy = sinon.spy(function(cb) {
           process.nextTick(function() {
             cb();
@@ -163,7 +169,7 @@ describe('oauth2/http/statestore', function() {
         });
       
         it('should destroy state', function() {
-          expect(req.state.destroy).to.have.been.calledOnce;
+          expect(req.state.complete).to.have.been.calledOnce;
         });
       
         it('should verify', function() {
