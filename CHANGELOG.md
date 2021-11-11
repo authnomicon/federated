@@ -16,9 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Login action no longer resumes state, instead calls next middleware in stack
 to support subsequent actions after login.
-- OAuth 2.0 state store updated to use latest `flowstate` API, specifically
+- OAuth 2.0 state store updated to use `flowstate@0.5.x` API, specifically
 `req.pushState`.
-- OAuth state store updated to use latest `flowstate` API, specifically
+- OAuth state store updated to use `flowstate@0.5.x` API, specifically
 `req.pushState`.
 
 ### Fixed
