@@ -1,7 +1,7 @@
 /* global describe, it, expect */
 
-var chai = require('chai');
 var expect = require('chai').expect;
+var chai = require('chai');
 var sinon = require('sinon');
 var factory = require('../../../com/http/handlers/initiate');
 
@@ -19,7 +19,7 @@ describe('http/handlers/initiate', function() {
   
   describe('handler', function() {
     
-    describe('federating with provider', function() {
+    it('federating with provider', function(done) {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp)
@@ -47,49 +47,35 @@ describe('http/handlers/initiate', function() {
       var sessionSpy = sinon.spy(session);
       
       
-      var request, response;
+      var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
       
-      before(function(done) {
-        var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
-        
-        chai.express.use(handler)
-          .request(function(req, res) {
-            request = req;
-            req.query = {
-              provider: 'https://server.example.com'
-            };
-            
-            response = res;
-          })
-          .finish(function() {
-            done();
-          })
-          .listen();
-      });
-      
-      it('should setup middleware', function() {
-        expect(sessionSpy).to.be.calledOnce;
-        expect(stateSpy).to.be.calledOnce;
-      });
-      
-      it('should create identity provider', function() {
-        expect(idpFactory.create).to.be.calledOnce;
-        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', undefined, {});
-      });
-      
-      it('should authenticate with identity provider', function() {
-        expect(authenticateSpy).to.be.calledOnce;
-        expect(authenticateSpy).to.be.calledWithExactly(idp, {
-          state: {
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.query = {
             provider: 'https://server.example.com'
-          }
-        });
-      });
-      
-      it('should redirect', function() {
-        expect(response.statusCode).to.equal(302);
-        expect(response.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
-      });
+          };
+        })
+        .finish(function() {
+          expect(sessionSpy).to.be.calledOnce;
+          expect(stateSpy).to.be.calledOnce;
+          
+          expect(idpFactory.create).to.be.calledOnce;
+          expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', undefined, {});
+          
+          expect(authenticateSpy).to.be.calledOnce;
+          expect(authenticateSpy).to.be.calledWithExactly(idp, {
+            state: {
+              provider: 'https://server.example.com'
+            }
+          });
+          
+          expect(this.statusCode).to.equal(302);
+          expect(this.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+          
+          done();
+        })
+        .next(done)
+        .listen();
     }); // federating with provider
     
     describe('federating with provider and protocol', function() {
