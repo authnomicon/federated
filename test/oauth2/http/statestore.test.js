@@ -159,7 +159,7 @@ describe('oauth2/http/statestore', function() {
       
         store.verify(req, 'xyz', function(err, ok, info) {
           expect(err).to.be.an.instanceOf(Error);
-          expect(err.message).to.equal('OAuth 2.0 authentication requires state support. Did you forget to use `flowstate` middleware?');
+          expect(err.message).to.equal('OAuth 2.0 requires state support. Did you forget to use `flowstate` middleware?');
           expect(ok).to.be.undefined;
           expect(info).to.be.undefined;
           done();

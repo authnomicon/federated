@@ -52,12 +52,10 @@ describe('oauth/http/requesttokenstore', function() {
         var req = new Object();
         
         store.get(req, 'hh5s93j4hdidpola', function(err, tokenSecret, info) {
-          if (err) { return done(err); }
-          expect(tokenSecret).to.be.false;
-          expect(info).to.deep.equal({
-            message: 'Unable to obtain request token secret.'
-          });
-          
+          expect(err).to.be.an.instanceOf(Error);
+          expect(err.message).to.equal('OAuth requires state support. Did you forget to use `flowstate` middleware?');
+          expect(tokenSecret).to.be.undefined;
+          expect(info).to.be.undefined;
           done();
         });
       }); // should error when state middleware is not in use

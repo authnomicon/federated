@@ -27,8 +27,10 @@ to support subsequent actions after login.
 in use.
 - Improved OAuth 2.0 state store failure messages for mix-up attack
 countermeasures.
-- OAuth state store updated to use `flowstate@0.5.x` API, specifically
+- OAuth request token store updated to use `flowstate@0.5.x` API, specifically
 `req.pushState`.
+- OAuth request token store errors, rather than fails, when state middleware is
+not in use.
 
 ### Fixed
 
