@@ -32,56 +32,35 @@ describe('oauth/http/requesttokenstore', function() {
     
     describe('#get', function() {
       
-      describe('getting token secret', function() {
+      it('should get token secret', function(done) {
         var req = new Object();
-        req.params = {
-          hostname: 'sp.example.com'
-        };
         req.query = {
           oauth_token: 'hh5s93j4hdidpola',
         };
         req.state = {
-          location: 'https://client.example.com/cb',
-          provider: 'https://server.example.com',
           tokenSecret: 'hdhd0244k9j7ao03'
         };
       
-        var tokenSecret;
-      
-        before(function(done) {
-          store.get(req, 'hh5s93j4hdidpola', function(err, ts) {
-            if (err) { return done(err); }
-            tokenSecret = ts;
-            done();
-          });
-        });
-      
-        it('should yield token secret', function() {
+        store.get(req, 'hh5s93j4hdidpola', function(err, tokenSecret) {
+          if (err) { return done(err); }
           expect(tokenSecret).to.equal('hdhd0244k9j7ao03')
+          done();
         });
-      }); // getting token secret
+      }); // should get token secret
       
-      describe('failing to get token secret due to lack of state', function() {
+      it('should error when state middleware is not in use', function(done) {
         var req = new Object();
-      
-        var tokenSecret, info;
-      
-        before(function(done) {
-          store.get(req, 'hh5s93j4hdidpola', function(err, ts, i) {
-            if (err) { return done(err); }
-            tokenSecret = ts;
-            info = i;
-            done();
-          });
-        });
-      
-        it('should fail', function() {
+        
+        store.get(req, 'hh5s93j4hdidpola', function(err, tokenSecret, info) {
+          if (err) { return done(err); }
           expect(tokenSecret).to.be.false;
           expect(info).to.deep.equal({
             message: 'Unable to obtain request token secret.'
           });
+          
+          done();
         });
-      }); // failing to get token secret due to lack of state
+      }); // should error when state middleware is not in use
       
     }); // #get
     
@@ -140,7 +119,7 @@ describe('oauth/http/requesttokenstore', function() {
           expect(handle).to.equal('oauth:photos.example.net:hh5s93j4hdidpola');
           done();
         });
-      }); // setting token secret with provider
+      }); // should push state with provider and yield handle
       
       it('should yeild error when pushing state fails', function(done) {
         var req = new Object();
