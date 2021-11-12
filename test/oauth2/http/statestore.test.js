@@ -125,7 +125,7 @@ describe('oauth2/http/statestore', function() {
         });
       }); // failing to verify state due to lack of state
       
-      describe('failing to verify state due to mix-up attack', function() {
+      it('failing to verify state due to mix-up attack', function(done) {
         var req = new Object();
         req.params = {
           hostname: 'server.example.net'
@@ -134,27 +134,17 @@ describe('oauth2/http/statestore', function() {
           code: 'SplxlOBeZQQYbYS6WxSbIA',
           state: 'xyz'
         };
-        req.state = {
-          location: 'https://client.example.com/cb',
-          provider: 'https://server.example.com'
-        };
+        req.state = new Object();
+        req.state.provider = 'https://server.example.com';
       
-        var ok, info;
-      
-        before(function(done) {
-          store.verify(req, 'xyz', function(err, rv, i) {
-            if (err) { return done(err); }
-            ok = rv;
-            info = i;
-            done();
-          });
-        });
-      
-        it('should fail', function() {
+        store.verify(req, 'xyz', function(err, ok, info) {
+          if (err) { return done(err); }
+          
           expect(ok).to.be.false;
           expect(info).to.deep.equal({
             message: 'Authorization response received from incorrect authorization server.'
           });
+          done();
         });
       }); // failing to verify state due to mix-up attack
       
