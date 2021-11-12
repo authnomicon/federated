@@ -1,20 +1,22 @@
 exports = module.exports = function(idpFactory, authenticate, state, session) {
-  var utils = require('../../../lib/utils');
+  var filterObj = require('filter-obj')
+    , utils = require('../../../lib/utils');
   
   
   function federate(req, res, next) {
     var provider = (req.state && req.state.provider) || req.query.provider
-      , protocol = (req.state && req.state.protocol) || req.query.protocol
-      , options = utils.merge({}, req.state);
-      
-      // TODO: consider switching to filter-obj for this.
-      // https://github.com/sindresorhus/filter-obj
-      // TODO: Test cases for this
-    delete options.location;
-    delete options.returnTo;
-    delete options.resumeState;
-    delete options.provider;
-    delete options.protocol;
+      , protocol = (req.state && req.state.protocol) || req.query.protocol;
+    
+    var options = (req.state && filterObj(req.state, function(k) {
+      return [
+        'location',
+        'returnTo',
+        'resumeState',
+        'provider',
+        'protocol'
+      ].indexOf(k) === -1;
+    })) || {};
+    
     
     // TODO: Past `host` as option, for multi-tenancy
     idpFactory.create(provider, protocol, options)
