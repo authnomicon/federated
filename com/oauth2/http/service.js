@@ -11,9 +11,9 @@
  * with an authorization response.  This endpoint will process the response.
  *
  * The authorization request will typically be made using the federated
- * authentication service included in this package (see
- * `federated/http/service`).  In this situation, the authorization response
- * will be used as a form of delegated user authentication.
+ * authentication service included in this package (see `http/service`).  In
+ * this situation, the authorization response will be used as a form of
+ * delegated user authentication.
  *
  * [1]: https://tools.ietf.org/html/rfc6749#section-3.1.2
  *
