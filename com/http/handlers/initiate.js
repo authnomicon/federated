@@ -9,6 +9,7 @@ exports = module.exports = function(idpFactory, authenticate, state, session) {
       
       // TODO: consider switching to filter-obj for this.
       // https://github.com/sindresorhus/filter-obj
+      // TODO: Test cases for this
     delete options.location;
     delete options.returnTo;
     delete options.resumeState;
@@ -22,9 +23,11 @@ exports = module.exports = function(idpFactory, authenticate, state, session) {
         state.provider = provider;
         
         // TODO: Pull this from state instead, not a query parameter
+        /*
         if (req.query.action) {
           state.action = req.query.action.split(' ');
         }
+        */
         
         // TODO: Remove utils.dispatch here
         utils.dispatch(

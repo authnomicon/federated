@@ -16,6 +16,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Login action no longer resumes state, instead calls next middleware in stack
 to support subsequent actions after login.
+- `location`, `returnTo`, and `resumeState` are no longer passed as state properties
+`authenticate()`, as they are handled automatically by state middleware.
+- `location`, `returnTo`, and `resumeState` are no longer passed as options to
+`IDProviderFactory` when creating IDP.
+- Updated middleware to use `flowstate@0.5.x` API.
 - OAuth 2.0 state store updated to use `flowstate@0.5.x` API, specifically
 `req.pushState`.
 - OAuth state store updated to use `flowstate@0.5.x` API, specifically
