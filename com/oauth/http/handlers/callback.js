@@ -1,12 +1,12 @@
 exports = module.exports = function(actions, idpFactory, authenticate, state, session) {
   var utils = require('../../../../lib/utils');
   var merge = require('utils-merge');
-  var toHandle = require('../../../../lib/oauth/state/handle');
+  var handleFor = require('../../../../lib/oauth/state/handle');
   var dispatch = require('../../../../lib/dispatch');
 
 
   function getHandle(req) {
-    return toHandle(req.query.oauth_token, req.params.hostname);
+    return handleFor(req.query.oauth_token, req.params.hostname);
   }
 
 
@@ -63,7 +63,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
   
   return [
     session(),
-    state({ getHandle: getHandle }),
+    state({ mutationMethods: [ 'GET' ], getHandle: getHandle }),
     federate,
     execute,
     resume,
