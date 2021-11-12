@@ -147,6 +147,23 @@ describe('oauth/http/requesttokenstore', function() {
       }); // should yeild error when pushing state fails
       
     }); // #set
+    
+    describe('#destroy', function() {
+      
+      it('should complete state', function(done) {
+        var req = new Object();
+        req.state = new Object();
+        req.state.complete = sinon.spy();
+      
+        store.destroy(req, 'hh5s93j4hdidpola', function(err) {
+          if (err) { return done(err); }
+          expect(req.state.complete).to.have.been.calledOnce;
+          done();
+        });
+      }); // should complete state
+      
+    }); // #destroy
+    
   });
   
 });
