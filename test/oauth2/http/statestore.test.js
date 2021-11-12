@@ -1,7 +1,7 @@
 /* global describe, it, expect */
 
-var $require = require('proxyquire');
 var expect = require('chai').expect;
+var $require = require('proxyquire');
 var sinon = require('sinon');
 var factory = require('../../../com/oauth2/http/statestore');
 var StateStore = require('../../../lib/oauth2/statestore');
@@ -10,8 +10,8 @@ var StateStore = require('../../../lib/oauth2/statestore');
 describe('oauth2/http/statestore', function() {
   
   it('should be annotated', function() {
-    expect(factory['@singleton']).to.equal(true);
     expect(factory['@implements']).to.equal('http://i.authnomicon.org/federated/oauth2/http/StateStore');
+    expect(factory['@singleton']).to.equal(true);
   });
   
   it('should construct StateStore', function() {
