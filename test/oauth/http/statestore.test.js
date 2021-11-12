@@ -28,9 +28,9 @@ describe('oauth/http/requesttokenstore', function() {
   
   
   describe('RequestTokenStore', function() {
+    var store = new RequestTokenStore();
     
     describe('#get', function() {
-      var store = new RequestTokenStore();
       
       describe('getting token secret', function() {
         var req = new Object();
@@ -87,46 +87,31 @@ describe('oauth/http/requesttokenstore', function() {
     
     describe('#set', function() {
       
-      // FIXME: Re-enable this test
-      describe.skip('setting token secret', function() {
-        var _store = new Object();
-        _store.save = sinon.spy(function(req, state, options, cb) {
-          process.nextTick(function() {
-            cb(null, 'XXXXXXXX');
-          })
-        });
-        
-        var store = new RequestTokenStore(_store);
-        
+      it('should push state and yield handle', function(done) {
         var req = new Object();
         req.state = new Object();
-        req.state.push = sinon.spy();
+        req.pushState = sinon.stub().yieldsAsync(null, 'oauth:photos.example.net:hh5s93j4hdidpola');
       
-        before(function(done) {
-          var state = {};
-          var meta = {
-            requestTokenURL: 'https://sp.example.com/request_token',
-            accessTokenURL: 'https://sp.example.com/access_token',
-            userAuthorizationURL: 'http://sp.example.com/authorize',
-            consumerKey: 'dpf43f3p2l4k3l03',
-            callbackURL: 'http://client.example.com/request_token_ready'
-          }
+        //var state = { provider: 'https://photos.example.net' };
+        var state = {};
+        var meta = {
+          requestTokenURL: 'https://photos.example.net/request_token',
+          accessTokenURL: 'https://photos.example.net/access_token',
+          userAuthorizationURL: 'http://photos.example.net/authorize',
+          consumerKey: 'dpf43f3p2l4k3l03',
+          callbackURL: 'http://printer.example.com/request_token_ready'
+        }
+        
+        store.set(req, 'hh5s93j4hdidpola', 'hdhd0244k9j7ao03', state, meta, function(err, handle) {
+          if (err) { return done(err); }
           
-          store.set(req, 'hh5s93j4hdidpola', 'hdhd0244k9j7ao03', state, meta, function(err, h) {
-            if (err) { return done(err); }
-            done();
-          });
-        });
-      
-        it('should push state for callback endpoint', function() {
-          expect(req.state.push).to.have.been.calledOnceWith({
-            location: 'http://client.example.com/request_token_ready',
+          expect(req.pushState).to.have.been.calledOnceWith({
             tokenSecret: 'hdhd0244k9j7ao03'
-          });
-        });
-      
-        it('should save state with handle', function() {
-          expect(_store.save).to.have.been.calledOnceWith(req, req.state, { handle: 'oauth:sp.example.com:hh5s93j4hdidpola' });
+          }, 'http://printer.example.com/request_token_ready',
+          { handle: 'oauth:photos.example.net:hh5s93j4hdidpola' });
+          
+          expect(handle).to.equal('oauth:photos.example.net:hh5s93j4hdidpola');
+          done();
         });
       }); // setting token secret
       
