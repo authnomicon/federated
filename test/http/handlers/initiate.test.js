@@ -17,37 +17,46 @@ describe('http/handlers/initiate', function() {
     expect(factory['@singleton']).to.be.undefined;
   });
   
+  
+  function authenticate(idp, options) {
+    return function(req, res, next) {
+      res.redirect('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
+    };
+  }
+  
+  function state() {
+    return function(req, res, next) {
+      next();
+    };
+  }
+  
+  function session() {
+    return function(req, res, next) {
+      next();
+    };
+  }
+  
+  it('should create handler', function() {
+    var idpFactory = new Object();
+    var stateSpy = sinon.spy(state);
+    var sessionSpy = sinon.spy(session);
+    
+    var handler = factory(idpFactory, authenticate, stateSpy, sessionSpy);
+    
+    expect(sessionSpy).to.be.calledOnce;
+    expect(stateSpy).to.be.calledOnce;
+    expect(sessionSpy).to.be.calledBefore(stateSpy);
+  });
+  
   describe('handler', function() {
     
-    it('federating with provider', function(done) {
+    it('should create IdP from provider and authenticate', function(done) {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp)
-      
-      function authenticate(idp, options) {
-        return function(req, res, next) {
-          res.redirect('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
-        };
-      }
-      
-      function state() {
-        return function(req, res, next) {
-          next();
-        };
-      }
-      
-      function session() {
-        return function(req, res, next) {
-          next();
-        };
-      }
-      
       var authenticateSpy = sinon.spy(authenticate);
-      var stateSpy = sinon.spy(state);
-      var sessionSpy = sinon.spy(session);
       
-      
-      var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
+      var handler = factory(idpFactory, authenticateSpy, state, session);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -56,9 +65,6 @@ describe('http/handlers/initiate', function() {
           };
         })
         .finish(function() {
-          expect(sessionSpy).to.be.calledOnce;
-          expect(stateSpy).to.be.calledOnce;
-          
           expect(idpFactory.create).to.be.calledOnce;
           expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', undefined, {});
           
@@ -70,13 +76,12 @@ describe('http/handlers/initiate', function() {
           });
           
           expect(this.statusCode).to.equal(302);
-          expect(this.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
-          
+          expect(this.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
           done();
         })
         .next(done)
         .listen();
-    }); // federating with provider
+    }); // should create IdP from provider and authenticate
     
     describe('federating with provider and protocol', function() {
       var idp = new Object();
@@ -85,7 +90,7 @@ describe('http/handlers/initiate', function() {
       
       function authenticate(idp, options) {
         return function(req, res, next) {
-          res.redirect('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+          res.redirect('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
         };
       }
       
@@ -148,7 +153,7 @@ describe('http/handlers/initiate', function() {
       
       it('should redirect', function() {
         expect(response.statusCode).to.equal(302);
-        expect(response.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+        expect(response.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
       });
     }); // federating with provider and protocol
     
@@ -159,7 +164,7 @@ describe('http/handlers/initiate', function() {
       
       function authenticate(idp, options) {
         return function(req, res, next) {
-          res.redirect('https://server.example.net/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+          res.redirect('https://server.example.net/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
         };
       }
       
@@ -223,7 +228,7 @@ describe('http/handlers/initiate', function() {
       
       it('should redirect', function() {
         expect(response.statusCode).to.equal(302);
-        expect(response.getHeader('Location')).to.equal('https://server.example.net/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+        expect(response.getHeader('Location')).to.equal('https://server.example.net/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
       });
     }); // federating with provider from state
     
@@ -234,7 +239,7 @@ describe('http/handlers/initiate', function() {
       
       function authenticate(idp, options) {
         return function(req, res, next) {
-          res.redirect('https://server.example.net/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+          res.redirect('https://server.example.net/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
         };
       }
       
@@ -300,7 +305,7 @@ describe('http/handlers/initiate', function() {
       
       it('should redirect', function() {
         expect(response.statusCode).to.equal(302);
-        expect(response.getHeader('Location')).to.equal('https://server.example.net/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+        expect(response.getHeader('Location')).to.equal('https://server.example.net/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
       });
     }); // federating with provider and protocol from state
     
@@ -311,7 +316,7 @@ describe('http/handlers/initiate', function() {
       
       function authenticate(idp, options) {
         return function(req, res, next) {
-          res.redirect('https://example.myshopify.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+          res.redirect('https://example.myshopify.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
         };
       }
       
@@ -375,7 +380,7 @@ describe('http/handlers/initiate', function() {
       
       it('should redirect', function() {
         expect(response.statusCode).to.equal(302);
-        expect(response.getHeader('Location')).to.equal('https://example.myshopify.com/authorize?response_type=code&client_id=s6BhdRkqt3&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb&state=XXXXXXXX');
+        expect(response.getHeader('Location')).to.equal('https://example.myshopify.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
       });
     }); // federating with provider and parameters in state
     
