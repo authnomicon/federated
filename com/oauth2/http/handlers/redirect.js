@@ -74,7 +74,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
   
   return [
     session(),
-    state(),
+    state({ mutationMethods: [ 'GET', 'POST' ]}),
     federate,
     execute,
     resume,

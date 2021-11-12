@@ -9,31 +9,22 @@ var StateStore = require('../../../lib/oauth2/statestore');
 
 describe('oauth2/http/statestore', function() {
   
-  it('should export factory function', function() {
-    expect(factory).to.be.a('function');
-  });
-  
   it('should be annotated', function() {
     expect(factory['@singleton']).to.equal(true);
     expect(factory['@implements']).to.equal('http://i.authnomicon.org/federated/oauth2/http/StateStore');
   });
   
-  describe('creating with defaults', function() {
+  it('should construct StateStore', function() {
     var StateStoreSpy = sinon.spy(StateStore);
-    var factory = $require('../../../com/oauth2/http/statestore',
-      { '../../../lib/oauth2/statestore': StateStoreSpy });
+    var factory = $require('../../../com/oauth2/http/statestore', {
+      '../../../lib/oauth2/statestore': StateStoreSpy
+    });
     
     var store = factory();
-    
-    it('should construct store', function() {
-      expect(StateStoreSpy).to.have.been.calledOnce;
-      expect(StateStoreSpy).to.have.been.calledWithNew;
-    });
-  
-    it('should return store', function() {
-      expect(store).to.be.an.instanceOf(StateStore);
-    });
-  }); // creating with defaults
+    expect(StateStoreSpy).to.have.been.calledOnce;
+    expect(StateStoreSpy).to.have.been.calledWithNew;
+    expect(store).to.be.an.instanceOf(StateStore);
+  });
   
   
   describe('StateStore', function() {

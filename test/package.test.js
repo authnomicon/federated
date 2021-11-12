@@ -4,12 +4,7 @@ var expect = require('chai').expect;
 var sinon = require('sinon');
 
 
-afterEach(function() {
-  sinon.restore();
-});
-
-
-describe('@authnomicon/sso', function() {
+describe('@authnomicon/federated', function() {
   
   describe('package.json', function() {
     var json = require('../package.json');
@@ -28,10 +23,8 @@ describe('@authnomicon/sso', function() {
     });
   });
   
-  it('should throw if required', function() {
-    expect(function() {
-      var pkg = require('..');
-    }).to.throw(Error).with.property('code', 'MODULE_NOT_FOUND');
-  });
-  
+});
+
+afterEach(function() {
+  sinon.restore();
 });
