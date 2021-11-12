@@ -110,22 +110,28 @@ describe('oauth2/http/statestore', function() {
         });
       }); // should verify state
       
-      it('failing to verify state due to lack of state', function(done) {
+      it('should fail when response sent to indistinct redirect URI', function(done) {
         var req = new Object();
+        req.params = {};
+        req.query = {
+          code: 'SplxlOBeZQQYbYS6WxSbIA',
+          state: 'xyz'
+        };
+        req.state = new Object();
+        req.state.provider = 'https://server.example.com';
       
         store.verify(req, 'xyz', function(err, ok, info) {
           if (err) { return done(err); }
           
           expect(ok).to.be.false;
           expect(info).to.deep.equal({
-            message: 'Unable to verify authorization request state.'
+            message: 'OAuth 2.0 authorization response received on indistinct redirect URI.'
           });
-          
           done();
         });
-      }); // failing to verify state due to lack of state
+      }); // should fail when response sent to indistinct redirect URI
       
-      it('failing to verify state due to mix-up attack', function(done) {
+      it('should fail when under a mix-up attack', function(done) {
         var req = new Object();
         req.params = {
           hostname: 'server.example.net'
@@ -142,11 +148,23 @@ describe('oauth2/http/statestore', function() {
           
           expect(ok).to.be.false;
           expect(info).to.deep.equal({
-            message: 'Authorization response received from incorrect authorization server.'
+            message: 'OAuth 2.0 authorization response received from incorrect authorization server.'
           });
           done();
         });
-      }); // failing to verify state due to mix-up attack
+      }); // should fail when under a mix-up attack
+      
+      it('should error when state middleware is not in use', function(done) {
+        var req = new Object();
+      
+        store.verify(req, 'xyz', function(err, ok, info) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(err.message).to.equal('OAuth 2.0 authentication requires state support. Did you forget to use `flowstate` middleware?');
+          expect(ok).to.be.undefined;
+          expect(info).to.be.undefined;
+          done();
+        });
+      }); // should error when state middleware is not in use
       
     }); // #verify
   
