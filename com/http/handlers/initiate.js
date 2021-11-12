@@ -1,5 +1,6 @@
 exports = module.exports = function(idpFactory, authenticate, state, session) {
   var filterObj = require('filter-obj')
+    , merge = require('utils-merge')
     , utils = require('../../../lib/utils');
   
   
@@ -21,7 +22,7 @@ exports = module.exports = function(idpFactory, authenticate, state, session) {
     // TODO: Past `host` as option, for multi-tenancy
     idpFactory.create(provider, protocol, options)
       .then(function(idp) {
-        var state = utils.merge({}, options);
+        var state = merge({}, options);
         state.provider = provider;
         
         // TODO: Pull this from state instead, not a query parameter
