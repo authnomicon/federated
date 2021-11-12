@@ -67,7 +67,7 @@ describe('oauth/http/requesttokenstore', function() {
       it('should push state and yield handle', function(done) {
         var req = new Object();
         req.state = new Object();
-        req.pushState = sinon.stub().yieldsAsync(null, 'oauth:photos.example.net:hh5s93j4hdidpola');
+        req.pushState = sinon.stub().yieldsAsync(null, 'oauth_photos.example.net_hh5s93j4hdidpola');
         
         var state = {};
         var meta = {
@@ -84,9 +84,9 @@ describe('oauth/http/requesttokenstore', function() {
           expect(req.pushState).to.have.been.calledOnceWith({
             tokenSecret: 'hdhd0244k9j7ao03'
           }, 'http://printer.example.com/request_token_ready',
-          { handle: 'oauth:photos.example.net:hh5s93j4hdidpola' });
+          { handle: 'oauth_photos.example.net_hh5s93j4hdidpola' });
           
-          expect(handle).to.equal('oauth:photos.example.net:hh5s93j4hdidpola');
+          expect(handle).to.equal('oauth_photos.example.net_hh5s93j4hdidpola');
           done();
         });
       }); // should push state and yield handle
@@ -94,7 +94,7 @@ describe('oauth/http/requesttokenstore', function() {
       it('should push state with provider and yield handle', function(done) {
         var req = new Object();
         req.state = new Object();
-        req.pushState = sinon.stub().yieldsAsync(null, 'oauth:photos.example.net:hh5s93j4hdidpola');
+        req.pushState = sinon.stub().yieldsAsync(null, 'oauth_photos.example.net_hh5s93j4hdidpola');
       
         var state = { provider: 'https://photos.example.net' };
         var meta = {
@@ -112,9 +112,9 @@ describe('oauth/http/requesttokenstore', function() {
             provider: 'https://photos.example.net',
             tokenSecret: 'hdhd0244k9j7ao03'
           }, 'http://printer.example.com/request_token_ready',
-          { handle: 'oauth:photos.example.net:hh5s93j4hdidpola' });
+          { handle: 'oauth_photos.example.net_hh5s93j4hdidpola' });
           
-          expect(handle).to.equal('oauth:photos.example.net:hh5s93j4hdidpola');
+          expect(handle).to.equal('oauth_photos.example.net_hh5s93j4hdidpola');
           done();
         });
       }); // should push state with provider and yield handle
@@ -137,7 +137,7 @@ describe('oauth/http/requesttokenstore', function() {
           expect(req.pushState).to.have.been.calledOnceWith({
             tokenSecret: 'hdhd0244k9j7ao03'
           }, 'http://printer.example.com/request_token_ready',
-          { handle: 'oauth:photos.example.net:hh5s93j4hdidpola' });
+          { handle: 'oauth_photos.example.net_hh5s93j4hdidpola' });
           
           expect(err).to.be.an.instanceOf(Error);
           expect(err.message).to.equal('something went wrong');
