@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 
+- Support for `login_hint` query parameter to '/login/federated' endpoint, which
+is passed as `loginHint` option to federated authentication strategy.
 - Support for dispatching to multiple actions from OAuth 2.0 redirect endpoint.
 - Support for dispatching to multiple actions from OAuth callback endpoint.
 - Added `authorize` action for storing tokens authorized by users.

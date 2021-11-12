@@ -189,6 +189,41 @@ describe('http/handlers/initiate', function() {
         .listen();
     }); // should authenticate with provider and protocol from state
     
+    it('should authenticate with login hint option', function(done) {
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().resolves(idp)
+      var authenticateSpy = sinon.spy(authenticate);
+      
+      var handler = factory(idpFactory, authenticateSpy, state, session);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.query = {
+            provider: 'https://server.example.com',
+            login_hint: 'janedoe@example.com'
+          };
+        })
+        .finish(function() {
+          expect(idpFactory.create).to.be.calledOnce;
+          expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', undefined, {});
+          
+          expect(authenticateSpy).to.be.calledOnce;
+          expect(authenticateSpy).to.be.calledWithExactly(idp, {
+            loginHint: 'janedoe@example.com',
+            state: {
+              provider: 'https://server.example.com'
+            }
+          });
+          
+          expect(this.statusCode).to.equal(302);
+          expect(this.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
+          done();
+        })
+        .next(done)
+        .listen();
+    }); // should authenticate with provider
+    
     it('should authenticate without return to property managed by state middleware', function(done) {
       var idp = new Object();
       var idpFactory = new Object();

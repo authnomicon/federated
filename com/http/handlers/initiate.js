@@ -22,8 +22,11 @@ exports = module.exports = function(idpFactory, authenticate, state, session) {
     // TODO: Past `host` as option, for multi-tenancy
     idpFactory.create(provider, protocol, options)
       .then(function(idp) {
-        var state = merge({}, options);
-        state.provider = provider;
+        var opts = {
+          state: merge({ provider: provider }, options)
+        };
+        if (req.query.login_hint) { opts.loginHint = req.query.login_hint; }
+        
         
         // TODO: Pull this from state instead, not a query parameter
         /*
@@ -34,9 +37,7 @@ exports = module.exports = function(idpFactory, authenticate, state, session) {
         
         // TODO: Remove utils.dispatch here
         utils.dispatch(
-          authenticate(idp, {
-            state: state
-          })
+          authenticate(idp, opts)
         )(null, req, res, next);
       }, function(err) {
         next(err);
