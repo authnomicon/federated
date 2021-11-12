@@ -86,7 +86,7 @@ describe('oauth2/http/statestore', function() {
     
     describe('#verify', function() {
       
-      describe('verifying state', function() {
+      it('should verify state', function(done) {
         var req = new Object();
         req.params = {
           hostname: 'server.example.com'
@@ -95,36 +95,19 @@ describe('oauth2/http/statestore', function() {
           code: 'SplxlOBeZQQYbYS6WxSbIA',
           state: 'xyz'
         };
-        req.state = {
-          location: 'https://client.example.com/cb',
-          provider: 'https://server.example.com'
-        };
+        req.state = new Object();
+        req.state.provider = 'https://server.example.com';
         req.state.complete = sinon.spy();
         
-        req.state.destroy = sinon.spy(function(cb) {
-          process.nextTick(function() {
-            cb();
-          })
-        });
-      
-        var ok;
-      
-        before(function(done) {
-          store.verify(req, 'xyz', function(err, rv) {
-            if (err) { return done(err); }
-            ok = rv;
-            done();
-          });
-        });
-      
-        it('should destroy state', function() {
+        store.verify(req, 'xyz', function(err, ok) {
+          if (err) { return done(err); }
+          
           expect(req.state.complete).to.have.been.calledOnce;
-        });
-      
-        it('should verify', function() {
+          
           expect(ok).to.be.true;
+          done();
         });
-      }); // verifying state
+      }); // should verify state
       
       describe('failing to verify state due to lack of state', function() {
         var req = new Object();
