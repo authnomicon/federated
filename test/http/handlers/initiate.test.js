@@ -302,6 +302,29 @@ describe('http/handlers/initiate', function() {
         .listen();
     }); // should authenticate with parameters from state
     
+    it('should next with error when identity provider fails to be created', function(done) {
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().rejects(new Error('something went wrong'))
+      var authenticateSpy = sinon.spy(authenticate);
+      
+      var handler = factory(idpFactory, authenticateSpy, state, session);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.query = {
+            provider: 'https://server.example.com'
+          };
+        })
+        .next(function(err, req, res) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(err.message).to.equal('something went wrong');
+          expect(authenticateSpy).to.not.be.called;
+          done();
+        })
+        .listen();
+    }); // should next with error when identity provider fails to be created
+    
   }); // handler
   
 });
