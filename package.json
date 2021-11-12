@@ -40,7 +40,7 @@
     "components": [
       "http/service",
       "oauth/http/service",
-      "oauth/http/statestore",
+      "oauth/http/requesttokenstore",
       "oauth2/http/service",
       "oauth2/http/statestore",
       "openidconnect/http/statestore",

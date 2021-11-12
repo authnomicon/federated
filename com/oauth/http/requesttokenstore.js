@@ -1,5 +1,5 @@
 exports = module.exports = function() {
-  var RequestTokenStore = require('../../../lib/oauth/statestore');
+  var RequestTokenStore = require('../../../lib/oauth/requesttokenstore');
   
   return new RequestTokenStore();
 };

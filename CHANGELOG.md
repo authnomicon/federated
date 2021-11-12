@@ -31,6 +31,7 @@ countermeasures.
 `req.pushState`.
 - OAuth request token store errors, rather than fails, when state middleware is
 not in use.
+- Moved `oauth/http/statestore` component to `oauth/http/requesttokenstore`.
 
 ### Fixed
 

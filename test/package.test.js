@@ -15,7 +15,7 @@ describe('@authnomicon/federated', function() {
       expect(json.assembly.components).to.have.length(8);
       expect(json.assembly.components).to.include('http/service');
       expect(json.assembly.components).to.include('oauth/http/service');
-      expect(json.assembly.components).to.include('oauth/http/statestore');
+      expect(json.assembly.components).to.include('oauth/http/requesttokenstore');
       expect(json.assembly.components).to.include('oauth2/http/service');
       expect(json.assembly.components).to.include('oauth2/http/statestore');
       expect(json.assembly.components).to.include('idp/http/facebook');
