@@ -17,6 +17,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
 
   function federate(req, res, next) {
     var provider = req.state.provider
+      , protocol = req.state.protocol || 'oauth2'
       , options = merge({}, req.state);
     
     delete options.provider;
@@ -28,7 +29,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
     // TODO: Past `host` as option
     // TODO: Pass `idpID` as option, if available in state
     // TODO: Pass `clientID` as option, if available
-    idpFactory.create(provider, 'oauth2', options)
+    idpFactory.create(provider, protocol, options)
       .then(function(idp) {
         // TODO: Remove utils.dispatch here
         utils.dispatch(

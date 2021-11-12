@@ -10,6 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support for dispatching to multiple actions from OAuth 2.0 redirect endpoint.
 - Support for dispatching to multiple actions from OAuth callback endpoint.
 - Added `authorize` action for storing tokens authorized by users.
+- OAuth 2.0 redirect endpoint passes protocol from state as argument when
+constructing IDPs, useful for indicating layers on top of OAuth 2.0, such as
+OpenID Connect.
 - Added OpenID Connect `StateStore` component at `openidconnect/http/statestore`.
 
 ### Changed

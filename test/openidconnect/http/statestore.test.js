@@ -51,7 +51,8 @@ describe('openidconnect/http/statestore', function() {
           if (err) { return done(err); }
         
           expect(req.pushState).to.have.been.calledOnceWith({
-            provider: 'https://server.example.com'
+            provider: 'https://server.example.com',
+            protocol: 'openidconnect'
           }, 'https://client.example.com/cb');
         
           expect(handle).to.equal('af0ifjsldkj');
@@ -79,6 +80,7 @@ describe('openidconnect/http/statestore', function() {
         
           expect(req.pushState).to.have.been.calledOnceWith({
             provider: 'https://server.example.com',
+            protocol: 'openidconnect',
             nonce: 'n-0S6_WzA2Mj'
           }, 'https://client.example.com/cb');
         
@@ -104,7 +106,8 @@ describe('openidconnect/http/statestore', function() {
       
         store.store(req, ctx, state, meta, function(err, handle) {
           expect(req.pushState).to.have.been.calledOnceWith({
-            provider: 'https://server.example.com'
+            provider: 'https://server.example.com',
+            protocol: 'openidconnect'
           }, 'https://client.example.com/cb');
           
           expect(err).to.be.an.instanceOf(Error);
