@@ -99,35 +99,29 @@ describe('oauth2/http/statestore', function() {
         req.state.provider = 'https://server.example.com';
         req.state.complete = sinon.spy();
         
-        store.verify(req, 'xyz', function(err, ok) {
+        store.verify(req, 'xyz', function(err, ok, state) {
           if (err) { return done(err); }
           
           expect(req.state.complete).to.have.been.calledOnce;
           
           expect(ok).to.be.true;
+          expect(state).to.be.undefined;
           done();
         });
       }); // should verify state
       
-      describe('failing to verify state due to lack of state', function() {
+      it('failing to verify state due to lack of state', function(done) {
         var req = new Object();
       
-        var ok, info;
-      
-        before(function(done) {
-          store.verify(req, 'xyz', function(err, rv, i) {
-            if (err) { return done(err); }
-            ok = rv;
-            info = i;
-            done();
-          });
-        });
-      
-        it('should fail', function() {
+        store.verify(req, 'xyz', function(err, ok, info) {
+          if (err) { return done(err); }
+          
           expect(ok).to.be.false;
           expect(info).to.deep.equal({
             message: 'Unable to verify authorization request state.'
           });
+          
+          done();
         });
       }); // failing to verify state due to lack of state
       
