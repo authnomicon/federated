@@ -23,6 +23,10 @@ to support subsequent actions after login.
 - Updated middleware to use `flowstate@0.5.x` API.
 - OAuth 2.0 state store updated to use `flowstate@0.5.x` API, specifically
 `req.pushState`.
+- OAuth 2.0 state store errors, rather than fails, when state middleware is not
+in use.
+- Improved OAuth 2.0 state store failure messages for mix-up attack
+countermeasures.
 - OAuth state store updated to use `flowstate@0.5.x` API, specifically
 `req.pushState`.
 
