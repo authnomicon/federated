@@ -152,82 +152,42 @@ describe('http/handlers/initiate', function() {
         .listen();
     }); // should authenticate with provider from state
     
-    describe('federating with provider and protocol from state', function() {
+    it('should authenticate with provider and protocol from state', function(done) {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp)
-      
-      function authenticate(idp, options) {
-        return function(req, res, next) {
-          res.redirect('https://server.example.net/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
-        };
-      }
-      
-      function state() {
-        return function(req, res, next) {
-          req.state = new Object();
-          req.state.provider = 'https://server.example.net';
-          req.state.protocol = 'openidconnect';
-          next();
-        };
-      }
-      
-      function session() {
-        return function(req, res, next) {
-          next();
-        };
-      }
-      
       var authenticateSpy = sinon.spy(authenticate);
-      var stateSpy = sinon.spy(state);
-      var sessionSpy = sinon.spy(session);
       
+      var handler = factory(idpFactory, authenticateSpy, state, session);
       
-      var request, response;
-      
-      before(function(done) {
-        var handler = factory(idpFactory, authenticateSpy, stateSpy, sessionSpy);
-        
-        chai.express.use(handler)
-          .request(function(req, res) {
-            request = req;
-            req.query = {
-              provider: 'https://server.example.com',
-              protocol: 'oauth2'
-            };
-            
-            response = res;
-          })
-          .finish(function() {
-            done();
-          })
-          .listen();
-      });
-      
-      it('should setup middleware', function() {
-        expect(sessionSpy).to.be.calledOnce;
-        expect(stateSpy).to.be.calledOnce;
-      });
-      
-      it('should create identity provider', function() {
-        expect(idpFactory.create).to.be.calledOnce;
-        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.net', 'openidconnect', {});
-      });
-      
-      it('should authenticate with identity provider', function() {
-        expect(authenticateSpy).to.be.calledOnce;
-        expect(authenticateSpy).to.be.calledWithExactly(idp, {
-          state: {
-            provider: 'https://server.example.net'
-          }
-        });
-      });
-      
-      it('should redirect', function() {
-        expect(response.statusCode).to.equal(302);
-        expect(response.getHeader('Location')).to.equal('https://server.example.net/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
-      });
-    }); // federating with provider and protocol from state
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.query = {
+            provider: 'https://server.example.net',
+            protocol: 'oauth2'
+          };
+          req.state = new Object();
+          req.state.provider = 'https://server.example.com';
+          req.state.protocol = 'openidconnect';
+        })
+        .finish(function() {
+          expect(idpFactory.create).to.be.calledOnce;
+          expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'openidconnect', {});
+          
+          expect(authenticateSpy).to.be.calledOnce;
+          expect(authenticateSpy).to.be.calledWithExactly(idp, {
+            state: {
+              provider: 'https://server.example.com'
+            }
+          });
+          
+          expect(this.statusCode).to.equal(302);
+          expect(this.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
+          done();
+        })
+        .next(done)
+        .listen();
+    }); // should authenticate with provider and protocol from state
     
     describe('federating with provider and parameters in state', function() {
       var idp = new Object();
