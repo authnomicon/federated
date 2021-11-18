@@ -4,7 +4,13 @@ exports = module.exports = function(federatedIDs, directory) {
     federatedIDs.find(req.federatedUser.id, req.state.provider, function(err, federatedID, user) {
       if (err) { return next(err); }
       
-      if (federatedID) {
+      if (federatedID === false) {
+        // user isn't federated from an external domain
+        req.login(req.federatedUser, function(err) {
+          if (err) { return next(err); }
+          return next();
+        });
+      } else if (federatedID) {
         // Load the user, already JIT'ed
         directory.read(user.id, function(err, user) {
           if (err) { return next(err); }
