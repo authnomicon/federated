@@ -25,6 +25,7 @@ exports = module.exports = function(idpFactory, authenticate, state, session) {
         var opts = {
           state: merge({ provider: provider }, options)
         };
+        if (req.query.prompt) { opts.prompt = req.query.prompt; }
         if (req.query.login_hint) { opts.loginHint = req.query.login_hint; }
         
         
