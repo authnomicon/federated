@@ -8,10 +8,6 @@ var factory = require('../../../com/http/handlers/initiate');
 
 describe('http/handlers/initiate', function() {
   
-  it('should export factory function', function() {
-    expect(factory).to.be.a('function');
-  });
-  
   it('should be annotated', function() {
     expect(factory['@implements']).to.be.undefined;
     expect(factory['@singleton']).to.be.undefined;
