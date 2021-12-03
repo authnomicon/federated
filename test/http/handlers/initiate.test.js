@@ -273,7 +273,7 @@ describe('http/handlers/initiate', function() {
             provider: 'https://server.example.com'
           };
           req.state = new Object();
-          req.state.location = 'http://localhost:3000/login/federated';
+          req.state.location = 'https://client.example.com/login/federated';
           req.state.returnTo = 'https://client.example.com/app';
         })
         .finish(function() {
@@ -309,7 +309,7 @@ describe('http/handlers/initiate', function() {
             provider: 'https://server.example.com'
           };
           req.state = new Object();
-          req.state.location = 'http://localhost:3000/login/federated';
+          req.state.location = 'https://client.example.com/login/federated';
           req.state.resumeState = '00000000';
         })
         .finish(function() {
