@@ -1,6 +1,14 @@
-exports = module.exports = function(IoC) {
+var LocalIDProviderFactory = require('../../../lib/localidpfactory');
+
+exports = module.exports = function(C, scheme) {
   
+  // TODO: Register the provider and protocol with the scheme, so it can be validated?
   
+  return new LocalIDProviderFactory(scheme);
+  
+  // TODO: Old code, remove once not needed
+  // WIP: build "selectors" into electrolyte, so that app can override without this pattern
+  /*
   return IoC.create('http://i.authnomicon.org/federated/http/IDProviderFactory')
     .catch(function(err) {
       
@@ -19,9 +27,12 @@ exports = module.exports = function(IoC) {
         }
       };
     });
+  */
 };
 
 exports['@singleton'] = true;
+exports['@implements'] = 'module:@authnomicon/federated.IDProviderFactory';
 exports['@require'] = [
   '!container',
+  'module:@authnomicon/session.InitiationScheme'
 ];

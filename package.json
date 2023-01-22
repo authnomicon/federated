@@ -45,7 +45,8 @@
       "oauth2/http/statestore",
       "openidconnect/http/statestore",
       "idp/http/facebook",
-      "idp/http/twitter"
+      "idp/http/twitter",
+      "idp/http/factory"
     ]
   },
   "directories": {

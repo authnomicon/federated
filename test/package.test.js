@@ -12,7 +12,7 @@ describe('@authnomicon/federated', function() {
     it('should have assembly metadata', function() {
       expect(json.assembly.namespace).to.equal('org.authnomicon/federated');
       
-      expect(json.assembly.components).to.have.length(8);
+      expect(json.assembly.components).to.have.length(9);
       expect(json.assembly.components).to.include('http/service');
       expect(json.assembly.components).to.include('oauth/http/service');
       expect(json.assembly.components).to.include('oauth/http/requesttokenstore');

@@ -1,6 +1,14 @@
 exports = module.exports = function(federatedIDs, directory) {
   
+  // TODO: Rename "Federated ID server" to iss-sub service, following.
+  // https://www.ietf.org/archive/id/draft-ietf-secevent-subject-identifiers-14.html#name-issuer-and-subject-identifi
+  
+  
   function login(req, res, next) {
+    
+    // TODO: Decouple this component more, so directory isn't needed.  Should be
+    //. federatedIDs.findOrCreate()...
+    
     federatedIDs.find(req.federatedUser.id, req.state.provider, function(err, federatedID, user) {
       if (err) { return next(err); }
       
@@ -46,5 +54,5 @@ exports = module.exports = function(federatedIDs, directory) {
 
 exports['@require'] = [
   'http://i.authnomicon.org/credentials/FederatedIDService',
-  'http://i.authnomicon.org/Directory'
+  'http://i.authnomicon.org/Directory?'
 ];
