@@ -38,7 +38,7 @@
   "assembly": {
     "namespace": "org.authnomicon/federated",
     "components": [
-      "localidpfactory",
+      "localidpschemefactory",
       "http/service",
       "oauth/http/service",
       "oauth/http/requesttokenstore",

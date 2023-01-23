@@ -1,10 +1,10 @@
-var LocalIDProviderFactory = require('../lib/localidpfactory');
+var LocalIDPSchemeFactory = require('../lib/localidpschemefactory');
 
 exports = module.exports = function(scheme) {
   
   // TODO: Register the provider and protocol with the scheme, so it can be validated?
   
-  return new LocalIDProviderFactory(scheme);
+  return new LocalIDPSchemeFactory(scheme);
   
   // TODO: Old code, remove once not needed
   // WIP: build "selectors" into electrolyte, so that app can override without this pattern
