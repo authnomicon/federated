@@ -31,7 +31,7 @@ exports = module.exports = function(scheme) {
 };
 
 exports['@singleton'] = true;
-exports['@implements'] = 'module:@authnomicon/federated.IDProviderFactory';
+exports['@implements'] = 'module:@authnomicon/federated.IDSchemeFactory';
 exports['@require'] = [
   'module:@authnomicon/session.InitiationScheme'
 ];

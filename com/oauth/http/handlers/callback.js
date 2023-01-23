@@ -1,4 +1,4 @@
-exports = module.exports = function(actions, idpFactory, authenticate, state) {
+exports = module.exports = function(actions, schemeFactory, authenticate, state) {
   var utils = require('../../../../lib/utils');
   var merge = require('utils-merge');
   var handleFor = require('../../../../lib/oauth/state/handle');
@@ -24,11 +24,11 @@ exports = module.exports = function(actions, idpFactory, authenticate, state) {
     // TODO: Pass `idpID` as option, if available in state
     // TODO: Pass `clientID` as option, if available
       
-    idpFactory.create(provider, 'oauth', options)
-      .then(function(idp) {
+    schemeFactory.create(provider, 'oauth', options)
+      .then(function(scheme) {
         // TODO: Remove utils.dispatch here
         utils.dispatch(
-          authenticate(idp, { assignProperty: 'federatedUser' })
+          authenticate(scheme, { assignProperty: 'federatedUser' })
         )(null, req, res, next);
       })
       .catch(function(err) {
@@ -72,7 +72,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state) {
 
 exports['@require'] = [
   '../../../actions/http/router',
-  'module:@authnomicon/federated.IDProviderFactory', //'../../../idp/http/factory',
+  'module:@authnomicon/federated.IDSchemeFactory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/state'
 ];
