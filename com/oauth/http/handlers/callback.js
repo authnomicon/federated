@@ -1,4 +1,4 @@
-exports = module.exports = function(actions, idpFactory, authenticate, state, session) {
+exports = module.exports = function(actions, idpFactory, authenticate, state) {
   var utils = require('../../../../lib/utils');
   var merge = require('utils-merge');
   var handleFor = require('../../../../lib/oauth/state/handle');
@@ -62,7 +62,6 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
   
   
   return [
-    session(),
     state({ mutationMethods: [ 'GET' ], getHandle: getHandle }),
     federate,
     execute,
@@ -73,8 +72,7 @@ exports = module.exports = function(actions, idpFactory, authenticate, state, se
 
 exports['@require'] = [
   '../../../actions/http/router',
-  '../../../idp/http/factory',
+  'module:@authnomicon/federated.IDProviderFactory', //'../../../idp/http/factory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
-  'http://i.bixbyjs.org/http/middleware/state',
-  'http://i.bixbyjs.org/http/middleware/session'
+  'http://i.bixbyjs.org/http/middleware/state'
 ];

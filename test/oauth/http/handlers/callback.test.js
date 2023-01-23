@@ -44,21 +44,14 @@ describe('oauth/http/handlers/callback', function() {
         };
       }
       
-      function session() {
-        return function(req, res, next) {
-          next();
-        };
-      }
-      
       var authenticateSpy = sinon.spy(authenticate);
       var stateSpy = sinon.spy(state);
-      var sessionSpy = sinon.spy(session);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(actions, idpFactory, authenticateSpy, stateSpy, sessionSpy);
+        var handler = factory(actions, idpFactory, authenticateSpy, stateSpy);
         
         chai.express.use(handler)
           .request(function(req, res) {
@@ -86,7 +79,6 @@ describe('oauth/http/handlers/callback', function() {
       });
       
       it('should setup middleware', function() {
-        expect(sessionSpy).to.be.calledOnce;
         expect(stateSpy).to.be.calledOnce;
       });
       
