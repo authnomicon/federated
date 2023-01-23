@@ -9,7 +9,7 @@
  *
  * @returns {Function}
  */
-exports = module.exports = function(actions, schemeFactory, authenticate, state, session) {
+exports = module.exports = function(actions, idpFactory, authenticate, state, session) {
   var utils = require('../../../../lib/utils');
   var merge = require('utils-merge')
     , dispatch = require('../../../../lib/dispatch')
@@ -29,11 +29,11 @@ exports = module.exports = function(actions, schemeFactory, authenticate, state,
     // TODO: Past `host` as option
     // TODO: Pass `idpID` as option, if available in state
     // TODO: Pass `clientID` as option, if available
-    schemeFactory.create(provider, protocol, options)
-      .then(function(scheme) {
+    idpFactory.create(provider, protocol, options)
+      .then(function(idp) {
         // TODO: Remove utils.dispatch here
         utils.dispatch(
-          authenticate(scheme, { assignProperty: 'federatedUser' })
+          authenticate(idp, { assignProperty: 'federatedUser' })
         )(null, req, res, next);
       })
       .catch(function(err) {
@@ -84,7 +84,7 @@ exports = module.exports = function(actions, schemeFactory, authenticate, state,
 
 exports['@require'] = [
   '../../../actions/http/router',
-  'module:@authnomicon/federated.IDSchemeFactory',
+  'module:@authnomicon/federated.IDPSchemeFactory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/state'
 ];

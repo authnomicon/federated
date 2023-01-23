@@ -1,4 +1,4 @@
-exports = module.exports = function(schemeFactory, authenticate, state) {
+exports = module.exports = function(idpFactory, authenticate, state) {
   var filterObj = require('filter-obj')
     , merge = require('utils-merge')
     , utils = require('../../../lib/utils');
@@ -20,8 +20,8 @@ exports = module.exports = function(schemeFactory, authenticate, state) {
     
     
     // TODO: Past `host` as option, for multi-tenancy
-    schemeFactory.create(provider, protocol, options)
-      .then(function(scheme) {
+    idpFactory.create(provider, protocol, options)
+      .then(function(idp) {
         var opts = {
           state: merge({ provider: provider }, options)
         };
@@ -38,7 +38,7 @@ exports = module.exports = function(schemeFactory, authenticate, state) {
         
         // TODO: Remove utils.dispatch here
         utils.dispatch(
-          authenticate(scheme, opts)
+          authenticate(idp, opts)
         )(null, req, res, next);
       }, function(err) {
         next(err);
@@ -53,7 +53,7 @@ exports = module.exports = function(schemeFactory, authenticate, state) {
 };
 
 exports['@require'] = [
-  'module:@authnomicon/federated.IDSchemeFactory',
+  'module:@authnomicon/federated.IDPSchemeFactory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/state'
 ];
