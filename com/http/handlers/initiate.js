@@ -53,7 +53,7 @@ exports = module.exports = function(idpFactory, authenticate, state) {
 };
 
 exports['@require'] = [
-  '../../idp/http/factory',
+  'module:@authnomicon/federated.IDProviderFactory', //'../../idp/http/factory',
   'http://i.bixbyjs.org/http/middleware/authenticate',
   'http://i.bixbyjs.org/http/middleware/state'
 ];
