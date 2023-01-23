@@ -38,13 +38,13 @@
   "assembly": {
     "namespace": "org.authnomicon/federated",
     "components": [
+      "localidpfactory",
       "http/service",
       "oauth/http/service",
       "oauth/http/requesttokenstore",
       "oauth2/http/service",
       "oauth2/http/statestore",
-      "openidconnect/http/statestore",
-      "idp/http/factory"
+      "openidconnect/http/statestore"
     ]
   },
   "directories": {

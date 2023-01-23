@@ -1,6 +1,6 @@
-var LocalIDProviderFactory = require('../../../lib/localidpfactory');
+var LocalIDProviderFactory = require('../lib/localidpfactory');
 
-exports = module.exports = function(C, scheme) {
+exports = module.exports = function(scheme) {
   
   // TODO: Register the provider and protocol with the scheme, so it can be validated?
   
@@ -33,6 +33,5 @@ exports = module.exports = function(C, scheme) {
 exports['@singleton'] = true;
 exports['@implements'] = 'module:@authnomicon/federated.IDProviderFactory';
 exports['@require'] = [
-  '!container',
   'module:@authnomicon/session.InitiationScheme'
 ];
