@@ -1,7 +1,6 @@
-exports = module.exports = function(idpFactory, authenticate, state) {
+exports = module.exports = function(idpFactory, authenticator, state) {
   var filterObj = require('filter-obj')
-    , merge = require('utils-merge')
-    , utils = require('../../../lib/utils');
+    , merge = require('utils-merge');
   
   
   function federate(req, res, next) {
@@ -36,10 +35,7 @@ exports = module.exports = function(idpFactory, authenticate, state) {
         }
         */
         
-        // TODO: Remove utils.dispatch here
-        utils.dispatch(
-          authenticate(idp, opts)
-        )(null, req, res, next);
+        authenticator.authenticate(idp, opts)(req, res, next);
       }, function(err) {
         next(err);
       });
@@ -54,6 +50,6 @@ exports = module.exports = function(idpFactory, authenticate, state) {
 
 exports['@require'] = [
   'module:@authnomicon/federated.IDPSchemeFactory',
-  'http://i.bixbyjs.org/http/middleware/authenticate',
+  'module:@authnomicon/session.Authenticator',
   'http://i.bixbyjs.org/http/middleware/state'
 ];

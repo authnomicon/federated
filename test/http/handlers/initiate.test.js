@@ -30,7 +30,7 @@ describe('http/handlers/initiate', function() {
     var idpFactory = new Object();
     var stateSpy = sinon.spy(state);
     
-    var handler = factory(idpFactory, authenticate, stateSpy);
+    var handler = factory(idpFactory, { authenticate: authenticate }, stateSpy);
     
     expect(stateSpy).to.be.calledOnce;
   });
@@ -43,7 +43,7 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, authenticateSpy, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -62,6 +62,7 @@ describe('http/handlers/initiate', function() {
             }
           });
           
+          
           expect(this.statusCode).to.equal(302);
           expect(this.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
           done();
@@ -76,7 +77,7 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp);
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, authenticateSpy, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
         
       chai.express.use(handler)
         .request(function(req, res) {
@@ -110,7 +111,7 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, authenticateSpy, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -145,7 +146,7 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, authenticateSpy, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -182,7 +183,7 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, authenticateSpy, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -217,7 +218,7 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, authenticateSpy, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -252,7 +253,7 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, authenticateSpy, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -288,7 +289,7 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, authenticateSpy, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -330,7 +331,7 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, authenticateSpy, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -365,7 +366,7 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().rejects(new Error('something went wrong'))
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, authenticateSpy, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
       
       chai.express.use(handler)
         .request(function(req, res) {
