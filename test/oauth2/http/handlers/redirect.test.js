@@ -57,7 +57,7 @@ describe('oauth2/http/handlers/redirect', function() {
       var request, response;
       
       before(function(done) {
-        var handler = factory(actions, idpFactory, authenticateSpy, stateSpy);
+        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, stateSpy);
         
         chai.express.use(handler)
           .request(function(req, res) {
@@ -154,7 +154,7 @@ describe('oauth2/http/handlers/redirect', function() {
       var request, response;
       
       before(function(done) {
-        var handler = factory(actions, idpFactory, authenticateSpy, stateSpy);
+        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, stateSpy);
         
         chai.express.use(handler)
           .request(function(req, res) {
@@ -253,7 +253,7 @@ describe('oauth2/http/handlers/redirect', function() {
       var request, response;
       
       before(function(done) {
-        var handler = factory(actions, idpFactory, authenticateSpy, stateSpy);
+        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, stateSpy);
         
         chai.express.use(handler)
           .request(function(req, res) {
