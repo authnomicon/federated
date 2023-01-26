@@ -1,4 +1,4 @@
-exports = module.exports = function(idpFactory, authenticator, state) {
+exports = module.exports = function(idpFactory, authenticator) {
   var filterObj = require('filter-obj')
     , merge = require('utils-merge');
   
@@ -43,13 +43,12 @@ exports = module.exports = function(idpFactory, authenticator, state) {
 
 
   return [
-    state(),
+    require('flowstate')(),
     federate
   ];
 };
 
 exports['@require'] = [
   'module:@authnomicon/federated.IDPSchemeFactory',
-  'module:@authnomicon/session.Authenticator',
-  'http://i.bixbyjs.org/http/middleware/state'
+  'module:@authnomicon/session.Authenticator'
 ];

@@ -20,19 +20,12 @@ describe('http/handlers/initiate', function() {
     };
   }
   
-  function state() {
-    return function(req, res, next) {
-      next();
-    };
-  }
-  
   it('should create handler', function() {
     var idpFactory = new Object();
-    var stateSpy = sinon.spy(state);
     
-    var handler = factory(idpFactory, { authenticate: authenticate }, stateSpy);
+    var handler = factory(idpFactory, { authenticate: authenticate });
     
-    expect(stateSpy).to.be.calledOnce;
+    //expect(stateSpy).to.be.calledOnce;
   });
   
   describe('handler', function() {
@@ -43,10 +36,11 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy });
       
       chai.express.use(handler)
         .request(function(req, res) {
+          req.connection = {};
           req.query = {
             provider: 'https://server.example.com'
           };
@@ -77,10 +71,11 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp);
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy });
         
       chai.express.use(handler)
         .request(function(req, res) {
+          req.connection = {};
           req.query = {
             provider: 'https://server.example.com',
             protocol: 'oauth2'
@@ -111,10 +106,11 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy });
       
       chai.express.use(handler)
         .request(function(req, res) {
+          req.connection = {};
           req.query = {
             provider: 'https://server.example.net'
           };
@@ -146,10 +142,11 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy });
       
       chai.express.use(handler)
         .request(function(req, res) {
+          req.connection = {};
           req.query = {
             provider: 'https://server.example.net',
             protocol: 'oauth2'
@@ -183,10 +180,11 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy });
       
       chai.express.use(handler)
         .request(function(req, res) {
+          req.connection = {};
           req.query = {
             provider: 'https://server.example.com',
             prompt: 'select_account'
@@ -218,10 +216,11 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy });
       
       chai.express.use(handler)
         .request(function(req, res) {
+          req.connection = {};
           req.query = {
             provider: 'https://server.example.com',
             login_hint: 'janedoe@example.com'
@@ -253,10 +252,11 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy });
       
       chai.express.use(handler)
         .request(function(req, res) {
+          req.connection = {};
           req.query = {
             provider: 'https://server.example.com'
           };
@@ -289,10 +289,11 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy });
       
       chai.express.use(handler)
         .request(function(req, res) {
+          req.connection = {};
           req.query = {
             provider: 'https://server.example.com'
           };
@@ -331,10 +332,11 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().resolves(idp)
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy });
       
       chai.express.use(handler)
         .request(function(req, res) {
+          req.connection = {};
           req.query = {};
           req.state = new Object();
           req.state.provider = 'https://myshopify.com';
@@ -366,10 +368,11 @@ describe('http/handlers/initiate', function() {
       idpFactory.create = sinon.stub().rejects(new Error('something went wrong'))
       var authenticateSpy = sinon.spy(authenticate);
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, state);
+      var handler = factory(idpFactory, { authenticate: authenticateSpy });
       
       chai.express.use(handler)
         .request(function(req, res) {
+          req.connection = {};
           req.query = {
             provider: 'https://server.example.com'
           };
