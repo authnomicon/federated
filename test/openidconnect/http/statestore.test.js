@@ -10,7 +10,7 @@ var StateStore = require('../../../lib/openidconnect/statestore');
 describe('openidconnect/http/statestore', function() {
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.equal('http://i.authnomicon.org/federated/openidconnect/http/StateStore');
+    expect(factory['@implements']).to.equal('module:passport-openidconnect.StateStore');
     expect(factory['@singleton']).to.equal(true);
   });
   

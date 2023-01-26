@@ -4,6 +4,6 @@ exports = module.exports = function() {
   return new StateStore();
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/federated/openidconnect/http/StateStore';
+exports['@implements'] = 'module:passport-openidconnect.StateStore';
 exports['@singleton'] = true;
 exports['@require'] = [];
