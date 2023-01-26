@@ -20,8 +20,7 @@ describe('oauth/http/handlers/callback', function() {
   
   describe('handler', function() {
     
-    // FIXME: put this back, adjust for using flowstate middleware directly
-    describe.skip('federating with provider', function() {
+    describe('federating with provider', function() {
       var actions = new Object();
       actions.dispatch = sinon.spy(function(name, err, req, res, next) {
         next();
@@ -37,6 +36,20 @@ describe('oauth/http/handlers/callback', function() {
         };
       }
       
+      // TODO: review this
+      var store = new Object();
+      store.get = function(req, state, cb) {
+        return cb(null, {
+          location: 'https://www.example.com/oauth/callback',
+          provider: 'http://sp.example.com'
+        });
+      }
+      
+      store.destroy = function(req, handle, cb) {
+        return cb();
+      };
+      
+      /*
       function state(options) {
         return function(req, res, next) {
           var h = options.getHandle(req);
@@ -44,19 +57,23 @@ describe('oauth/http/handlers/callback', function() {
           next();
         };
       }
+      */
       
       var authenticateSpy = sinon.spy(authenticate);
-      var stateSpy = sinon.spy(state);
+      //var stateSpy = sinon.spy(state);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, stateSpy);
+        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
         
         chai.express.use(handler)
           .request(function(req, res) {
             request = req;
+            req.connection = { encrypted: true };
+            req.url = '/oauth/callback';
+            req.headers.host = 'www.example.com';
             request.params = { hostname: 'twitter.com' };
             request.query = { oauth_token: 'XXXXXXXX' };
             request.session = {};
@@ -80,12 +97,14 @@ describe('oauth/http/handlers/callback', function() {
       });
       
       it('should setup middleware', function() {
-        expect(stateSpy).to.be.calledOnce;
+        //expect(stateSpy).to.be.calledOnce;
       });
       
       it('should create identity provider', function() {
         expect(idpFactory.create).to.be.calledOnce;
-        expect(idpFactory.create).to.be.calledWithExactly('http://sp.example.com', 'oauth', {});
+        expect(idpFactory.create).to.be.calledWithExactly('http://sp.example.com', 'oauth', {
+          location: 'https://www.example.com/oauth/callback'
+        });
       });
       
       it('should authenticate with identity provider', function() {
