@@ -1,4 +1,4 @@
-exports = module.exports = function(actions, idpFactory, authenticator, state) {
+exports = module.exports = function(actions, idpFactory, authenticator, store) {
   var merge = require('utils-merge');
   var handleFor = require('../../../../lib/oauth/state/handle');
   var dispatch = require('../../../../lib/dispatch');
@@ -58,7 +58,9 @@ exports = module.exports = function(actions, idpFactory, authenticator, state) {
   
   
   return [
-    state({ mutationMethods: [ 'GET' ], getHandle: getHandle }),
+    // TODO: delete state here to workaround self-awareness from any app-level middleware
+    //state({ mutationMethods: [ 'GET' ], getHandle: getHandle }),
+    require('flowstate')({ mutationMethods: [ 'GET' ], getHandle: getHandle, store: store }),
     federate,
     execute,
     resume,
@@ -70,5 +72,5 @@ exports['@require'] = [
   '../../../actions/http/router',
   'module:@authnomicon/federated.IDPSchemeFactory',
   'module:@authnomicon/session.Authenticator',
-  'http://i.bixbyjs.org/http/middleware/state'
+  'module:flowstate.Store'
 ];
