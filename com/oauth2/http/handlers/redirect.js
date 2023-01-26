@@ -9,7 +9,7 @@
  *
  * @returns {Function}
  */
-exports = module.exports = function(actions, idpFactory, authenticator, state) {
+exports = module.exports = function(actions, idpFactory, authenticator, store) {
   var merge = require('utils-merge');
 
 
@@ -69,7 +69,8 @@ exports = module.exports = function(actions, idpFactory, authenticator, state) {
   
   
   return [
-    state({ mutationMethods: [ 'GET', 'POST' ]}),
+    //state({ mutationMethods: [ 'GET', 'POST' ]}),
+    require('flowstate')({ mutationMethods: [ 'GET', 'POST' ], store: store }),
     federate,
     execute,
     resume,
@@ -81,5 +82,5 @@ exports['@require'] = [
   '../../../actions/http/router',
   'module:@authnomicon/federated.IDPSchemeFactory',
   'module:@authnomicon/session.Authenticator',
-  'http://i.bixbyjs.org/http/middleware/state'
+  'module:flowstate.Store'
 ];

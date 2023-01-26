@@ -42,6 +42,20 @@ describe('oauth2/http/handlers/redirect', function() {
         };
       }
       
+      // TODO: review this
+      var store = new Object();
+      store.get = function(req, state, cb) {
+        return cb(null, {
+          location: 'https://www.example.com/oauth2/redirect',
+          provider: 'https://server.example.com'
+        });
+      }
+      
+      store.destroy = function(req, handle, cb) {
+        return cb();
+      };
+      
+      /*
       function state() {
         return function(req, res, next) {
           req.state = new Object();
@@ -49,19 +63,25 @@ describe('oauth2/http/handlers/redirect', function() {
           next();
         };
       }
+      */
       
       var authenticateSpy = sinon.spy(authenticate);
-      var stateSpy = sinon.spy(state);
+      //var stateSpy = sinon.spy(state);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, stateSpy);
+        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
         
         chai.express.use(handler)
           .request(function(req, res) {
             request = req;
+            req.connection = { encrypted: true };
+            req.method = 'POST';
+            req.url = '/oauth2/redirect';
+            req.headers.host = 'www.example.com';
+            req.query = { state: 'foo' };
             req.session = {};
             
             response = res;
@@ -81,12 +101,14 @@ describe('oauth2/http/handlers/redirect', function() {
       });
       
       it('should setup middleware', function() {
-        expect(stateSpy).to.be.calledOnce;
+        //expect(stateSpy).to.be.calledOnce;
       });
       
       it('should create identity provider', function() {
         expect(idpFactory.create).to.be.calledOnce;
-        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2', {});
+        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2', {
+          location: 'https://www.example.com/oauth2/redirect'
+        });
       });
       
       it('should authenticate with identity provider', function() {
@@ -138,6 +160,21 @@ describe('oauth2/http/handlers/redirect', function() {
         };
       }
       
+      // TODO: review this
+      var store = new Object();
+      store.get = function(req, state, cb) {
+        return cb(null, {
+          location: 'https://www.example.com/oauth2/redirect',
+          provider: 'https://server.example.com',
+          returnTo: '/home'
+        });
+      }
+      
+      store.destroy = function(req, handle, cb) {
+        return cb();
+      };
+      
+      /*
       function state() {
         return function(req, res, next) {
           req.state = new Object();
@@ -146,20 +183,25 @@ describe('oauth2/http/handlers/redirect', function() {
           next();
         };
       }
+      */
       
       var authenticateSpy = sinon.spy(authenticate);
-      var stateSpy = sinon.spy(state);
+      //var stateSpy = sinon.spy(state);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, stateSpy);
+        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
         
         chai.express.use(handler)
           .request(function(req, res) {
             request = req;
+            req.connection = { encrypted: true };
             req.session = {};
+            req.url = '/oauth2/redirect';
+            req.headers.host = 'www.example.com';
+            req.query = { state: 'foo' };
             
             response = res;
             
@@ -178,7 +220,7 @@ describe('oauth2/http/handlers/redirect', function() {
       });
       
       it('should setup middleware', function() {
-        expect(stateSpy).to.be.calledOnce;
+        //expect(stateSpy).to.be.calledOnce;
       });
       
       /*
@@ -236,6 +278,22 @@ describe('oauth2/http/handlers/redirect', function() {
         };
       }
       
+      // TODO: review this
+      var store = new Object();
+      store.get = function(req, state, cb) {
+        return cb(null, {
+          location: 'https://www.example.com/oauth2/redirect',
+          provider: 'https://myshopify.com',
+          shop: 'example',
+          returnTo: '/home'
+        });
+      }
+      
+      store.destroy = function(req, handle, cb) {
+        return cb();
+      };
+      
+      /*
       function state() {
         return function(req, res, next) {
           req.state = new Object();
@@ -245,20 +303,25 @@ describe('oauth2/http/handlers/redirect', function() {
           next();
         };
       }
+      */
       
       var authenticateSpy = sinon.spy(authenticate);
-      var stateSpy = sinon.spy(state);
+      //var stateSpy = sinon.spy(state);
       
       
       var request, response;
       
       before(function(done) {
-        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, stateSpy);
+        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
         
         chai.express.use(handler)
           .request(function(req, res) {
             request = req;
+            req.connection = { encrypted: true };
             req.session = {};
+            req.url = '/oauth2/redirect';
+            req.headers.host = 'www.example.com';
+            req.query = { state: 'foo' };
             
             response = res;
             
@@ -277,7 +340,7 @@ describe('oauth2/http/handlers/redirect', function() {
       });
       
       it('should setup middleware', function() {
-        expect(stateSpy).to.be.calledOnce;
+        //expect(stateSpy).to.be.calledOnce;
       });
       
       /*
