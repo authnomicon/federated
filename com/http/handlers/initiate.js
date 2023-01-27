@@ -1,4 +1,4 @@
-exports = module.exports = function(idpFactory, authenticator) {
+exports = module.exports = function(idpFactory, authenticator, store) {
   var filterObj = require('filter-obj')
     , merge = require('utils-merge');
   
@@ -43,12 +43,13 @@ exports = module.exports = function(idpFactory, authenticator) {
 
 
   return [
-    require('flowstate')(),
+    require('flowstate')({ store: store }),
     federate
   ];
 };
 
 exports['@require'] = [
   'module:@authnomicon/federated.IDPSchemeFactory',
-  'module:@authnomicon/session.Authenticator'
+  'module:@authnomicon/session.Authenticator',
+  'module:flowstate.Store'
 ];
