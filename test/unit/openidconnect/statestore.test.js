@@ -97,4 +97,28 @@ describe('openidconnect/StateStore', function() {
     
   }); // #store
   
+  describe('#verify', function() {
+    
+    it('should verify state', function(done) {
+      var req = new Object();
+      req.query = {
+        code: 'SplxlOBeZQQYbYS6WxSbIA',
+        state: 'af0ifjsldkj'
+      };
+      req.state = new Object();
+      req.state.complete = sinon.spy();
+      
+      store.verify(req, 'af0ifjsldkj', function(err, ctx, state) {
+        if (err) { return done(err); }
+        
+        expect(req.state.complete).to.have.been.calledOnce;
+        
+        expect(ctx).to.deep.equal({});
+        expect(state).to.be.undefined;
+        done();
+      });
+    }); // should verify state
+    
+  }); // #verify
+  
 });
