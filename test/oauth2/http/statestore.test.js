@@ -10,7 +10,7 @@ var StateStore = require('../../../lib/oauth2/statestore');
 describe('oauth2/http/statestore', function() {
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.equal('http://i.authnomicon.org/federated/oauth2/http/StateStore');
+    expect(factory['@implements']).to.equal('module:passport-oauth2.StateStore');
     expect(factory['@singleton']).to.equal(true);
   });
   
