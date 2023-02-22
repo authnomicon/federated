@@ -1,4 +1,4 @@
-exports = module.exports = function(C) {
+exports = module.exports = function(C, logger) {
   var actions = require('../../../lib/actions');
   
   
@@ -14,7 +14,7 @@ exports = module.exports = function(C) {
           if (!component) {
             return resolve(router);
           }
-        
+          
           component.create()
             .then(function(handler) {
               logger.info('Loaded federated action handler: ' + component.a['@action']);
@@ -61,4 +61,5 @@ exports = module.exports = function(C) {
 exports['@singleton'] = true;
 exports['@require'] = [
   '!container',
+  'http://i.bixbyjs.org/Logger'
 ];
