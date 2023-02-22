@@ -15,8 +15,13 @@ exports = module.exports = function(federatedIDs, directory) {
         directory.read(user.id, function(err, user) {
           if (err) { return next(err); }
           
-          req.login(user, function(err) {
+          req.login(user, function(err, selector) {
             if (err) { return next(err); }
+            
+            console.log('LOGGED IN AFTER FEDERATE');
+            console.log(req.authInfo);
+            console.log(selector);
+            
             return next();
           });
         });
