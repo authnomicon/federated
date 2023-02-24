@@ -5,6 +5,15 @@ exports = module.exports = function(federatedIDs, directory) {
   
   
   function login(req, res, next) {
+    if (!federatedIDs) {
+      // user isn't federated from an external domain
+      req.login(req.federatedUser, function(err) {
+        if (err) { return next(err); }
+        return next();
+      });
+      return;
+    }
+    
     
     // TODO: Decouple this component more, so directory isn't needed.  Should be
     //. federatedIDs.findOrCreate()...
@@ -14,6 +23,7 @@ exports = module.exports = function(federatedIDs, directory) {
       
       if (federatedID === false) {
         // user isn't federated from an external domain
+        // TODO: remove this
         req.login(req.federatedUser, function(err) {
           if (err) { return next(err); }
           return next();
@@ -53,6 +63,6 @@ exports = module.exports = function(federatedIDs, directory) {
 };
 
 exports['@require'] = [
-  'http://i.authnomicon.org/credentials/FederatedIDService',
+  'http://i.authnomicon.org/credentials/FederatedIDService?',
   'http://i.authnomicon.org/Directory?'
 ];
