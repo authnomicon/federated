@@ -100,80 +100,6 @@ describe('http/handlers/initiate', function() {
         .listen();
     }); // should authenticate with provider and protocol
     
-    it.skip('should authenticate with provider from state', function(done) {
-      var idp = new Object();
-      var idpFactory = new Object();
-      idpFactory.create = sinon.stub().resolves(idp)
-      var authenticateSpy = sinon.spy(authenticate);
-      
-      var handler = factory(idpFactory, { authenticate: authenticateSpy });
-      
-      chai.express.use(handler)
-        .request(function(req, res) {
-          req.connection = {};
-          req.query = {
-            provider: 'https://server.example.net'
-          };
-          req.state = new Object();
-          req.state.provider = 'https://server.example.com';
-        })
-        .finish(function() {
-          expect(idpFactory.create).to.be.calledOnce;
-          expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', undefined, {});
-          
-          expect(authenticateSpy).to.be.calledOnce;
-          expect(authenticateSpy).to.be.calledWithExactly(idp, {
-            state: {
-              provider: 'https://server.example.com'
-            }
-          });
-          
-          expect(this.statusCode).to.equal(302);
-          expect(this.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
-          done();
-        })
-        .next(done)
-        .listen();
-    }); // should authenticate with provider from state
-    
-    it.skip('should authenticate with provider and protocol from state', function(done) {
-      var idp = new Object();
-      var idpFactory = new Object();
-      idpFactory.create = sinon.stub().resolves(idp)
-      var authenticateSpy = sinon.spy(authenticate);
-      
-      var handler = factory(idpFactory, { authenticate: authenticateSpy });
-      
-      chai.express.use(handler)
-        .request(function(req, res) {
-          req.connection = {};
-          req.query = {
-            provider: 'https://server.example.net',
-            protocol: 'oauth2'
-          };
-          req.state = new Object();
-          req.state.provider = 'https://server.example.com';
-          req.state.protocol = 'openidconnect';
-        })
-        .finish(function() {
-          expect(idpFactory.create).to.be.calledOnce;
-          expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'openidconnect', {});
-          
-          expect(authenticateSpy).to.be.calledOnce;
-          expect(authenticateSpy).to.be.calledWithExactly(idp, {
-            state: {
-              provider: 'https://server.example.com'
-            }
-          });
-          
-          expect(this.statusCode).to.equal(302);
-          expect(this.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
-          done();
-        })
-        .next(done)
-        .listen();
-    }); // should authenticate with provider and protocol from state
-    
     it('should authenticate with prompt option', function(done) {
       var idp = new Object();
       var idpFactory = new Object();
@@ -319,48 +245,6 @@ describe('http/handlers/initiate', function() {
         .next(done)
         .listen();
     }); // should authenticate without resume state property managed by state middleware
-    
-    it.skip('should authenticate with parameters from state', function(done) {
-      function authenticate(idp, options) {
-        return function(req, res, next) {
-          res.redirect('https://example.myshopify.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
-        };
-      }
-      
-      var idp = new Object();
-      var idpFactory = new Object();
-      idpFactory.create = sinon.stub().resolves(idp)
-      var authenticateSpy = sinon.spy(authenticate);
-      
-      var handler = factory(idpFactory, { authenticate: authenticateSpy });
-      
-      chai.express.use(handler)
-        .request(function(req, res) {
-          req.connection = {};
-          req.query = {};
-          req.state = new Object();
-          req.state.provider = 'https://myshopify.com';
-          req.state.shop = 'example';
-        })
-        .finish(function() {
-          expect(idpFactory.create).to.be.calledOnce;
-          expect(idpFactory.create).to.be.calledWithExactly('https://myshopify.com', undefined, { shop: 'example' });
-          
-          expect(authenticateSpy).to.be.calledOnce;
-          expect(authenticateSpy).to.be.calledWithExactly(idp, {
-            state: {
-              provider: 'https://myshopify.com',
-              shop: 'example'
-            }
-          });
-          
-          expect(this.statusCode).to.equal(302);
-          expect(this.getHeader('Location')).to.equal('https://example.myshopify.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
-          done();
-        })
-        .next(done)
-        .listen();
-    }); // should authenticate with parameters from state
     
     it('should next with error when identity provider fails to be created', function(done) {
       var idp = new Object();
