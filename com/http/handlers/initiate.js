@@ -1,7 +1,4 @@
 exports = module.exports = function(idpFactory, authenticator, store) {
-  var filterObj = require('filter-obj')
-    , merge = require('utils-merge');
-  
   
   function federate(req, res, next) {
     var provider = req.query.provider
@@ -9,21 +6,14 @@ exports = module.exports = function(idpFactory, authenticator, store) {
     
     idpFactory.create(provider, protocol)
       .then(function(idp) {
-        var opts = {
+        var options = {
           state: { provider: provider }
         };
-        if (req.query.prompt) { opts.prompt = req.query.prompt; }
-        if (req.query.login_hint) { opts.loginHint = req.query.login_hint; }
+        // TODO: This should be set based on the explicit logout state of the session, not a query param
+        if (req.query.prompt) { options.prompt = req.query.prompt; }
+        if (req.query.login_hint) { options.loginHint = req.query.login_hint; }
         
-        
-        // TODO: Pull this from state instead, not a query parameter
-        /*
-        if (req.query.action) {
-          state.action = req.query.action.split(' ');
-        }
-        */
-        
-        authenticator.authenticate(idp, opts)(req, res, next);
+        authenticator.authenticate(idp, options)(req, res, next);
       }, function(err) {
         next(err);
       });
