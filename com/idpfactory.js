@@ -1,10 +1,10 @@
-var LocalIDPSchemeFactory = require('../lib/localidpschemefactory');
+var LocalIDPFactory = require('../lib/localidpfactory');
 
 exports = module.exports = function(scheme) {
   
   // TODO: Register the provider and protocol with the scheme, so it can be validated?
   
-  return new LocalIDPSchemeFactory(scheme);
+  return new LocalIDPFactory(scheme);
   
   // TODO: Old code, remove once not needed
   // WIP: build "selectors" into electrolyte, so that app can override without this pattern
@@ -31,7 +31,7 @@ exports = module.exports = function(scheme) {
 };
 
 exports['@singleton'] = true;
-exports['@implements'] = 'module:@authnomicon/federated.IDPSchemeFactory';
+exports['@implements'] = 'module:@authnomicon/federated.IDPFactory';
 exports['@require'] = [
   'module:@authnomicon/session.InitiationScheme'
 ];
