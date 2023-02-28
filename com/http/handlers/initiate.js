@@ -49,7 +49,7 @@ exports = module.exports = function(idpFactory, authenticator, store) {
 };
 
 exports['@require'] = [
-  'module:@authnomicon/federated.IDPSchemeFactory',
+  'module:@authnomicon/federated.IDPFactory',
   'module:@authnomicon/session.Authenticator',
   'module:flowstate.Store'
 ];

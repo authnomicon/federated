@@ -1,3 +1,6 @@
+// Module dependencies.
+var express = require('express');
+
 /**
  * Federated authentication service.
  *
@@ -39,9 +42,7 @@
  * @returns {Function}
  */
 exports = module.exports = function(initiateHandler) {
-  var express = require('express');
-  var router = new express.Router();
-  
+  var router = express.Router();
   router.get('/', initiateHandler);
   
   return router;
