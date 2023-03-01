@@ -5,4 +5,4 @@ exports = module.exports = function() {
 };
 
 exports['@singleton'] = true;
-exports['@implements'] = 'module:passport-oauth2.RequestTokenStore';
+exports['@implements'] = 'module:passport-oauth1.RequestTokenStore';

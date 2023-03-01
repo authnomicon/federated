@@ -10,7 +10,7 @@ var RequestTokenStore = require('../../../lib/oauth/requesttokenstore');
 describe('oauth/http/requesttokenstore', function() {
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.equal('http://i.authnomicon.org/federated/oauth/http/RequestTokenStore');
+    expect(factory['@implements']).to.equal('module:passport-oauth1.RequestTokenStore');
     expect(factory['@singleton']).to.equal(true);
   });
   
