@@ -1,7 +1,5 @@
 exports = module.exports = function(router, idpFactory, authenticator, store) {
-  var merge = require('utils-merge');
   var handleFor = require('../../../../lib/oauth/state/handle');
-  var dispatch = require('../../../../lib/dispatch');
 
 
   function getHandle(req) {
