@@ -48,13 +48,6 @@ exports = module.exports = function(actions, idpFactory, authenticator, store) {
     res.redirect('/');
   }
   
-  // FIXME: If passport session serialization isn't set up, this isn't being called.  Why?
-  //        ^ its not in the middleware stack returned below, duh!
-  // TODO: Put error handing in here
-  function errorHandler(err, req, res, next) {
-    next(err);
-  }
-  
   
   return [
     require('flowstate')({ mutationMethods: [ 'GET', 'POST' ], store: store }),
