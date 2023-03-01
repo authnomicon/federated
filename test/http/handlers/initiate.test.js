@@ -176,12 +176,12 @@ describe('http/handlers/initiate', function() {
     }); // should authenticate with login hint option
     
     it('should next with error when identity provider fails to be created', function(done) {
-      var idp = new Object();
       var idpFactory = new Object();
-      idpFactory.create = sinon.stub().rejects(new Error('something went wrong'))
+      idpFactory.create = sinon.stub().rejects(new Error('something went wrong'));
       var authenticateSpy = sinon.spy(authenticate);
+      var store = new Object();
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy });
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, store);
       
       chai.express.use(handler)
         .request(function(req, res) {
