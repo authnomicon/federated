@@ -25,27 +25,27 @@ describe('oauth2/http/handlers/redirect', function() {
   
   describe('handler', function() {
     
+    function authenticate(idp, options) {
+      return function(req, res, next) {
+        req.login = function(user, cb) {
+          process.nextTick(function() {
+            req.session.user = user;
+            cb();
+          });
+        };
+        
+        req.federatedUser = { id: '248289761001', displayName: 'Jane Doe' };
+        next();
+      };
+    }
+    
     describe('federating with provider', function() {
+      var actions = new Object();
+      actions.dispatch = sinon.stub().yieldsAsync(null);
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp)
       
-      var actions = new Object();
-      actions.dispatch = sinon.stub().yieldsAsync(null);
-      
-      function authenticate(idp, options) {
-        return function(req, res, next) {
-          req.login = function(user, cb) {
-            process.nextTick(function() {
-              req.session.user = user;
-              cb();
-            });
-          };
-          
-          req.federatedUser = { id: '248289761001', displayName: 'Jane Doe' };
-          next();
-        };
-      }
       
       // TODO: review this
       var store = new Object();
