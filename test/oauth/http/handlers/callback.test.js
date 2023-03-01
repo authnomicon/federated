@@ -1,5 +1,6 @@
 var chai = require('chai');
 var expect = require('chai').expect;
+var $require = require('proxyquire');
 var sinon = require('sinon');
 var factory = require('../../../../com/oauth/http/handlers/callback');
 var utils = require('../../../utils');
@@ -7,13 +8,21 @@ var utils = require('../../../utils');
 
 describe('oauth/http/handlers/callback', function() {
   
-  it('should export factory function', function() {
-    expect(factory).to.be.a('function');
-  });
-  
-  it('should be annotated', function() {
-    expect(factory['@implements']).to.be.undefined;
-    expect(factory['@singleton']).to.be.undefined;
+  it('should return handler', function() {
+    var flowstateSpy = sinon.spy();
+    var factory = $require('../../../../com/oauth/http/handlers/callback', {
+      'flowstate': flowstateSpy
+    });
+    
+    var idpFactory = new Object();
+    var authenticator = new Object();
+    var store = new Object();
+    var handler = factory(undefined, idpFactory, authenticator, store);
+    
+    expect(handler).to.be.an('array');
+    expect(flowstateSpy).to.be.calledOnce;
+    expect(flowstateSpy.firstCall.args[0].mutationMethods).to.deep.equal([ 'GET' ]);
+    expect(flowstateSpy.firstCall.args[0].store).to.equal(store);
   });
   
   describe('handler', function() {

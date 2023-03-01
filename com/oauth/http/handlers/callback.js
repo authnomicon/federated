@@ -45,8 +45,6 @@ exports = module.exports = function(router, idpFactory, authenticator, store) {
   
   
   return [
-    // TODO: delete state here to workaround self-awareness from any app-level middleware
-    //state({ mutationMethods: [ 'GET' ], getHandle: getHandle }),
     require('flowstate')({ mutationMethods: [ 'GET' ], getHandle: getHandle, store: store }),
     federate,
     execute,
