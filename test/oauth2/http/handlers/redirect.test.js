@@ -57,11 +57,9 @@ describe('oauth2/http/handlers/redirect', function() {
           req.query = { code: 'SplxlOBeZQQYbYS6WxSbIA', state: 'xyz' };
         })
         .finish(function() {
-          expect(idpFactory.create).to.be.calledOnce;
-          expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2');
-          expect(authenticateSpy).to.be.calledOnce;
-          expect(authenticateSpy).to.be.calledWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(store.get).to.be.calledOnceWith(this.req, 'xyz');
+          expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', 'oauth2');
+          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(store.destroy).to.be.calledOnceWith(this.req, 'xyz');
           
           expect(this.statusCode).to.equal(302);
@@ -70,30 +68,7 @@ describe('oauth2/http/handlers/redirect', function() {
           done();
         })
         .listen();
-      //});
-      
-      // TODO: Asser that actions is called correctly
-      /*
-      it('should establish session', function() {
-        expect(request.session.user).to.deep.equal({
-          id: '248289761001',
-          displayName: 'Jane Doe'
-        });
-      });
-      */
-      
-      /*
-      it('should resume state', function() {
-        expect(response.resumeState).to.be.calledOnceWith();
-      });
-      */
-      
-      /*
-      it('should redirect', function() {
-        
-      });
-      */
-    }); // federating with provider
+    }); // should federate with provider
     
     describe('federating with provider and returning to location', function() {
       var idp = new Object();

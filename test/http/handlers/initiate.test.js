@@ -48,10 +48,8 @@ describe('http/handlers/initiate', function() {
           };
         })
         .finish(function() {
-          expect(idpFactory.create).to.be.calledOnce;
-          expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', undefined);
-          expect(authenticateSpy).to.be.calledOnce;
-          expect(authenticateSpy).to.be.calledWithExactly(idp, {
+          expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', undefined);
+          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, {
             state: {
               provider: 'https://server.example.com'
             }
@@ -83,10 +81,8 @@ describe('http/handlers/initiate', function() {
           };
         })
         .finish(function() {
-          expect(idpFactory.create).to.be.calledOnce;
-          expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2');
-          expect(authenticateSpy).to.be.calledOnce;
-          expect(authenticateSpy).to.be.calledWithExactly(idp, {
+          expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', 'oauth2');
+          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, {
             state: {
               provider: 'https://server.example.com'
             }
@@ -118,10 +114,8 @@ describe('http/handlers/initiate', function() {
           };
         })
         .finish(function() {
-          expect(idpFactory.create).to.be.calledOnce;
-          expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', undefined);
-          expect(authenticateSpy).to.be.calledOnce;
-          expect(authenticateSpy).to.be.calledWithExactly(idp, {
+          expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', undefined);
+          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, {
             loginHint: 'janedoe@example.com',
             state: {
               provider: 'https://server.example.com'
