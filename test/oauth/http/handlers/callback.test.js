@@ -33,6 +33,53 @@ describe('oauth/http/handlers/callback', function() {
       };
     }
     
+    it('should federate with default provider', function(done) {
+      var actions = new Object();
+      actions.dispatch = sinon.stub().yieldsAsync(null);
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().resolves(idp);
+      var authenticateSpy = sinon.spy(authenticate);
+      var store = new Object();
+      store.get = sinon.stub().yieldsAsync(null, {
+        location: 'https://www.example.com/oauth/callback'
+      });
+      store.destroy = sinon.stub().yieldsAsync();
+      
+      
+      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+    
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.connection = { encrypted: true };
+          req.method = 'GET';
+          req.url = '/oauth/callback';
+          req.headers.host = 'www.example.com';
+          req.query = { oauth_token: 'hh5s93j4hdidpola' };
+        
+          res.resumeState = sinon.spy(function(cb) {
+            if (request.state.returnTo) {
+              return this.redirect(request.state.returnTo);
+            }
+          
+            process.nextTick(cb);
+          });
+        })
+        .finish(function() {
+          expect(store.get).to.be.calledOnceWith(this.req, 'oauth_hh5s93j4hdidpola');
+          expect(idpFactory.create).to.be.calledOnceWithExactly(undefined, 'oauth');
+          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(actions.dispatch).to.be.calledOnceWith('login');
+          expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_hh5s93j4hdidpola');
+          
+          expect(this.statusCode).to.equal(302);
+          expect(this.getHeader('Location')).to.equal('/');
+          
+          done();
+        })
+        .listen();
+    }); // should federate with default provider
+    
     it('should federate with provider', function(done) {
       var actions = new Object();
       actions.dispatch = sinon.stub().yieldsAsync(null);
