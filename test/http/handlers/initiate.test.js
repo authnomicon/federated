@@ -62,7 +62,6 @@ describe('http/handlers/initiate', function() {
           done();
         })
         .next(done)
-        
         .listen();
     }); // should authenticate with provider
     

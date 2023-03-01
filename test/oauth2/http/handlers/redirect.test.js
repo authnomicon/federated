@@ -27,19 +27,11 @@ describe('oauth2/http/handlers/redirect', function() {
     
     function authenticate(idp, options) {
       return function(req, res, next) {
-        req.login = function(user, cb) {
-          process.nextTick(function() {
-            req.session.user = user;
-            cb();
-          });
-        };
-        
-        req.federatedUser = { id: '248289761001', displayName: 'Jane Doe' };
         next();
       };
     }
     
-    describe('federating with provider', function() {
+    it('should federate with provider', function(done) {
       var actions = new Object();
       actions.dispatch = sinon.stub().yieldsAsync(null);
       var idp = new Object();
@@ -60,64 +52,33 @@ describe('oauth2/http/handlers/redirect', function() {
         return cb();
       };
       
-      /*
-      function state() {
-        return function(req, res, next) {
-          req.state = new Object();
-          req.state.provider = 'https://server.example.com';
-          next();
-        };
-      }
-      */
-      
       var authenticateSpy = sinon.spy(authenticate);
-      //var stateSpy = sinon.spy(state);
       
       
-      var request, response;
+      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
       
-      before(function(done) {
-        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
-        
-        chai.express.use(handler)
-          .request(function(req, res) {
-            request = req;
-            req.connection = { encrypted: true };
-            req.method = 'POST';
-            req.url = '/oauth2/redirect';
-            req.headers.host = 'www.example.com';
-            req.query = { state: 'foo' };
-            req.session = {};
-            
-            response = res;
-            
-            res.resumeState = sinon.spy(function(cb) {
-              if (request.state.returnTo) {
-                return this.redirect(request.state.returnTo);
-              }
-              
-              process.nextTick(cb);
-            });
-          })
-          .finish(function() {
-            done();
-          })
-          .listen();
-      });
-      
-      it('should setup middleware', function() {
-        //expect(stateSpy).to.be.calledOnce;
-      });
-      
-      it('should create identity provider', function() {
-        expect(idpFactory.create).to.be.calledOnce;
-        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2');
-      });
-      
-      it('should authenticate with identity provider', function() {
-        expect(authenticateSpy).to.be.calledOnce;
-        expect(authenticateSpy).to.be.calledWithExactly(idp, { assignProperty: 'federatedUser' });
-      });
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.connection = { encrypted: true };
+          req.method = 'GET';
+          req.url = '/oauth2/redirect';
+          req.headers.host = 'www.example.com';
+          req.query = { code: 'SplxlOBeZQQYbYS6WxSbIA', state: 'xyz' };
+          req.session = {};
+        })
+        .finish(function() {
+          expect(idpFactory.create).to.be.calledOnce;
+          expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2');
+          expect(authenticateSpy).to.be.calledOnce;
+          expect(authenticateSpy).to.be.calledWithExactly(idp, { assignProperty: 'federatedUser' });
+          
+          expect(this.statusCode).to.equal(302);
+          expect(this.getHeader('Location')).to.equal('/');
+          
+          done();
+        })
+        .listen();
+      //});
       
       // TODO: Asser that actions is called correctly
       /*
@@ -135,10 +96,11 @@ describe('oauth2/http/handlers/redirect', function() {
       });
       */
       
+      /*
       it('should redirect', function() {
-        expect(response.statusCode).to.equal(302);
-        expect(response.getHeader('Location')).to.equal('/');
+        
       });
+      */
     }); // federating with provider
     
     describe('federating with provider and returning to location', function() {
