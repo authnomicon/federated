@@ -1,5 +1,3 @@
-/* global describe, it, expect */
-
 var chai = require('chai');
 var expect = require('chai').expect;
 var $require = require('proxyquire');
