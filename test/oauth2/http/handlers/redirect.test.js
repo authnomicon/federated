@@ -1,19 +1,26 @@
 var chai = require('chai');
 var expect = require('chai').expect;
+var $require = require('proxyquire');
 var sinon = require('sinon');
 var factory = require('../../../../com/oauth2/http/handlers/redirect');
-var utils = require('../../../utils');
 
 
 describe('oauth2/http/handlers/redirect', function() {
   
-  it('should export factory function', function() {
-    expect(factory).to.be.a('function');
-  });
-  
-  it('should be annotated', function() {
-    expect(factory['@implements']).to.be.undefined;
-    expect(factory['@singleton']).to.be.undefined;
+  it('should return handler', function() {
+    var flowstateSpy = sinon.spy();
+    var factory = $require('../../../../com/oauth2/http/handlers/redirect', {
+      'flowstate': flowstateSpy
+    });
+    
+    var idpFactory = new Object();
+    var authenticator = new Object();
+    var store = new Object();
+    var handler = factory(undefined, idpFactory, authenticator, store);
+    
+    expect(handler).to.be.an('array');
+    expect(flowstateSpy).to.be.calledOnce;
+    expect(flowstateSpy).to.be.calledWith({ mutationMethods: [ 'GET', 'POST' ], store: store });
   });
   
   describe('handler', function() {
