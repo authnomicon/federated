@@ -60,6 +60,7 @@ describe('oauth2/http/handlers/redirect', function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'xyz');
           expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', 'oauth2');
           expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(actions.dispatch).to.be.calledOnceWith('login');
           expect(store.destroy).to.be.calledOnceWith(this.req, 'xyz');
           
           expect(this.statusCode).to.equal(302);
@@ -99,6 +100,7 @@ describe('oauth2/http/handlers/redirect', function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'xyz');
           expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', 'oauth2');
           expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(actions.dispatch).to.be.calledOnceWith('login');
           expect(store.destroy).to.be.calledOnceWith(this.req, 'xyz');
           
           expect(this.statusCode).to.equal(302);
@@ -138,6 +140,7 @@ describe('oauth2/http/handlers/redirect', function() {
           expect(err.message).to.equal('something went wrong');
           
           expect(authenticateSpy).to.not.be.called;
+          expect(actions.dispatch).to.not.be.called;
           expect(store.destroy).to.not.be.called;
           
           done();
