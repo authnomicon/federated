@@ -111,6 +111,47 @@ describe('oauth2/http/handlers/redirect', function() {
         .listen();
     }); // should federate with provider and resume
     
+    it('should federate with provider and execute action', function(done) {
+      var actions = new Object();
+      actions.dispatch = sinon.stub().yieldsAsync(null);
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().resolves(idp);
+      var authenticateSpy = sinon.spy(authenticate);
+      var store = new Object();
+      store.get = sinon.stub().yieldsAsync(null, {
+        location: 'https://www.example.com/oauth2/redirect',
+        provider: 'https://server.example.com',
+        action: 'authorize'
+      });
+      store.destroy = sinon.stub().yieldsAsync();
+      
+      
+      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.connection = { encrypted: true };
+          req.method = 'GET';
+          req.url = '/oauth2/redirect';
+          req.headers.host = 'www.example.com';
+          req.query = { code: 'SplxlOBeZQQYbYS6WxSbIA', state: 'xyz' };
+        })
+        .finish(function() {
+          expect(store.get).to.be.calledOnceWith(this.req, 'xyz');
+          expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', 'oauth2');
+          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(actions.dispatch).to.be.calledOnceWith('authorize');
+          expect(store.destroy).to.be.calledOnceWith(this.req, 'xyz');
+          
+          expect(this.statusCode).to.equal(302);
+          expect(this.getHeader('Location')).to.equal('/');
+          
+          done();
+        })
+        .listen();
+    }); // should federate with provider and execute action
+    
     it('should next with error when identity provider fails to be created', function(done) {
       var actions = new Object();
       actions.dispatch = sinon.stub().yieldsAsync(null);
@@ -148,6 +189,6 @@ describe('oauth2/http/handlers/redirect', function() {
         .listen();
     }); // should next with error when identity provider fails to be created
     
-  });
+  }); // handler
   
 });
