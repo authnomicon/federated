@@ -246,6 +246,55 @@ describe('oauth/http/handlers/callback', function() {
         .listen();
     }); // should federate with provider and execute multiple actions
     
+    it('should next with error when identity provider fails to be created', function(done) {
+      var actions = new Object();
+      actions.dispatch = sinon.stub().yieldsAsync(null);
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().rejects(new Error('something went wrong'));
+      var authenticateSpy = sinon.spy(authenticate);
+      var store = new Object();
+      store.get = sinon.stub().yieldsAsync(null, {
+        location: 'https://www.example.com/oauth/callback',
+        provider: 'http://sp.example.com'
+      });
+      store.destroy = sinon.stub().yieldsAsync();
+      
+      
+      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+    
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.connection = { encrypted: true };
+          req.method = 'GET';
+          req.url = '/oauth/callback';
+          req.headers.host = 'www.example.com';
+          req.params = { hostname: 'twitter.com' };
+          req.query = { oauth_token: 'XXXXXXXX' };
+          req.session = {};
+          req.session.state = {};
+          req.session.state['oauth_twitter.com_XXXXXXXX'] = { provider: 'http://sp.example.com' };
+        
+          res.resumeState = sinon.spy(function(cb) {
+            if (request.state.returnTo) {
+              return this.redirect(request.state.returnTo);
+            }
+          
+            process.nextTick(cb);
+          });
+        })
+        .next(function(err, req, res) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(err.message).to.equal('something went wrong');
+          
+          expect(authenticateSpy).to.not.be.called;
+          expect(actions.dispatch).to.not.be.called;
+          expect(store.destroy).to.not.be.called;
+          
+          done();
+        })
+        .listen();
+    }); // should next with error when identity provider fails to be created
+    
   }); // handler
   
 });
