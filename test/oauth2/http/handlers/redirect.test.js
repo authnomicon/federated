@@ -70,123 +70,44 @@ describe('oauth2/http/handlers/redirect', function() {
         .listen();
     }); // should federate with provider
     
-    describe('federating with provider and returning to location', function() {
-      var idp = new Object();
-      var idpFactory = new Object();
-      idpFactory.create = sinon.stub().resolves(idp)
-      
+    it('should federate with provider and resume', function(done) {
       var actions = new Object();
       actions.dispatch = sinon.stub().yieldsAsync(null);
-      
-      function authenticate(idp, options) {
-        return function(req, res, next) {
-          req.login = function(user, cb) {
-            process.nextTick(function() {
-              req.session.user = user;
-              cb();
-            });
-          };
-          
-          req.federatedUser = { id: '248289761001', displayName: 'Jane Doe' };
-          next();
-        };
-      }
-      
-      // TODO: review this
-      var store = new Object();
-      store.get = function(req, state, cb) {
-        return cb(null, {
-          location: 'https://www.example.com/oauth2/redirect',
-          provider: 'https://server.example.com',
-          returnTo: '/home'
-        });
-      }
-      
-      store.destroy = function(req, handle, cb) {
-        return cb();
-      };
-      
-      /*
-      function state() {
-        return function(req, res, next) {
-          req.state = new Object();
-          req.state.provider = 'https://server.example.com';
-          req.state.returnTo = '/home';
-          next();
-        };
-      }
-      */
-      
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().resolves(idp);
       var authenticateSpy = sinon.spy(authenticate);
-      //var stateSpy = sinon.spy(state);
-      
-      
-      var request, response;
-      
-      before(function(done) {
-        var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
-        
-        chai.express.use(handler)
-          .request(function(req, res) {
-            request = req;
-            req.connection = { encrypted: true };
-            req.session = {};
-            req.url = '/oauth2/redirect';
-            req.headers.host = 'www.example.com';
-            req.query = { state: 'foo' };
-            
-            response = res;
-            
-            res.resumeState = sinon.spy(function(cb) {
-              if (request.state.returnTo) {
-                return this.redirect(request.state.returnTo);
-              }
-              
-              process.nextTick(cb);
-            });
-          })
-          .finish(function() {
-            done();
-          })
-          .listen();
+      var store = new Object();
+      store.get = sinon.stub().yieldsAsync(null, {
+        location: 'https://www.example.com/oauth2/redirect',
+        provider: 'https://server.example.com',
+        returnTo: '/app'
       });
+      store.destroy = sinon.stub().yieldsAsync();
       
-      it('should setup middleware', function() {
-        //expect(stateSpy).to.be.calledOnce;
-      });
+      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
       
-      /*
-      it('should create identity provider', function() {
-        expect(idpFactory.create).to.be.calledOnce;
-        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2', {});
-      });
-      */
-      
-      it('should authenticate with identity provider', function() {
-        expect(authenticateSpy).to.be.calledOnce;
-        expect(authenticateSpy).to.be.calledWithExactly(idp, { assignProperty: 'federatedUser' });
-      });
-      
-      /*
-      it('should establish session', function() {
-        expect(request.session.user).to.deep.equal({
-          id: '248289761001',
-          displayName: 'Jane Doe'
-        });
-      });
-      */
-      
-      /*
-      it('should resume state', function() {
-        expect(response.resumeState).to.be.calledOnceWith();
-      });
-      */
-      
-      it('should redirect', function() {
-        expect(response.statusCode).to.equal(302);
-        expect(response.getHeader('Location')).to.equal('/home');
-      });
-    }); // federating with provider and returning to location
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.connection = { encrypted: true };
+          req.method = 'GET';
+          req.url = '/oauth2/redirect';
+          req.headers.host = 'www.example.com';
+          req.query = { code: 'SplxlOBeZQQYbYS6WxSbIA', state: 'xyz' };
+        })
+        .finish(function() {
+          expect(store.get).to.be.calledOnceWith(this.req, 'xyz');
+          expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', 'oauth2');
+          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(store.destroy).to.be.calledOnceWith(this.req, 'xyz');
+          
+          expect(this.statusCode).to.equal(302);
+          expect(this.getHeader('Location')).to.equal('/app');
+          
+          done();
+        })
+        .listen();
+    }); // should federate with provider and resume
     
     describe('federating with provider and parameters in state', function() {
       var idp = new Object();
