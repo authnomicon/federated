@@ -70,7 +70,7 @@ exports = module.exports = function(actions, idpFactory, authenticator, store) {
 
 exports['@require'] = [
   '../../../actions/http/router',
-  'module:@authnomicon/federated.IDPSchemeFactory',
+  'module:@authnomicon/federated.IDProviderFactory',
   'module:@authnomicon/session.Authenticator',
   'module:flowstate.Store'
 ];
