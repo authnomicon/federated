@@ -1,7 +1,8 @@
+// Module dependencies.
+var express = require('express');
+
 exports = module.exports = function(callbackHandler) {
-  var express = require('express');
-  var router = new express.Router();
-  
+  var router = express.Router();
   router.get('/:hostname', callbackHandler);
   
   return router;
