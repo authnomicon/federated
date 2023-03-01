@@ -1,3 +1,7 @@
+var defer = typeof setImmediate === 'function'
+  ? setImmediate
+  : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
+
 exports = module.exports = function(idpFactory, authenticator, store) {
   
   function federate(req, res, next) {
@@ -13,9 +17,9 @@ exports = module.exports = function(idpFactory, authenticator, store) {
         if (req.query.prompt) { options.prompt = req.query.prompt; }
         if (req.query.login_hint) { options.loginHint = req.query.login_hint; }
         
-        authenticator.authenticate(idp, options)(req, res, next);
+        defer(authenticator.authenticate(idp, options), req, res, next);
       }, function(err) {
-        next(err);
+        defer(next, err);
       });
   }
 
