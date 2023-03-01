@@ -10,9 +10,7 @@
  * @returns {Function}
  */
 exports = module.exports = function(actions, idpFactory, authenticator, store) {
-  var merge = require('utils-merge');
-
-
+  
   function federate(req, res, next) {
     var provider = req.state.provider
       , protocol = req.state.protocol || 'oauth2';
@@ -59,7 +57,6 @@ exports = module.exports = function(actions, idpFactory, authenticator, store) {
   
   
   return [
-    //state({ mutationMethods: [ 'GET', 'POST' ]}),
     require('flowstate')({ mutationMethods: [ 'GET', 'POST' ], store: store }),
     federate,
     execute,
