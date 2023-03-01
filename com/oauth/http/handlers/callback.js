@@ -48,7 +48,7 @@ exports = module.exports = function(router, idpFactory, authenticator, store) {
   }
   
   return [
-    require('flowstate')({ mutationMethods: [ 'GET' ], getHandle: getHandle, store: store }),
+    require('flowstate')({ getHandle: getHandle, store: store }),
     federate,
     execute,
     resume,

@@ -21,7 +21,6 @@ describe('oauth/http/handlers/callback', function() {
     
     expect(handler).to.be.an('array');
     expect(flowstateSpy).to.be.calledOnce;
-    expect(flowstateSpy.firstCall.args[0].mutationMethods).to.deep.equal([ 'GET' ]);
     expect(flowstateSpy.firstCall.args[0].store).to.equal(store);
   });
   
