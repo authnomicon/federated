@@ -232,6 +232,42 @@ describe('oauth2/http/handlers/redirect', function() {
         .listen();
     }); // should next with error when identity provider fails to be created
     
+    it('should next with error when action fails', function(done) {
+      var actions = new Object();
+      actions.dispatch = sinon.stub().yieldsAsync(new Error('something went wrong'));
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().resolves(idp);
+      var authenticateSpy = sinon.spy(authenticate);
+      var store = new Object();
+      store.get = sinon.stub().yieldsAsync(null, {
+        location: 'https://www.example.com/oauth2/redirect',
+        provider: 'https://server.example.com'
+      });
+      store.destroy = sinon.stub().yieldsAsync();
+      
+      
+      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.connection = { encrypted: true };
+          req.method = 'GET';
+          req.url = '/oauth2/redirect';
+          req.headers.host = 'www.example.com';
+          req.query = { code: 'SplxlOBeZQQYbYS6WxSbIA', state: 'xyz' };
+        })
+        .next(function(err, req, res) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(err.message).to.equal('something went wrong');
+          
+          expect(store.destroy).to.not.be.called;
+          
+          done();
+        })
+        .listen();
+    }); // should next with error when action fails
+    
   }); // handler
   
 });
