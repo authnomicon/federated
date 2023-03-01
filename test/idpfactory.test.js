@@ -9,7 +9,7 @@ describe('idpfactory', function() {
   
   it('should be annotated', function() {
     expect(factory['@singleton']).to.equal(true);
-    expect(factory['@implements']).to.equal('module:@authnomicon/federated.IDPFactory');
+    expect(factory['@implements']).to.equal('module:@authnomicon/federated.IDProviderFactory');
   });
   
   it('should construct LocalIDPFactory', function() {
