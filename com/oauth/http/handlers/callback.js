@@ -1,5 +1,9 @@
 var handle = require('../../../../lib/oauth/state/handle');
 
+var defer = typeof setImmediate === 'function'
+  ? setImmediate
+  : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
+
 exports = module.exports = function(router, idpFactory, authenticator, store) {
   
   function federate(req, res, next) {
@@ -7,10 +11,10 @@ exports = module.exports = function(router, idpFactory, authenticator, store) {
     
     idpFactory.create(provider, 'oauth')
       .then(function(idp) {
-        authenticator.authenticate(idp, { assignProperty: 'federatedUser' })(req, res, next);
+        defer(authenticator.authenticate(idp, { assignProperty: 'federatedUser' }), req, res, next);
       })
       .catch(function(err) {
-        next(err);
+        defer(next, err);
       });
   }
   
