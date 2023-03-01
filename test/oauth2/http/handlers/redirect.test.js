@@ -55,13 +55,14 @@ describe('oauth2/http/handlers/redirect', function() {
           req.url = '/oauth2/redirect';
           req.headers.host = 'www.example.com';
           req.query = { code: 'SplxlOBeZQQYbYS6WxSbIA', state: 'xyz' };
-          req.session = {};
         })
         .finish(function() {
           expect(idpFactory.create).to.be.calledOnce;
           expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2');
           expect(authenticateSpy).to.be.calledOnce;
           expect(authenticateSpy).to.be.calledWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(store.get).to.be.calledOnceWith(this.req, 'xyz');
+          expect(store.destroy).to.be.calledOnceWith(this.req, 'xyz');
           
           expect(this.statusCode).to.equal(302);
           expect(this.getHeader('Location')).to.equal('/');
