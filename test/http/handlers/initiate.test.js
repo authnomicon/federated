@@ -148,7 +148,9 @@ describe('http/handlers/initiate', function() {
         .next(function(err, req, res) {
           expect(err).to.be.an.instanceOf(Error);
           expect(err.message).to.equal('something went wrong');
+          
           expect(authenticateSpy).to.not.be.called;
+          
           done();
         })
         .listen();

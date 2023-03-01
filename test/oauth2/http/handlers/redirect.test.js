@@ -109,48 +109,41 @@ describe('oauth2/http/handlers/redirect', function() {
         .listen();
     }); // should federate with provider and resume
     
-    /*
-    describe('error due to unsupported identity provider', function() {
-      var error, request, response;
-      
-      before(function() {
-        sinon.stub(IDPFactory, 'create').rejects(new Error('Unsupported identity provider'));
+    it('should next with error when identity provider fails to be created', function(done) {
+      var actions = new Object();
+      actions.dispatch = sinon.stub().yieldsAsync(null);
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().rejects(new Error('something went wrong'));
+      var authenticateSpy = sinon.spy(authenticate);
+      var store = new Object();
+      store.get = sinon.stub().yieldsAsync(null, {
+        location: 'https://www.example.com/oauth2/redirect',
+        provider: 'https://server.example.com'
       });
+      store.destroy = sinon.stub().yieldsAsync();
       
-      before(function(done) {
-        var handler = factory(IDPFactory, authenticate, ceremony);
-        
-        chai.express.handler(handler)
-          .req(function(req) {
-            request = req;
-            request.state = { provider: 'http://server.example.com' };
-            request.session = {};
-          })
-          .res(function(res) {
-            response = res;
-          })
-          .next(function(err) {
-            error = err;
-            done();
-          })
-          .dispatch();
-      });
       
-      it('should not authenticate', function() {
-        expect(request.federatedUser).to.be.undefined;
-        expect(request.authInfo).to.be.undefined;
-      });
+      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
       
-      it('should not establish session', function() {
-        expect(request.session.user).to.be.undefined;
-      });
-      
-      it('should error', function() {
-        expect(error).to.be.an.instanceof(Error);
-        expect(error.message).to.equal('Unsupported identity provider');
-      });
-    }); // error due to unsupported identity provider
-    */
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.connection = { encrypted: true };
+          req.method = 'GET';
+          req.url = '/oauth2/redirect';
+          req.headers.host = 'www.example.com';
+          req.query = { code: 'SplxlOBeZQQYbYS6WxSbIA', state: 'xyz' };
+        })
+        .next(function(err, req, res) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(err.message).to.equal('something went wrong');
+          
+          expect(authenticateSpy).to.not.be.called;
+          expect(store.destroy).to.not.be.called;
+          
+          done();
+        })
+        .listen();
+    }); // should next with error when identity provider fails to be created
     
   });
   
