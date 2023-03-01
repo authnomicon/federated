@@ -13,7 +13,7 @@ var defer = typeof setImmediate === 'function'
  *
  * @returns {Function}
  */
-exports = module.exports = function(actions, idpFactory, authenticator, store) {
+exports = module.exports = function(router, idpFactory, authenticator, store) {
   
   function federate(req, res, next) {
     var provider = req.state.provider
@@ -28,18 +28,18 @@ exports = module.exports = function(actions, idpFactory, authenticator, store) {
   }
   
   function execute(req, res, next) {
-    var acts = req.state.action || [ 'login' ];
-    if (!Array.isArray(acts)) {
-      acts = [ acts ];
+    var actions = req.state.action || [ 'login' ];
+    if (!Array.isArray(actions)) {
+      actions = [ actions ];
     }
     
     var i = 0;
     (function iter(err) {
       if (err) { return next(err); }
       
-      var act = acts[i++];
-      if (!act) { return next(); }
-      actions.dispatch(act, null, req, res, iter);
+      var action = actions[i++];
+      if (!action) { return next(); }
+      router.dispatch(action, null, req, res, iter);
     })();
   }
   
