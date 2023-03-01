@@ -56,7 +56,7 @@ describe('oauth/http/handlers/callback', function() {
           req.method = 'GET';
           req.url = '/oauth/callback';
           req.headers.host = 'www.example.com';
-          req.params = { hostname: 'twitter.com' };
+          req.params = { slug: 'twitter.com' };
           req.query = { oauth_token: 'XXXXXXXX' };
           req.session = {};
           req.session.state = {};
@@ -109,7 +109,7 @@ describe('oauth/http/handlers/callback', function() {
           req.method = 'GET';
           req.url = '/oauth/callback';
           req.headers.host = 'www.example.com';
-          req.params = { hostname: 'twitter.com' };
+          req.params = { slug: 'twitter.com' };
           req.query = { oauth_token: 'XXXXXXXX' };
           req.session = {};
           req.session.state = {};
@@ -162,7 +162,7 @@ describe('oauth/http/handlers/callback', function() {
           req.method = 'GET';
           req.url = '/oauth/callback';
           req.headers.host = 'www.example.com';
-          req.params = { hostname: 'twitter.com' };
+          req.params = { slug: 'twitter.com' };
           req.query = { oauth_token: 'XXXXXXXX' };
           req.session = {};
           req.session.state = {};
@@ -215,7 +215,7 @@ describe('oauth/http/handlers/callback', function() {
           req.method = 'GET';
           req.url = '/oauth/callback';
           req.headers.host = 'www.example.com';
-          req.params = { hostname: 'twitter.com' };
+          req.params = { slug: 'twitter.com' };
           req.query = { oauth_token: 'XXXXXXXX' };
           req.session = {};
           req.session.state = {};
@@ -268,7 +268,7 @@ describe('oauth/http/handlers/callback', function() {
           req.method = 'GET';
           req.url = '/oauth/callback';
           req.headers.host = 'www.example.com';
-          req.params = { hostname: 'twitter.com' };
+          req.params = { slug: 'twitter.com' };
           req.query = { oauth_token: 'XXXXXXXX' };
           req.session = {};
           req.session.state = {};
@@ -318,7 +318,7 @@ describe('oauth/http/handlers/callback', function() {
           req.method = 'GET';
           req.url = '/oauth/callback';
           req.headers.host = 'www.example.com';
-          req.params = { hostname: 'twitter.com' };
+          req.params = { slug: 'twitter.com' };
           req.query = { oauth_token: 'XXXXXXXX' };
           req.session = {};
           req.session.state = {};
