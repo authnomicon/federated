@@ -1,3 +1,7 @@
+var defer = typeof setImmediate === 'function'
+  ? setImmediate
+  : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
+
 /**
  * OAuth 2.0 redirection handler.
  *
@@ -17,10 +21,9 @@ exports = module.exports = function(actions, idpFactory, authenticator, store) {
     
     idpFactory.create(provider, protocol)
       .then(function(idp) {
-        authenticator.authenticate(idp, { assignProperty: 'federatedUser' })(req, res, next);
-      })
-      .catch(function(err) {
-        next(err);
+        defer(authenticator.authenticate(idp, { assignProperty: 'federatedUser' }), req, res, next);
+      }, function(err) {
+        defer(next, err);
       });
   }
   
