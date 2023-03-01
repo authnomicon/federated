@@ -1,5 +1,3 @@
-/* global describe, it, expect */
-
 var chai = require('chai');
 var expect = require('chai').expect;
 var sinon = require('sinon');
@@ -102,9 +100,7 @@ describe('oauth/http/handlers/callback', function() {
       
       it('should create identity provider', function() {
         expect(idpFactory.create).to.be.calledOnce;
-        expect(idpFactory.create).to.be.calledWithExactly('http://sp.example.com', 'oauth', {
-          location: 'https://www.example.com/oauth/callback'
-        });
+        expect(idpFactory.create).to.be.calledWithExactly('http://sp.example.com', 'oauth');
       });
       
       it('should authenticate with identity provider', function() {

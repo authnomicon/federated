@@ -10,20 +10,9 @@ exports = module.exports = function(actions, idpFactory, authenticator, store) {
 
 
   function federate(req, res, next) {
-    var provider = req.state.provider
-      , options = merge({}, req.state);
+    var provider = req.state.provider;
     
-    delete options.provider;
-    // TODO: Test cases for deleting these properties, once they are settled
-    //delete options.returnTo;
-    // TODO: delete options.state? or whatever parent is
-    //delete options.state;
-    
-    // TODO: Past `host` as option
-    // TODO: Pass `idpID` as option, if available in state
-    // TODO: Pass `clientID` as option, if available
-      
-    idpFactory.create(provider, 'oauth', options)
+    idpFactory.create(provider, 'oauth')
       .then(function(idp) {
         authenticator.authenticate(idp, { assignProperty: 'federatedUser' })(req, res, next);
       })
