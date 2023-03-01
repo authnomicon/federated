@@ -1,5 +1,3 @@
-/* global describe, it, expect */
-
 var chai = require('chai');
 var expect = require('chai').expect;
 var sinon = require('sinon');
@@ -106,9 +104,7 @@ describe('oauth2/http/handlers/redirect', function() {
       
       it('should create identity provider', function() {
         expect(idpFactory.create).to.be.calledOnce;
-        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2', {
-          location: 'https://www.example.com/oauth2/redirect'
-        });
+        expect(idpFactory.create).to.be.calledWithExactly('https://server.example.com', 'oauth2');
       });
       
       it('should authenticate with identity provider', function() {
