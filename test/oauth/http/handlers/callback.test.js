@@ -42,7 +42,7 @@ describe('oauth/http/handlers/callback', function() {
       var authenticateSpy = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
-        location: 'https://www.example.com/oauth/callback',
+        location: 'https://www.example.com/oauth/callback/example',
         provider: 'http://sp.example.com'
       });
       store.destroy = sinon.stub().yieldsAsync();
@@ -54,13 +54,10 @@ describe('oauth/http/handlers/callback', function() {
         .request(function(req, res) {
           req.connection = { encrypted: true };
           req.method = 'GET';
-          req.url = '/oauth/callback';
+          req.url = '/oauth/callback/example';
           req.headers.host = 'www.example.com';
-          req.params = { slug: 'twitter.com' };
-          req.query = { oauth_token: 'XXXXXXXX' };
-          req.session = {};
-          req.session.state = {};
-          req.session.state['oauth_twitter.com_XXXXXXXX'] = { provider: 'http://sp.example.com' };
+          req.params = { slug: 'example' };
+          req.query = { oauth_token: 'hh5s93j4hdidpola' };
         
           res.resumeState = sinon.spy(function(cb) {
             if (request.state.returnTo) {
@@ -71,11 +68,11 @@ describe('oauth/http/handlers/callback', function() {
           });
         })
         .finish(function() {
-          expect(store.get).to.be.calledOnceWith(this.req, 'oauth_twitter.com_XXXXXXXX');
+          expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           expect(idpFactory.create).to.be.calledOnceWithExactly('http://sp.example.com', 'oauth');
           expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(actions.dispatch).to.be.calledOnceWith('login');
-          expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_twitter.com_XXXXXXXX');
+          expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           
           expect(this.statusCode).to.equal(302);
           expect(this.getHeader('Location')).to.equal('/');
@@ -94,7 +91,7 @@ describe('oauth/http/handlers/callback', function() {
       var authenticateSpy = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
-        location: 'https://www.example.com/oauth/callback',
+        location: 'https://www.example.com/oauth/callback/example',
         provider: 'http://sp.example.com',
         returnTo: '/app'
       });
@@ -107,13 +104,10 @@ describe('oauth/http/handlers/callback', function() {
         .request(function(req, res) {
           req.connection = { encrypted: true };
           req.method = 'GET';
-          req.url = '/oauth/callback';
+          req.url = '/oauth/callback/example';
           req.headers.host = 'www.example.com';
-          req.params = { slug: 'twitter.com' };
-          req.query = { oauth_token: 'XXXXXXXX' };
-          req.session = {};
-          req.session.state = {};
-          req.session.state['oauth_twitter.com_XXXXXXXX'] = { provider: 'http://sp.example.com' };
+          req.params = { slug: 'example' };
+          req.query = { oauth_token: 'hh5s93j4hdidpola' };
         
           res.resumeState = sinon.spy(function(cb) {
             if (request.state.returnTo) {
@@ -124,11 +118,11 @@ describe('oauth/http/handlers/callback', function() {
           });
         })
         .finish(function() {
-          expect(store.get).to.be.calledOnceWith(this.req, 'oauth_twitter.com_XXXXXXXX');
+          expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           expect(idpFactory.create).to.be.calledOnceWithExactly('http://sp.example.com', 'oauth');
           expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(actions.dispatch).to.be.calledOnceWith('login');
-          expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_twitter.com_XXXXXXXX');
+          expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           
           expect(this.statusCode).to.equal(302);
           expect(this.getHeader('Location')).to.equal('/app');
@@ -147,7 +141,7 @@ describe('oauth/http/handlers/callback', function() {
       var authenticateSpy = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
-        location: 'https://www.example.com/oauth/callback',
+        location: 'https://www.example.com/oauth/callback/example',
         provider: 'http://sp.example.com',
         action: 'authorize'
       });
@@ -160,13 +154,10 @@ describe('oauth/http/handlers/callback', function() {
         .request(function(req, res) {
           req.connection = { encrypted: true };
           req.method = 'GET';
-          req.url = '/oauth/callback';
+          req.url = '/oauth/callback/example';
           req.headers.host = 'www.example.com';
-          req.params = { slug: 'twitter.com' };
-          req.query = { oauth_token: 'XXXXXXXX' };
-          req.session = {};
-          req.session.state = {};
-          req.session.state['oauth_twitter.com_XXXXXXXX'] = { provider: 'http://sp.example.com' };
+          req.params = { slug: 'example' };
+          req.query = { oauth_token: 'hh5s93j4hdidpola' };
         
           res.resumeState = sinon.spy(function(cb) {
             if (request.state.returnTo) {
@@ -177,11 +168,11 @@ describe('oauth/http/handlers/callback', function() {
           });
         })
         .finish(function() {
-          expect(store.get).to.be.calledOnceWith(this.req, 'oauth_twitter.com_XXXXXXXX');
+          expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           expect(idpFactory.create).to.be.calledOnceWithExactly('http://sp.example.com', 'oauth');
           expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(actions.dispatch).to.be.calledOnceWith('authorize');
-          expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_twitter.com_XXXXXXXX');
+          expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           
           expect(this.statusCode).to.equal(302);
           expect(this.getHeader('Location')).to.equal('/');
@@ -200,7 +191,7 @@ describe('oauth/http/handlers/callback', function() {
       var authenticateSpy = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
-        location: 'https://www.example.com/oauth/callback',
+        location: 'https://www.example.com/oauth/callback/example',
         provider: 'http://sp.example.com',
         action: [ 'login', 'authorize' ]
       });
@@ -213,13 +204,10 @@ describe('oauth/http/handlers/callback', function() {
         .request(function(req, res) {
           req.connection = { encrypted: true };
           req.method = 'GET';
-          req.url = '/oauth/callback';
+          req.url = '/oauth/callback/example';
           req.headers.host = 'www.example.com';
-          req.params = { slug: 'twitter.com' };
-          req.query = { oauth_token: 'XXXXXXXX' };
-          req.session = {};
-          req.session.state = {};
-          req.session.state['oauth_twitter.com_XXXXXXXX'] = { provider: 'http://sp.example.com' };
+          req.params = { slug: 'example' };
+          req.query = { oauth_token: 'hh5s93j4hdidpola' };
         
           res.resumeState = sinon.spy(function(cb) {
             if (request.state.returnTo) {
@@ -230,13 +218,13 @@ describe('oauth/http/handlers/callback', function() {
           });
         })
         .finish(function() {
-          expect(store.get).to.be.calledOnceWith(this.req, 'oauth_twitter.com_XXXXXXXX');
+          expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           expect(idpFactory.create).to.be.calledOnceWithExactly('http://sp.example.com', 'oauth');
           expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(actions.dispatch).to.be.calledTwice;
           expect(actions.dispatch.firstCall).to.be.calledWith('login');
           expect(actions.dispatch.secondCall).to.be.calledWith('authorize');
-          expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_twitter.com_XXXXXXXX');
+          expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           
           expect(this.statusCode).to.equal(302);
           expect(this.getHeader('Location')).to.equal('/');
@@ -254,7 +242,7 @@ describe('oauth/http/handlers/callback', function() {
       var authenticateSpy = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
-        location: 'https://www.example.com/oauth/callback',
+        location: 'https://www.example.com/oauth/callback/example',
         provider: 'http://sp.example.com'
       });
       store.destroy = sinon.stub().yieldsAsync();
@@ -266,13 +254,10 @@ describe('oauth/http/handlers/callback', function() {
         .request(function(req, res) {
           req.connection = { encrypted: true };
           req.method = 'GET';
-          req.url = '/oauth/callback';
+          req.url = '/oauth/callback/example';
           req.headers.host = 'www.example.com';
-          req.params = { slug: 'twitter.com' };
-          req.query = { oauth_token: 'XXXXXXXX' };
-          req.session = {};
-          req.session.state = {};
-          req.session.state['oauth_twitter.com_XXXXXXXX'] = { provider: 'http://sp.example.com' };
+          req.params = { slug: 'example' };
+          req.query = { oauth_token: 'hh5s93j4hdidpola' };
         
           res.resumeState = sinon.spy(function(cb) {
             if (request.state.returnTo) {
