@@ -36,23 +36,14 @@ describe('oauth2/http/handlers/redirect', function() {
       actions.dispatch = sinon.stub().yieldsAsync(null);
       var idp = new Object();
       var idpFactory = new Object();
-      idpFactory.create = sinon.stub().resolves(idp)
-      
-      
-      // TODO: review this
-      var store = new Object();
-      store.get = function(req, state, cb) {
-        return cb(null, {
-          location: 'https://www.example.com/oauth2/redirect',
-          provider: 'https://server.example.com'
-        });
-      }
-      
-      store.destroy = function(req, handle, cb) {
-        return cb();
-      };
-      
+      idpFactory.create = sinon.stub().resolves(idp);
       var authenticateSpy = sinon.spy(authenticate);
+      var store = new Object();
+      store.get = sinon.stub().yieldsAsync(null, {
+        location: 'https://www.example.com/oauth2/redirect',
+        provider: 'https://server.example.com'
+      });
+      store.destroy = sinon.stub().yieldsAsync();
       
       
       var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
