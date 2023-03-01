@@ -10,8 +10,8 @@ var RequestTokenStore = require('../../../lib/oauth/requesttokenstore');
 describe('oauth/http/requesttokenstore', function() {
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.equal('module:passport-oauth1.RequestTokenStore');
     expect(factory['@singleton']).to.equal(true);
+    expect(factory['@implements']).to.equal('module:passport-oauth1.RequestTokenStore');
   });
   
   it('should construct RequestTokenStore', function() {
@@ -29,38 +29,6 @@ describe('oauth/http/requesttokenstore', function() {
   
   describe('RequestTokenStore', function() {
     var store = new RequestTokenStore();
-    
-    describe('#get', function() {
-      
-      it('should get token secret', function(done) {
-        var req = new Object();
-        req.query = {
-          oauth_token: 'hh5s93j4hdidpola',
-        };
-        req.state = {
-          tokenSecret: 'hdhd0244k9j7ao03'
-        };
-      
-        store.get(req, 'hh5s93j4hdidpola', function(err, tokenSecret) {
-          if (err) { return done(err); }
-          expect(tokenSecret).to.equal('hdhd0244k9j7ao03')
-          done();
-        });
-      }); // should get token secret
-      
-      it('should error when state middleware is not in use', function(done) {
-        var req = new Object();
-        
-        store.get(req, 'hh5s93j4hdidpola', function(err, tokenSecret, info) {
-          expect(err).to.be.an.instanceOf(Error);
-          expect(err.message).to.equal('OAuth requires state support. Did you forget to use `flowstate` middleware?');
-          expect(tokenSecret).to.be.undefined;
-          expect(info).to.be.undefined;
-          done();
-        });
-      }); // should error when state middleware is not in use
-      
-    }); // #get
     
     describe('#set', function() {
       

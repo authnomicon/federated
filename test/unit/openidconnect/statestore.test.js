@@ -1,9 +1,7 @@
 /* global describe, it, expect */
 
 var expect = require('chai').expect;
-var $require = require('proxyquire');
 var sinon = require('sinon');
-var factory = require('../../../com/openidconnect/http/statestore');
 var StateStore = require('../../../lib/openidconnect/statestore');
 
 
