@@ -1,3 +1,6 @@
+// Module dependencies.
+var express = require('express');
+
 /**
  * OAuth 2.0 redirection service.
  *
@@ -21,9 +24,7 @@
  * @returns {Function}
  */
 exports = module.exports = function(redirectHandler) {
-  var express = require('express');
-  var router = new express.Router();
-  
+  var router = express.Router();
   router.get('/:hostname?', redirectHandler);
   
   return router;
