@@ -1,12 +1,7 @@
+var handleFor = require('../../../../lib/oauth/state/handle');
+
 exports = module.exports = function(router, idpFactory, authenticator, store) {
-  var handleFor = require('../../../../lib/oauth/state/handle');
-
-
-  function getHandle(req) {
-    return handleFor(req.query.oauth_token, req.params.hostname);
-  }
-
-
+  
   function federate(req, res, next) {
     var provider = req.state.provider;
     
@@ -43,6 +38,10 @@ exports = module.exports = function(router, idpFactory, authenticator, store) {
     res.redirect('/');
   }
   
+  
+  function getHandle(req) {
+    return handleFor(req.query.oauth_token, req.params.hostname);
+  }
   
   return [
     require('flowstate')({ mutationMethods: [ 'GET' ], getHandle: getHandle, store: store }),
