@@ -1,4 +1,4 @@
-var handleFor = require('../../../../lib/oauth/state/handle');
+var handle = require('../../../../lib/oauth/state/handle');
 
 exports = module.exports = function(router, idpFactory, authenticator, store) {
   
@@ -40,7 +40,7 @@ exports = module.exports = function(router, idpFactory, authenticator, store) {
   
   
   function getHandle(req) {
-    return handleFor(req.query.oauth_token, req.params.hostname);
+    return handle.fromSlug(req.query.oauth_token, req.params.slug);
   }
   
   return [
