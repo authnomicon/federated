@@ -55,14 +55,6 @@ describe('oauth/http/handlers/callback', function() {
           req.url = '/oauth/callback';
           req.headers.host = 'www.example.com';
           req.query = { oauth_token: 'hh5s93j4hdidpola' };
-        
-          res.resumeState = sinon.spy(function(cb) {
-            if (request.state.returnTo) {
-              return this.redirect(request.state.returnTo);
-            }
-          
-            process.nextTick(cb);
-          });
         })
         .finish(function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'oauth_hh5s93j4hdidpola');
@@ -104,14 +96,6 @@ describe('oauth/http/handlers/callback', function() {
           req.headers.host = 'www.example.com';
           req.params = { slug: 'example' };
           req.query = { oauth_token: 'hh5s93j4hdidpola' };
-        
-          res.resumeState = sinon.spy(function(cb) {
-            if (request.state.returnTo) {
-              return this.redirect(request.state.returnTo);
-            }
-          
-            process.nextTick(cb);
-          });
         })
         .finish(function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
@@ -154,14 +138,6 @@ describe('oauth/http/handlers/callback', function() {
           req.headers.host = 'www.example.com';
           req.params = { slug: 'example' };
           req.query = { oauth_token: 'hh5s93j4hdidpola' };
-        
-          res.resumeState = sinon.spy(function(cb) {
-            if (request.state.returnTo) {
-              return this.redirect(request.state.returnTo);
-            }
-          
-            process.nextTick(cb);
-          });
         })
         .finish(function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
@@ -204,14 +180,6 @@ describe('oauth/http/handlers/callback', function() {
           req.headers.host = 'www.example.com';
           req.params = { slug: 'example' };
           req.query = { oauth_token: 'hh5s93j4hdidpola' };
-        
-          res.resumeState = sinon.spy(function(cb) {
-            if (request.state.returnTo) {
-              return this.redirect(request.state.returnTo);
-            }
-          
-            process.nextTick(cb);
-          });
         })
         .finish(function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
@@ -254,14 +222,6 @@ describe('oauth/http/handlers/callback', function() {
           req.headers.host = 'www.example.com';
           req.params = { slug: 'example' };
           req.query = { oauth_token: 'hh5s93j4hdidpola' };
-        
-          res.resumeState = sinon.spy(function(cb) {
-            if (request.state.returnTo) {
-              return this.redirect(request.state.returnTo);
-            }
-          
-            process.nextTick(cb);
-          });
         })
         .finish(function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
@@ -304,14 +264,6 @@ describe('oauth/http/handlers/callback', function() {
           req.headers.host = 'www.example.com';
           req.params = { slug: 'example' };
           req.query = { oauth_token: 'hh5s93j4hdidpola' };
-        
-          res.resumeState = sinon.spy(function(cb) {
-            if (request.state.returnTo) {
-              return this.redirect(request.state.returnTo);
-            }
-          
-            process.nextTick(cb);
-          });
         })
         .next(function(err, req, res) {
           expect(err).to.be.an.instanceOf(Error);
@@ -354,14 +306,6 @@ describe('oauth/http/handlers/callback', function() {
           req.session = {};
           req.session.state = {};
           req.session.state['oauth_twitter.com_XXXXXXXX'] = { provider: 'http://sp.example.com' };
-        
-          res.resumeState = sinon.spy(function(cb) {
-            if (request.state.returnTo) {
-              return this.redirect(request.state.returnTo);
-            }
-          
-            process.nextTick(cb);
-          });
         })
         .next(function(err, req, res) {
           expect(err).to.be.an.instanceOf(Error);
