@@ -48,6 +48,31 @@ describe('actions/http/authorize', function() {
         .listen();
     }); // should store token
     
+    it('should next with error when token fails to be stored', function(done) {
+      var store = new Object();
+      store.store = sinon.stub().yieldsAsync(new Error('something went wrong'));
+      
+      var handler = factory(store);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.user = { id: '248289761001' };
+          req.state = {};
+          req.state.provider = 'https://server.example.com';
+          req.authInfo = {};
+          req.authInfo.token = {
+            type: 'bearer',
+            token: 'mF_9.B5f-4.1JqM'
+          };
+        })
+        .next(function(err, req, res) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(err.message).to.equal('something went wrong');
+          done();
+        })
+        .listen();
+    });
+    
   }); // handler
   
 });
