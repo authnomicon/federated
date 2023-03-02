@@ -42,7 +42,7 @@ describe('actions/http/authorize', function() {
             { id: '248289761001' }
           );
           
-          expect(res.locals.credential).to.deep.equal({ id: 'crd_1'});
+          expect(res.locals.credential).to.deep.equal({ id: 'crd_1' });
           done();
         })
         .listen();
