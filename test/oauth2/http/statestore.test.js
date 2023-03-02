@@ -10,8 +10,8 @@ var StateStore = require('../../../lib/oauth2/statestore');
 describe('oauth2/http/statestore', function() {
   
   it('should be annotated', function() {
-    expect(factory['@implements']).to.equal('module:passport-oauth2.StateStore');
     expect(factory['@singleton']).to.equal(true);
+    expect(factory['@implements']).to.equal('module:passport-oauth2.StateStore');
   });
   
   it('should construct StateStore', function() {

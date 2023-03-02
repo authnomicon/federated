@@ -152,6 +152,18 @@ describe('openidconnect/StateStore', function() {
       });
     }); // should yield error when state middleware is not in use
     
+    it('should error when state middleware is not in use', function(done) {
+      var req = new Object();
+    
+      store.verify(req, 'af0ifjsldkj', function(err, ctx, info) {
+        expect(err).to.be.an.instanceOf(Error);
+        expect(err.message).to.equal('OpenID Connect requires state support. Did you forget to use `flowstate` middleware?');
+        expect(ctx).to.be.undefined;
+        expect(info).to.be.undefined;
+        done();
+      });
+    }); // should error when state middleware is not in use
+    
   }); // #verify
   
 });
