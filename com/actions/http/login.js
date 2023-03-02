@@ -18,7 +18,7 @@ exports = module.exports = function(federatedIDs, directory) {
     // TODO: Decouple this component more, so directory isn't needed.  Should be
     //. federatedIDs.findOrCreate()...
     
-    federatedIDs.find(req.federatedUser.id, req.state.provider, function(err, federatedID, user) {
+    federatedIDs.get(req.federatedUser, req.state.provider, function(err, federatedID, user) {
       if (err) { return next(err); }
       
       if (federatedID === false) {
