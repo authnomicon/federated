@@ -3,7 +3,7 @@ var express = require('express');
 
 exports = module.exports = function(callbackHandler) {
   var router = express.Router();
-  router.get('/:slug', callbackHandler);
+  router.get('/:slug?', callbackHandler);
   
   return router;
 };
