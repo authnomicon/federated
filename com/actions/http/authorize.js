@@ -1,6 +1,6 @@
 exports = module.exports = function(store) {
 
-  function go(req, res, next) {
+  function exec(req, res, next) {
     var token = req.authInfo.token;
     
     store.store(token, req.state.provider, req.user, function(err, cred) {
@@ -11,10 +11,10 @@ exports = module.exports = function(store) {
   }
 
   return [
-    go
+    exec
   ];
 };
 
 exports['@require'] = [
-  'http://i.bixbyjs.org/security/credentials/DelegatedTokenVault'
+  'module:@authnomicon/federated.DelegatedCredentialStore'
 ];
