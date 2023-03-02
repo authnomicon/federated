@@ -38,7 +38,7 @@ describe('actions/http/login', function() {
   it('should provision user', function(done) {
     var mapper = new Object();
     mapper.get = sinon.stub().yieldsAsync(null);
-    mapper.create = sinon.stub().yieldsAsync(null);
+    mapper.set = sinon.stub().yieldsAsync(null);
     var directory = new Object();
     directory.create = sinon.stub().yieldsAsync(null, {
       id: '703887',
@@ -73,10 +73,17 @@ describe('actions/http/login', function() {
             displayName: 'Jane Doe'
           }
         );
-        expect(mapper.create).to.have.been.calledOnceWith('248289761001', 'https://server.example.com', {
-          id: '703887',
-          displayName: 'Jane Doe'
-        });
+        expect(mapper.set).to.have.been.calledOnceWith(
+          {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
+          'https://server.example.com',
+          {
+            id: '703887',
+            displayName: 'Jane Doe'
+          }
+        );
         expect(req.login).to.have.been.calledOnceWith({
           id: '703887',
           displayName: 'Jane Doe'
