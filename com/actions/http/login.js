@@ -36,7 +36,7 @@ exports = module.exports = function(federatedIDs, directory) {
         directory.create(req.federatedUser, function(err, user) {
           if (err) { return next(err); }
           
-          federatedIDs.set(req.federatedUser, req.state.provider, user, function(err, federatedID) {
+          federatedIDs.set(req.federatedUser, req.state.provider, user, function(err) {
             if (err) { return next(err); }
             
             req.login(user, function(err) {
