@@ -17,17 +17,7 @@ exports = module.exports = function(idMapper, directory) {
     idMapper.get(req.federatedUser, req.state.provider, function(err, user) {
       if (err) { return next(err); }
       
-      if (user) {
-        // Load the user, already JIT'ed
-        directory.read(user.id, function(err, user) {
-          if (err) { return next(err); }
-          
-          req.login(user, function(err) {
-            if (err) { return next(err); }
-            return next();
-          });
-        });
-      } else {
+      if (!user) {
         // JIT the user
         directory.create(req.federatedUser, function(err, user) {
           if (err) { return next(err); }
@@ -39,6 +29,16 @@ exports = module.exports = function(idMapper, directory) {
               if (err) { return next(err); }
               return next();
             });
+          });
+        });
+      } else {
+        // Load the user, already JIT'ed
+        directory.read(user.id, function(err, user) {
+          if (err) { return next(err); }
+          
+          req.login(user, function(err) {
+            if (err) { return next(err); }
+            return next();
           });
         });
       }
