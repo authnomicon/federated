@@ -1,7 +1,6 @@
+var actions = require('../../../lib/actions');
+
 exports = module.exports = function(C, logger) {
-  var actions = require('../../../lib/actions');
-  
-  
   var router = new actions.Router();
   
   return Promise.resolve(router)
