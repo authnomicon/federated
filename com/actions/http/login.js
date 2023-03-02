@@ -1,11 +1,11 @@
-exports = module.exports = function(federatedIDs, directory) {
+exports = module.exports = function(idMapper, directory) {
   
   // TODO: Rename "Federated ID server" to iss-sub service, following.
   // https://www.ietf.org/archive/id/draft-ietf-secevent-subject-identifiers-14.html#name-issuer-and-subject-identifi
   
   
   function login(req, res, next) {
-    if (!federatedIDs) {
+    if (!idMapper) {
       // user isn't federated from an external domain
       req.login(req.federatedUser, function(err) {
         if (err) { return next(err); }
@@ -14,11 +14,7 @@ exports = module.exports = function(federatedIDs, directory) {
       return;
     }
     
-    
-    // TODO: Decouple this component more, so directory isn't needed.  Should be
-    //. federatedIDs.findOrCreate()...
-    
-    federatedIDs.get(req.federatedUser, req.state.provider, function(err, user) {
+    idMapper.get(req.federatedUser, req.state.provider, function(err, user) {
       if (err) { return next(err); }
       
       if (user) {
@@ -36,7 +32,7 @@ exports = module.exports = function(federatedIDs, directory) {
         directory.create(req.federatedUser, function(err, user) {
           if (err) { return next(err); }
           
-          federatedIDs.set(req.federatedUser, req.state.provider, user, function(err) {
+          idMapper.set(req.federatedUser, req.state.provider, user, function(err) {
             if (err) { return next(err); }
             
             req.login(user, function(err) {
