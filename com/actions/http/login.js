@@ -18,17 +18,10 @@ exports = module.exports = function(federatedIDs, directory) {
     // TODO: Decouple this component more, so directory isn't needed.  Should be
     //. federatedIDs.findOrCreate()...
     
-    federatedIDs.get(req.federatedUser, req.state.provider, function(err, federatedID, user) {
+    federatedIDs.get(req.federatedUser, req.state.provider, function(err, user) {
       if (err) { return next(err); }
       
-      if (federatedID === false) {
-        // user isn't federated from an external domain
-        // TODO: remove this
-        req.login(req.federatedUser, function(err) {
-          if (err) { return next(err); }
-          return next();
-        });
-      } else if (federatedID) {
+      if (user) {
         // Load the user, already JIT'ed
         directory.read(user.id, function(err, user) {
           if (err) { return next(err); }
