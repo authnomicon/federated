@@ -94,7 +94,7 @@ describe('oauth2/StateStore', function() {
       });
     }); // should verify state
     
-    it('should error when state middleware is not in use', function(done) {
+    it('should yield error when state middleware is not in use', function(done) {
       var req = new Object();
     
       store.verify(req, 'xyz', function(err, ok, info) {
@@ -104,7 +104,7 @@ describe('oauth2/StateStore', function() {
         expect(info).to.be.undefined;
         done();
       });
-    }); // should error when state middleware is not in use
+    }); // should yield error when state middleware is not in use
     
   }); // #verify
   

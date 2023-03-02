@@ -24,7 +24,7 @@ describe('oauth/RequestTokenStore', function() {
       });
     }); // should get token secret
     
-    it('should error when state middleware is not in use', function(done) {
+    it('should yield error when state middleware is not in use', function(done) {
       var req = new Object();
       
       store.get(req, 'hh5s93j4hdidpola', function(err, tokenSecret) {
@@ -33,7 +33,7 @@ describe('oauth/RequestTokenStore', function() {
         expect(tokenSecret).to.be.undefined;
         done();
       });
-    }); // should error when state middleware is not in use
+    }); // should yield error when state middleware is not in use
     
   }); // #get
   
