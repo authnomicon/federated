@@ -53,7 +53,7 @@ exports = module.exports = function(router, idpFactory, authenticator, store) {
   
   
   return [
-    require('flowstate')({ mutationMethods: [ 'GET', 'POST' ], store: store }),
+    require('flowstate')({ store: store }),
     federate,
     execute,
     resume,

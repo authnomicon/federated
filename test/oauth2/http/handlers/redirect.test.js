@@ -20,7 +20,7 @@ describe('oauth2/http/handlers/redirect', function() {
     
     expect(handler).to.be.an('array');
     expect(flowstateSpy).to.be.calledOnce;
-    expect(flowstateSpy).to.be.calledWith({ mutationMethods: [ 'GET', 'POST' ], store: store });
+    expect(flowstateSpy).to.be.calledWith({ store: store });
   });
   
   describe('handler', function() {
