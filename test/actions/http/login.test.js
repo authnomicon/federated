@@ -35,7 +35,7 @@ describe('actions/http/login', function() {
       .listen();
   }); // should login when directory is externalized
   
-  it('should provision user', function(done) {
+  it('should provision user and login', function(done) {
     var mapper = new Object();
     mapper.get = sinon.stub().yieldsAsync(null);
     mapper.set = sinon.stub().yieldsAsync(null);
@@ -91,6 +91,49 @@ describe('actions/http/login', function() {
         done();
       })
       .listen();
-  }); // should provision user
+  }); // should provision user and login
+  
+  it('should login already provisioned user', function(done) {
+    var mapper = new Object();
+    mapper.get = sinon.stub().yieldsAsync(null, {
+      id: '703887'
+    });
+    var directory = new Object();
+    directory.read = sinon.stub().yieldsAsync(null, {
+      id: '703887',
+      displayName: 'Jane Doe'
+    });
+    
+    var handler = factory(mapper, directory);
+  
+    chai.express.use(handler)
+      .request(function(req, res) {
+        req.login = sinon.stub().yieldsAsync(null);
+        
+        req.federatedUser = {
+          id: '248289761001',
+          displayName: 'Jane Doe'
+        };
+        req.state = {
+          provider: 'https://server.example.com'
+        };
+      })
+      .next(function(err, req, res) {
+        expect(mapper.get).to.have.been.calledOnceWith(
+          {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          },
+          'https://server.example.com'
+        );
+        expect(directory.read).to.have.been.calledOnceWith('703887');
+        expect(req.login).to.have.been.calledOnceWith({
+          id: '703887',
+          displayName: 'Jane Doe'
+        });
+        done();
+      })
+      .listen();
+  }); // should login already provisioned user
   
 });
