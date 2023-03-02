@@ -2,7 +2,7 @@ exports = module.exports = function(idMapper, directory) {
   
   // https://www.ietf.org/archive/id/draft-ietf-secevent-subject-identifiers-14.html#name-issuer-and-subject-identifi
   
-  function login(req, res, next) {
+  function exec(req, res, next) {
     if (!idMapper) {
       // user isn't federated from an external domain
       req.login(req.federatedUser, function(err) {
@@ -44,7 +44,7 @@ exports = module.exports = function(idMapper, directory) {
   
   
   return [
-    login
+    exec
   ];
 };
 
