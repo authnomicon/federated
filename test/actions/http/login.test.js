@@ -13,127 +13,131 @@ describe('actions/http/login', function() {
     expect(handler).to.be.an('array');
   });
   
-  it('should login when directory is externalized', function(done) {
-    var handler = factory();
+  describe('handler', function() {
   
-    chai.express.use(handler)
-      .request(function(req, res) {
-        req.login = sinon.stub().yieldsAsync(null);
+    it('should login when directory is externalized', function(done) {
+      var handler = factory();
+  
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.login = sinon.stub().yieldsAsync(null);
         
-        req.federatedUser = {
-          id: '248289761001',
-          displayName: 'Jane Doe'
-        };
-      })
-      .next(function(err, req, res) {
-        expect(req.login).to.have.been.calledOnceWith({
-          id: '248289761001',
-          displayName: 'Jane Doe'
-        });
-        done();
-      })
-      .listen();
-  }); // should login when directory is externalized
+          req.federatedUser = {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          };
+        })
+        .next(function(err, req, res) {
+          expect(req.login).to.have.been.calledOnceWith({
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          });
+          done();
+        })
+        .listen();
+    }); // should login when directory is externalized
   
-  it('should provision user and login', function(done) {
-    var mapper = new Object();
-    mapper.get = sinon.stub().yieldsAsync(null);
-    mapper.set = sinon.stub().yieldsAsync(null);
-    var directory = new Object();
-    directory.create = sinon.stub().yieldsAsync(null, {
-      id: '703887',
-      displayName: 'Jane Doe'
-    });
+    it('should provision user and login', function(done) {
+      var mapper = new Object();
+      mapper.get = sinon.stub().yieldsAsync(null);
+      mapper.set = sinon.stub().yieldsAsync(null);
+      var directory = new Object();
+      directory.create = sinon.stub().yieldsAsync(null, {
+        id: '703887',
+        displayName: 'Jane Doe'
+      });
     
-    var handler = factory(mapper, directory);
+      var handler = factory(mapper, directory);
   
-    chai.express.use(handler)
-      .request(function(req, res) {
-        req.login = sinon.stub().yieldsAsync(null);
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.login = sinon.stub().yieldsAsync(null);
         
-        req.federatedUser = {
-          id: '248289761001',
-          displayName: 'Jane Doe'
-        };
-        req.state = {
-          provider: 'https://server.example.com'
-        };
-      })
-      .next(function(err, req, res) {
-        expect(mapper.get).to.have.been.calledOnceWith(
-          {
+          req.federatedUser = {
             id: '248289761001',
             displayName: 'Jane Doe'
-          },
-          'https://server.example.com'
-        );
-        expect(directory.create).to.have.been.calledOnceWith(
-          {
-            id: '248289761001',
-            displayName: 'Jane Doe'
-          }
-        );
-        expect(mapper.set).to.have.been.calledOnceWith(
-          {
-            id: '248289761001',
-            displayName: 'Jane Doe'
-          },
-          'https://server.example.com',
-          {
+          };
+          req.state = {
+            provider: 'https://server.example.com'
+          };
+        })
+        .next(function(err, req, res) {
+          expect(mapper.get).to.have.been.calledOnceWith(
+            {
+              id: '248289761001',
+              displayName: 'Jane Doe'
+            },
+            'https://server.example.com'
+          );
+          expect(directory.create).to.have.been.calledOnceWith(
+            {
+              id: '248289761001',
+              displayName: 'Jane Doe'
+            }
+          );
+          expect(mapper.set).to.have.been.calledOnceWith(
+            {
+              id: '248289761001',
+              displayName: 'Jane Doe'
+            },
+            'https://server.example.com',
+            {
+              id: '703887',
+              displayName: 'Jane Doe'
+            }
+          );
+          expect(req.login).to.have.been.calledOnceWith({
             id: '703887',
             displayName: 'Jane Doe'
-          }
-        );
-        expect(req.login).to.have.been.calledOnceWith({
-          id: '703887',
-          displayName: 'Jane Doe'
-        });
-        done();
-      })
-      .listen();
-  }); // should provision user and login
+          });
+          done();
+        })
+        .listen();
+    }); // should provision user and login
   
-  it('should login already provisioned user', function(done) {
-    var mapper = new Object();
-    mapper.get = sinon.stub().yieldsAsync(null, {
-      id: '703887'
-    });
-    var directory = new Object();
-    directory.read = sinon.stub().yieldsAsync(null, {
-      id: '703887',
-      displayName: 'Jane Doe'
-    });
+    it('should login already provisioned user', function(done) {
+      var mapper = new Object();
+      mapper.get = sinon.stub().yieldsAsync(null, {
+        id: '703887'
+      });
+      var directory = new Object();
+      directory.read = sinon.stub().yieldsAsync(null, {
+        id: '703887',
+        displayName: 'Jane Doe'
+      });
     
-    var handler = factory(mapper, directory);
+      var handler = factory(mapper, directory);
   
-    chai.express.use(handler)
-      .request(function(req, res) {
-        req.login = sinon.stub().yieldsAsync(null);
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.login = sinon.stub().yieldsAsync(null);
         
-        req.federatedUser = {
-          id: '248289761001',
-          displayName: 'Jane Doe'
-        };
-        req.state = {
-          provider: 'https://server.example.com'
-        };
-      })
-      .next(function(err, req, res) {
-        expect(mapper.get).to.have.been.calledOnceWith(
-          {
+          req.federatedUser = {
             id: '248289761001',
             displayName: 'Jane Doe'
-          },
-          'https://server.example.com'
-        );
-        expect(directory.read).to.have.been.calledOnceWith('703887');
-        expect(req.login).to.have.been.calledOnceWith({
-          id: '703887',
-          displayName: 'Jane Doe'
-        });
-        done();
-      })
-      .listen();
-  }); // should login already provisioned user
+          };
+          req.state = {
+            provider: 'https://server.example.com'
+          };
+        })
+        .next(function(err, req, res) {
+          expect(mapper.get).to.have.been.calledOnceWith(
+            {
+              id: '248289761001',
+              displayName: 'Jane Doe'
+            },
+            'https://server.example.com'
+          );
+          expect(directory.read).to.have.been.calledOnceWith('703887');
+          expect(req.login).to.have.been.calledOnceWith({
+            id: '703887',
+            displayName: 'Jane Doe'
+          });
+          done();
+        })
+        .listen();
+    }); // should login already provisioned user
+    
+  }); // handler
   
 });
