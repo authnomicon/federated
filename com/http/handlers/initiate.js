@@ -14,7 +14,8 @@ exports = module.exports = function(idpFactory, authenticator, store) {
           state: { provider: provider }
         };
         // TODO: This should be set based on the explicit logout state of the session, not a query param
-        //if (req.query.prompt) { options.prompt = req.query.prompt; }
+        //.      actually, a query param should override that state, as done here.  TODO: implement that state
+        if (req.query.prompt) { options.prompt = req.query.prompt; }
         if (req.query.login_hint) { options.loginHint = req.query.login_hint; }
         
         defer(authenticator.authenticate(idp, options), req, res, next);

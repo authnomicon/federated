@@ -96,6 +96,40 @@ describe('http/handlers/initiate', function() {
         .listen();
     }); // should authenticate with provider and protocol
     
+    it('should authenticate with prompt option', function(done) {
+      var idp = new Object();
+      var idpFactory = new Object();
+      idpFactory.create = sinon.stub().resolves(idp);
+      var authenticateSpy = sinon.spy(authenticate);
+      var store = new Object();
+      
+      var handler = factory(idpFactory, { authenticate: authenticateSpy }, store);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.connection = {};
+          req.query = {
+            provider: 'https://server.example.com',
+            prompt: 'select_account'
+          };
+        })
+        .finish(function() {
+          expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', undefined);
+          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, {
+            prompt: 'select_account',
+            state: {
+              provider: 'https://server.example.com'
+            }
+          });
+          
+          expect(this.statusCode).to.equal(302);
+          expect(this.getHeader('Location')).to.equal('https://server.example.com/authorize?response_type=code&client_id=s6BhdRkqt3&state=xyz&redirect_uri=https%3A%2F%2Fclient.example.com%2Fcb');
+          done();
+        })
+        .next(done)
+        .listen();
+    }); // should authenticate with prompt option
+    
     it('should authenticate with login hint option', function(done) {
       var idp = new Object();
       var idpFactory = new Object();
