@@ -37,7 +37,8 @@ describe('oauth2/http/handlers/redirect', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp);
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
         location: 'https://www.example.com/oauth2/redirect',
@@ -46,7 +47,7 @@ describe('oauth2/http/handlers/redirect', function() {
       store.destroy = sinon.stub().yieldsAsync();
       
       
-      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(actions, idpFactory, authenticator, store);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -59,7 +60,7 @@ describe('oauth2/http/handlers/redirect', function() {
         .finish(function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'xyz');
           expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', 'oauth2');
-          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(authenticator.authenticate).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(actions.dispatch).to.be.calledOnceWith('login');
           expect(store.destroy).to.be.calledOnceWith(this.req, 'xyz');
           
@@ -77,7 +78,8 @@ describe('oauth2/http/handlers/redirect', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp);
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
         location: 'https://www.example.com/oauth2/redirect',
@@ -86,7 +88,7 @@ describe('oauth2/http/handlers/redirect', function() {
       });
       store.destroy = sinon.stub().yieldsAsync();
       
-      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(actions, idpFactory, authenticator, store);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -99,7 +101,7 @@ describe('oauth2/http/handlers/redirect', function() {
         .finish(function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'xyz');
           expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', 'oauth2');
-          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(authenticator.authenticate).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(actions.dispatch).to.be.calledOnceWith('login');
           expect(store.destroy).to.be.calledOnceWith(this.req, 'xyz');
           
