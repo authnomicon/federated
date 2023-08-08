@@ -39,8 +39,8 @@ describe('actions/http/login', function() {
   
     it('should provision user and login', function(done) {
       var mapper = new Object();
-      mapper.get = sinon.stub().yieldsAsync(null);
-      mapper.set = sinon.stub().yieldsAsync(null);
+      mapper.find = sinon.stub().yieldsAsync(null);
+      mapper.add = sinon.stub().yieldsAsync(null);
       var directory = new Object();
       directory.create = sinon.stub().yieldsAsync(null, {
         id: '703887',
@@ -62,7 +62,7 @@ describe('actions/http/login', function() {
           };
         })
         .next(function(err, req, res) {
-          expect(mapper.get).to.have.been.calledOnceWith(
+          expect(mapper.find).to.have.been.calledOnceWith(
             {
               id: '248289761001',
               displayName: 'Jane Doe'
@@ -75,7 +75,7 @@ describe('actions/http/login', function() {
               displayName: 'Jane Doe'
             }
           );
-          expect(mapper.set).to.have.been.calledOnceWith(
+          expect(mapper.add).to.have.been.calledOnceWith(
             {
               id: '248289761001',
               displayName: 'Jane Doe'
@@ -97,7 +97,7 @@ describe('actions/http/login', function() {
   
     it('should login already provisioned user', function(done) {
       var mapper = new Object();
-      mapper.get = sinon.stub().yieldsAsync(null, {
+      mapper.find = sinon.stub().yieldsAsync(null, {
         id: '703887'
       });
       var directory = new Object();
@@ -121,7 +121,7 @@ describe('actions/http/login', function() {
           };
         })
         .next(function(err, req, res) {
-          expect(mapper.get).to.have.been.calledOnceWith(
+          expect(mapper.find).to.have.been.calledOnceWith(
             {
               id: '248289761001',
               displayName: 'Jane Doe'

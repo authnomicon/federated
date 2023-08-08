@@ -1,16 +1,16 @@
-exports = module.exports = function(idMapper, directory) {
+exports = module.exports = function(idStore, directory) {
   
   // https://www.ietf.org/archive/id/draft-ietf-secevent-subject-identifiers-14.html#name-issuer-and-subject-identifi
   
   function exec(req, res, next) {
-    if (!idMapper) {
+    if (!idStore) {
       // user isn't federated from an external domain
       req.login(req.federatedUser, function(err) {
         if (err) { return next(err); }
         return next();
       });
     } else {
-      idMapper.get(req.federatedUser, req.state.provider, function(err, user) {
+      idStore.find(req.federatedUser, req.state.provider, function(err, user) {
         if (err) { return next(err); }
       
         if (!user) {
@@ -18,7 +18,7 @@ exports = module.exports = function(idMapper, directory) {
           directory.create(req.federatedUser, function(err, user) {
             if (err) { return next(err); }
           
-            idMapper.set(req.federatedUser, req.state.provider, user, function(err) {
+            idStore.add(req.federatedUser, req.state.provider, user, function(err) {
               if (err) { return next(err); }
             
               req.login(user, function(err) {
@@ -49,6 +49,6 @@ exports = module.exports = function(idMapper, directory) {
 };
 
 exports['@require'] = [
-  'module:@authnomicon/federated.IDMapper?',
+  'module:@authnomicon/federated.IDStore?',
   'module:@authnomicon/core.Directory?'
 ];
