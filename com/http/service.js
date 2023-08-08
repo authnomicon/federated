@@ -2,17 +2,18 @@
 var express = require('express');
 
 /**
- * Federated authentication service.
+ * Create federated authentication service.
  *
- * This component provides an HTTP service that initiates authentication with a
- * federated identity provider (IdP).
+ * Returns an HTTP service that initiates authentication with a federated
+ * identity provider (IdP).
  *
  * Authentication occurs via a protocol such as [OpenID Connect][1], in which
- * the user's web browser is redirected to the IdP.  The IdP then redirects
- * the user back to the application, with an assertion regarding the
- * authentication that was performed.  This package includes support for OpenID
- * Connect, [OAuth 2.0][2], and [OAuth 1.0][3].  Support for other protocols,
- * such as [SAML][4], can be obtained by installing other packages.
+ * the user's web browser is redirected to the IdP.  After any interaction with
+ * the user, the IdP then redirects the user back to the application, with an
+ * assertion regarding the authentication that was performed.  This package
+ * includes support for OpenID Connect, [OAuth 2.0][2], and [OAuth 1.0][3].
+ * Support for other protocols, such as [SAML][4], can be obtained by installing
+ * other packages.
  *
  * "Authentication" is a bit of a misnomer in this context, as authentication is
  * performed by the IdP, rather than the application.  In other words,
@@ -48,6 +49,7 @@ exports = module.exports = function(initiateHandler) {
   return router;
 };
 
+// Module annotations.
 exports['@implements'] = 'http://i.bixbyjs.org/http/Service';
 exports['@path'] = '/login/federated';
 exports['@require'] = [
