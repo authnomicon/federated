@@ -15,6 +15,9 @@ exports = module.exports = function(idpFactory, authenticator, store) {
         };
         // TODO: This should be set based on the explicit logout state of the session, not a query param
         //.      actually, a query param should override that state, as done here.  TODO: implement that state
+        // TODO: Add support for passing state into this endpoint which gets merged into
+        //.      state when handling callback.
+        
         if (req.query.prompt) { options.prompt = req.query.prompt; }
         if (req.query.login_hint) { options.loginHint = req.query.login_hint; }
         
