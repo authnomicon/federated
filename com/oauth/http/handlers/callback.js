@@ -8,6 +8,17 @@ var defer = typeof setImmediate === 'function'
   ? setImmediate
   : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
 
+ /**
+  * OAuth 1.0 callback handler.
+  *
+  * This component provides an HTTP handler that implements the OAuth 1.0
+  * [callback URL][1].  The user is redirected to this URL by the service
+  * provider, after it has authenticated the user and obtained consent.
+  *
+  * [1]: https://oauth.net/core/1.0a/#rfc.section.6.2.3
+  *
+  * @returns {Function}
+  */
 exports = module.exports = function(router, idpFactory, authenticator, store) {
   
   function federate(req, res, next) {
