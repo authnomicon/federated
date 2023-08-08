@@ -79,7 +79,8 @@ describe('oauth/http/handlers/callback', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp);
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
         location: 'https://www.example.com/oauth/callback/example',
@@ -89,7 +90,7 @@ describe('oauth/http/handlers/callback', function() {
       store.destroy = sinon.stub().yieldsAsync();
       
       
-      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(actions, idpFactory, authenticator, store);
     
       chai.express.use(handler)
         .request(function(req, res) {
@@ -103,7 +104,7 @@ describe('oauth/http/handlers/callback', function() {
         .finish(function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           expect(idpFactory.create).to.be.calledOnceWithExactly('http://sp.example.com', 'oauth');
-          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(authenticator.authenticate).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(actions.dispatch).to.be.calledOnceWith('login');
           expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           
@@ -121,7 +122,8 @@ describe('oauth/http/handlers/callback', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp);
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
         location: 'https://www.example.com/oauth/callback/example',
@@ -131,7 +133,7 @@ describe('oauth/http/handlers/callback', function() {
       store.destroy = sinon.stub().yieldsAsync();
       
       
-      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(actions, idpFactory, authenticator, store);
     
       chai.express.use(handler)
         .request(function(req, res) {
@@ -145,7 +147,7 @@ describe('oauth/http/handlers/callback', function() {
         .finish(function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           expect(idpFactory.create).to.be.calledOnceWithExactly('http://sp.example.com', 'oauth');
-          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(authenticator.authenticate).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(actions.dispatch).to.be.calledOnceWith('authorize');
           expect(store.destroy).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           
@@ -163,7 +165,8 @@ describe('oauth/http/handlers/callback', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp);
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
         location: 'https://www.example.com/oauth/callback/example',
@@ -173,7 +176,7 @@ describe('oauth/http/handlers/callback', function() {
       store.destroy = sinon.stub().yieldsAsync();
       
       
-      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(actions, idpFactory, authenticator, store);
     
       chai.express.use(handler)
         .request(function(req, res) {
@@ -187,7 +190,7 @@ describe('oauth/http/handlers/callback', function() {
         .finish(function() {
           expect(store.get).to.be.calledOnceWith(this.req, 'oauth_example_hh5s93j4hdidpola');
           expect(idpFactory.create).to.be.calledOnceWithExactly('http://sp.example.com', 'oauth');
-          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
+          expect(authenticator.authenticate).to.be.calledOnceWithExactly(idp, { assignProperty: 'federatedUser' });
           expect(actions.dispatch).to.be.calledTwice;
           expect(actions.dispatch.firstCall).to.be.calledWith('login');
           expect(actions.dispatch.secondCall).to.be.calledWith('authorize');
@@ -206,7 +209,8 @@ describe('oauth/http/handlers/callback', function() {
       actions.dispatch = sinon.stub().yieldsAsync(null);
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().rejects(new Error('something went wrong'));
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
         location: 'https://www.example.com/oauth/callback/example',
@@ -215,7 +219,7 @@ describe('oauth/http/handlers/callback', function() {
       store.destroy = sinon.stub().yieldsAsync();
       
       
-      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(actions, idpFactory, authenticator, store);
     
       chai.express.use(handler)
         .request(function(req, res) {
@@ -230,7 +234,7 @@ describe('oauth/http/handlers/callback', function() {
           expect(err).to.be.an.instanceOf(Error);
           expect(err.message).to.equal('something went wrong');
           
-          expect(authenticateSpy).to.not.be.called;
+          expect(authenticator.authenticate).to.not.be.called;
           expect(actions.dispatch).to.not.be.called;
           expect(store.destroy).to.not.be.called;
           
@@ -245,7 +249,8 @@ describe('oauth/http/handlers/callback', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp);
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       store.get = sinon.stub().yieldsAsync(null, {
         location: 'https://www.example.com/oauth/callback',
@@ -254,7 +259,7 @@ describe('oauth/http/handlers/callback', function() {
       store.destroy = sinon.stub().yieldsAsync();
       
       
-      var handler = factory(actions, idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(actions, idpFactory, authenticator, store);
     
       chai.express.use(handler)
         .request(function(req, res) {
