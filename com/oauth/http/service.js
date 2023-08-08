@@ -17,6 +17,9 @@ var express = require('express');
  * authentication.
  *
  * [1]: https://oauth.net/core/1.0a/#rfc.section.6.2.3
+ *
+ * @param {Function|Function[]} callbackHandler - Callback handler.
+ * @returns {Function}
  */
 exports = module.exports = function(callbackHandler) {
   var router = express.Router();

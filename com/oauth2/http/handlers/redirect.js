@@ -11,7 +11,7 @@ var defer = typeof setImmediate === 'function'
  *
  * [1]: https://tools.ietf.org/html/rfc6749#section-3.1.2
  *
- * @returns {Function}
+ * @returns {Function[]}
  */
 exports = module.exports = function(router, idpFactory, authenticator, store) {
   

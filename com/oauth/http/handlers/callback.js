@@ -18,7 +18,7 @@ var defer = typeof setImmediate === 'function'
  *
  * [1]: https://oauth.net/core/1.0a/#rfc.section.6.2.3
  *
- * @returns {Function}
+ * @returns {Function[]}
  */
 exports = module.exports = function(router, idpFactory, authenticator, store) {
   
