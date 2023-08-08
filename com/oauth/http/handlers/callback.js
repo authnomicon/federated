@@ -1,5 +1,9 @@
 var handle = require('../../../../lib/oauth/state/handle');
 
+function getHandle(req) {
+  return handle.fromSlug(req.query.oauth_token, req.params.slug);
+}
+
 var defer = typeof setImmediate === 'function'
   ? setImmediate
   : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
@@ -42,10 +46,6 @@ exports = module.exports = function(router, idpFactory, authenticator, store) {
     res.redirect('/');
   }
   
-  
-  function getHandle(req) {
-    return handle.fromSlug(req.query.oauth_token, req.params.slug);
-  }
   
   return [
     require('flowstate')({ getHandle: getHandle, store: store }),
