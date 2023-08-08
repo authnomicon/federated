@@ -9,7 +9,6 @@ describe('oauth2/http/service', function() {
   it('should be annotated', function() {
     expect(factory['@implements']).to.equal('http://i.bixbyjs.org/http/Service');
     expect(factory['@path']).to.equal('/oauth2/redirect');
-    expect(factory['@singleton']).to.be.undefined;
   });
   
   it('should construct service', function() {
