@@ -200,6 +200,46 @@ describe('actions/http/login', function() {
         .listen();
     }); // should next with error when account fails to be created in directory
     
+    it('should next with error when federated identifier fails to be associated with account', function(done) {
+      var idStore = new Object();
+      idStore.find = sinon.stub().yieldsAsync(null);
+      idStore.add = sinon.stub().yieldsAsync(new Error('something went wrong'));
+      var directory = new Object();
+      directory.create = sinon.stub().yieldsAsync(null, {
+        id: '703887',
+        displayName: 'Jane Doe'
+      });
+      directory.read = sinon.spy();
+    
+      var handler = factory(idStore, directory);
+  
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.login = sinon.stub().yieldsAsync(null);
+        
+          req.federatedUser = {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          };
+          req.state = {
+            provider: 'https://server.example.com'
+          };
+        })
+        .next(function(err, req, res) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(err.message).to.equal('something went wrong');
+          
+          expect(idStore.find).to.have.been.called;
+          expect(idStore.add).to.have.been.called;
+          expect(directory.create).to.have.been.called;
+          expect(directory.read).to.not.have.been.called;
+          expect(req.login).to.not.have.been.called;
+          
+          done();
+        })
+        .listen();
+    }); // should next with error when federated identifier fails to be associated with account
+    
     it('should login locally when identifier store is not available', function(done) {
       var handler = factory();
   
