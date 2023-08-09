@@ -41,7 +41,7 @@ exports = module.exports = function(idStore, directory) {
   // https://www.ietf.org/archive/id/draft-ietf-secevent-subject-identifiers-14.html#name-issuer-and-subject-identifi
   
   function exec(req, res, next) {
-    if (!idStore) {
+    if (!directory || !idStore) {
       // TODO: Ensure that the provider is trusted for local login.
       
       // user isn't federated from an external domain
