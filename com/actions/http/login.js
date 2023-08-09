@@ -47,7 +47,15 @@ exports = module.exports = function(idStore, directory) {
     if (!directory || !idStore) {
       // TODO: Ensure that the provider is trusted for local login.
       
-      // user isn't federated from an external domain
+      // Authentication was delegated to an authentication server that is
+      // authoritative over the application's domain.  In this case, the user
+      // information is not coming from an external system so there is no need
+      // to map identifiers or provision accounts.
+      //
+      // This situation is typical when direct access to the directory has been
+      // restricted from the application and limited to an authentication
+      // server, where access to personally identifiable information (PII) can
+      // be centrally managed and audited.
       req.login(req.federatedUser, function(err) {
         if (err) { return next(err); }
         return next();
