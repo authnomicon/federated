@@ -1,9 +1,48 @@
+/**
+ * Create login action handler.
+ *
+ * Returns an HTTP handler that logs in a federated user.
+ *
+ * This handler is invoked when handling a redirect back from a federated
+ * identity provider (IdP), which typically implements a standard protocol such
+ * as [OpenID Connect][1] or [SAML][2].
+ *
+ * This handler operates in one of two modes:
+ *   1. Just-in-time (JIT) provisioning
+ *   2. Local authentication
+ *
+ * During JIT provisioning, when the federated user is not previously known, a
+ * user account will be automatically created in the directory.  The federated
+ * identifier will then be associated with the newly created account.  When the
+ * user subsequently returns to the application, they will be logged into their
+ * account.  JIT provisioning mode is enabled when the application has access to
+ * the directory and federated identifier store.
+ *
+ * During local authentication, the user is directly logged in based on their
+ * federated identifier.  Local authentication mode is enabled when the
+ * application does not have access to the directory or federated identifier
+ * store.
+ *
+ * Local authentication mode is useful when applications are restricted from
+ * accessing their own domain's directory.  In this scenario, directory access
+ * is centralized behind an authentication server, which typically implements a
+ * protocol such as OpenID Connect or SAML.  Applications then delegate
+ * authentication to the authentication server.  Despite using a federated
+ * protocol, authentication is occuring within a single domain.
+ *
+ * [1]: https://openid.net/connect/
+ * [2]: http://saml.xml.org/saml-specifications
+ *
+ * @returns {Function[]}
+ */
 exports = module.exports = function(idStore, directory) {
   
   // https://www.ietf.org/archive/id/draft-ietf-secevent-subject-identifiers-14.html#name-issuer-and-subject-identifi
   
   function exec(req, res, next) {
     if (!idStore) {
+      // TODO: Ensure that the provider is trusted for local login.
+      
       // user isn't federated from an external domain
       req.login(req.federatedUser, function(err) {
         if (err) { return next(err); }
