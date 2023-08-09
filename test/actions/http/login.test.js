@@ -415,6 +415,28 @@ describe('actions/http/login', function() {
         .listen();
     }); // should login locally when directory is not available
     
+    it('should next with error when local login fails', function(done) {
+      var handler = factory();
+  
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.login = sinon.stub().yieldsAsync(new Error('something went wrong'));
+        
+          req.federatedUser = {
+            id: '248289761001',
+            displayName: 'Jane Doe'
+          };
+        })
+        .next(function(err, req, res) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(err.message).to.equal('something went wrong');
+          
+          expect(req.login).to.have.been.called;
+          done();
+        })
+        .listen();
+    }); // should next with error when local login fails
+    
   }); // handler
   
 });
