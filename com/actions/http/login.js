@@ -28,7 +28,7 @@
  *
  * During local authentication, the user is directly logged in based on their
  * federated identifier.  Due to the fact that that authentication is occuring
- * within the domain, this identifer is assumbed to be equivalent to the local
+ * within the domain, this identifer is assumed to be equivalent to the local
  * identifier.  Due to that, no intermediate mapping layer is needed to
  * translate an external identifier to a local identifier.  Local authentication
  * mode is enabled when the application does not have access to the directory or
