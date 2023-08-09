@@ -74,6 +74,7 @@ exports = module.exports = function(idStore, directory) {
           // Load the user, already JIT'ed
           directory.read(user.id, function(err, user) {
             if (err) { return next(err); }
+            // TODO: Handle undefined user
           
             req.login(user, function(err) {
               if (err) { return next(err); }
