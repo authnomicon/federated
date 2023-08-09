@@ -2,6 +2,16 @@ var defer = typeof setImmediate === 'function'
   ? setImmediate
   : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
 
+/**
+ * Create federated authentication handler.
+ *
+ * Returns an HTTP handler that initiates authentication with a federated
+ * identity provider (IdP).  The user will be redirect to the IdP with a request
+ * that conforms to the protocol supported by the IdP (and implemented by the
+ * strategy created by the IdP factory).
+ *
+ * @returns {Function[]}
+ */
 exports = module.exports = function(idpFactory, authenticator, store) {
   
   function federate(req, res, next) {
@@ -34,6 +44,7 @@ exports = module.exports = function(idpFactory, authenticator, store) {
   ];
 };
 
+// Module annotations.
 exports['@require'] = [
   'module:@authnomicon/federated.IDProviderFactory',
   'module:passport.Authenticator',
