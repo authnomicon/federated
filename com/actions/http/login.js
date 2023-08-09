@@ -25,10 +25,11 @@
  *
  * Local authentication mode is useful when applications are restricted from
  * accessing their own domain's directory.  In this scenario, directory access
- * is centralized behind an authentication server, which typically implements a
- * protocol such as OpenID Connect or SAML.  Applications then delegate
- * authentication to the authentication server.  Despite using a federated
- * protocol, authentication is occuring within a single domain.
+ * is centralized behind an authentication server (AS).  Applications then
+ * delegate authentication to the AS.  Typically, the AS will implement a
+ * protocol such as OpenID Connect or SAML, which is capable of federating
+ * across domains.  Note, however, that in this case authentication is occuring
+ * within a single domain.
  *
  * [1]: https://openid.net/connect/
  * [2]: http://saml.xml.org/saml-specifications
