@@ -18,18 +18,21 @@
  * account.  JIT provisioning mode is enabled when the application has access to
  * the directory and federated identifier store.
  *
- * During local authentication, the user is directly logged in based on their
- * federated identifier.  Local authentication mode is enabled when the
- * application does not have access to the directory or federated identifier
- * store.
- *
  * Local authentication mode is useful when applications are restricted from
  * accessing their own domain's directory.  In this scenario, directory access
- * is centralized behind an authentication server (AS).  Applications then
- * delegate authentication to the AS.  Typically, the AS will implement a
- * protocol such as OpenID Connect or SAML, which is capable of federating
- * across domains.  Note, however, that in this case authentication is occuring
- * within a single domain.
+ * is centralized behind an authentication server (AS) (also referred to as an
+ * IdP).  Applications then delegate authentication to the AS.  Typically, the
+ * AS will implement a protocol such as OpenID Connect or SAML, which is capable
+ * of federating across domains.  In this case, however, authentication is
+ * occuring within a single domain.
+ *
+ * During local authentication, the user is directly logged in based on their
+ * federated identifier.  Due to the fact that that authentication is occuring
+ * within the domain, this identifer is assumbed to be equivalent to the local
+ * identifier.  Due to that, no intermediate mapping layer is needed to
+ * translate an external identifier to a local identifier.  Local authentication
+ * mode is enabled when the application does not have access to the directory or
+ * federated identifier store.
  *
  * [1]: https://openid.net/connect/
  * [2]: http://saml.xml.org/saml-specifications
