@@ -41,6 +41,8 @@ describe('actions/http/login', function() {
           };
         })
         .next(function(err, req, res) {
+          expect(err).to.be.undefined;
+          
           expect(idStore.find).to.have.been.calledOnceWith(
             {
               id: '248289761001',
@@ -103,6 +105,8 @@ describe('actions/http/login', function() {
           };
         })
         .next(function(err, req, res) {
+          expect(err).to.be.undefined;
+          
           expect(idStore.find).to.have.been.calledOnceWith(
             {
               id: '248289761001',
@@ -178,6 +182,8 @@ describe('actions/http/login', function() {
           };
         })
         .next(function(err, req, res) {
+          expect(err).to.be.undefined;
+          
           expect(req.login).to.have.been.calledOnceWith({
             id: '248289761001',
             displayName: 'Jane Doe'
@@ -204,6 +210,8 @@ describe('actions/http/login', function() {
           };
         })
         .next(function(err, req, res) {
+          expect(err).to.be.undefined;
+          
           expect(idStore.find).to.not.have.been.called;
           expect(idStore.add).to.not.have.been.called;
           expect(req.login).to.have.been.calledOnceWith({
