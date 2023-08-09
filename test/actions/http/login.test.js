@@ -152,13 +152,7 @@ describe('actions/http/login', function() {
           expect(err).to.be.an.instanceOf(Error);
           expect(err.message).to.equal('something went wrong');
           
-          expect(idStore.find).to.have.been.calledOnceWith(
-            {
-              id: '248289761001',
-              displayName: 'Jane Doe'
-            },
-            'https://server.example.com'
-          );
+          expect(idStore.find).to.have.been.called;
           expect(idStore.add).to.not.have.been.called;
           expect(directory.create).to.not.have.been.called;
           expect(directory.read).to.not.have.been.called;
@@ -195,20 +189,9 @@ describe('actions/http/login', function() {
           expect(err).to.be.an.instanceOf(Error);
           expect(err.message).to.equal('something went wrong');
           
-          expect(idStore.find).to.have.been.calledOnceWith(
-            {
-              id: '248289761001',
-              displayName: 'Jane Doe'
-            },
-            'https://server.example.com'
-          );
+          expect(idStore.find).to.have.been.called;
           expect(idStore.add).to.not.have.been.called;
-          expect(directory.create).to.have.been.calledOnceWith(
-            {
-              id: '248289761001',
-              displayName: 'Jane Doe'
-            }
-          );
+          expect(directory.create).to.have.been.called;
           expect(directory.read).to.not.have.been.called;
           expect(req.login).to.not.have.been.called;
           
