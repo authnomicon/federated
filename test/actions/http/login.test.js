@@ -24,6 +24,7 @@ describe('actions/http/login', function() {
         id: '703887',
         displayName: 'Jane Doe'
       });
+      directory.read = sinon.spy();
     
       var handler = factory(idStore, directory);
   
@@ -64,6 +65,7 @@ describe('actions/http/login', function() {
               displayName: 'Jane Doe'
             }
           );
+          expect(directory.read).to.not.have.been.called;
           expect(req.login).to.have.been.calledOnceWith({
             id: '703887',
             displayName: 'Jane Doe'
@@ -78,7 +80,9 @@ describe('actions/http/login', function() {
       idStore.find = sinon.stub().yieldsAsync(null, {
         id: '703887'
       });
+      idStore.add = sinon.spy();
       var directory = new Object();
+      directory.create = sinon.spy();
       directory.read = sinon.stub().yieldsAsync(null, {
         id: '703887',
         displayName: 'Jane Doe'
@@ -107,6 +111,8 @@ describe('actions/http/login', function() {
             'https://server.example.com'
           );
           expect(directory.read).to.have.been.calledOnceWith('703887');
+          expect(directory.create).to.not.have.been.called;
+          expect(idStore.add).to.not.have.been.called;
           expect(req.login).to.have.been.calledOnceWith({
             id: '703887',
             displayName: 'Jane Doe'
