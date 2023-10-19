@@ -31,7 +31,9 @@ exports = module.exports = function(scheme) {
 };
 
 exports['@singleton'] = true;
-exports['@implements'] = 'module:@authnomicon/federated.IDProviderFactory';
+// TODO: Remove "x-" prefix once "app/" override/selection is in place for multiple components with
+// same interface.
+exports['@implements'] = 'x-module:@authnomicon/federated.IDProviderFactory';
 exports['@require'] = [
   'module:@authnomicon/session.InitiationScheme'
 ];
