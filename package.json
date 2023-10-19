@@ -52,6 +52,7 @@
   },
   "dependencies": {
     "express": "^4.17.1",
+    "flowstate": "^0.6.0",
     "filter-obj": "^2.0.2",
     "utils-merge": "^1.0.1"
   },
