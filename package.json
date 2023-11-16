@@ -34,7 +34,7 @@
       "url": "https://opensource.org/licenses/MIT"
     }
   ],
-  "main": "./app",
+  "main": "./lib",
   "assembly": {
     "namespace": "org.authnomicon/federated",
     "components": [
