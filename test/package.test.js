@@ -2,6 +2,7 @@
 
 var expect = require('chai').expect;
 var sinon = require('sinon');
+var pkg = require('..');
 
 
 describe('@authnomicon/federated', function() {
@@ -19,6 +20,11 @@ describe('@authnomicon/federated', function() {
       expect(json.assembly.components).to.include('oauth2/http/service');
       expect(json.assembly.components).to.include('oauth2/http/statestore');
     });
+  });
+  
+  it('should export constructors', function() {
+    expect(pkg.openidconnect).to.be.an('object');
+    expect(pkg.openidconnect.RPInitiatedLogoutService).to.be.an('function');
   });
   
 });
