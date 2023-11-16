@@ -39,6 +39,7 @@
     "namespace": "org.authnomicon/federated",
     "components": [
       "idpfactory",
+      "slofactory",
       "http/service",
       "http/handlers/terminate",
       "oauth/http/service",
