@@ -1,37 +1,40 @@
-var LocalIDPFactory = require('../lib/localidpfactory');
+var LocalIDProviderFactory = require('../lib/localidpfactory');
+var OpenIDConnectStrategy = require('passport-openidconnect');
+var url = require('url');
 
-exports = module.exports = function(scheme) {
+exports = module.exports = function(store) {
   
-  // TODO: Register the provider and protocol with the scheme, so it can be validated?
+  // TODO: User more flexible service discovery to aid here, rather than hard-coding environment
+  // variables
   
-  return new LocalIDPFactory(scheme);
+  var idp = new OpenIDConnectStrategy({
+    issuer: process.env.OPENID_ISSUER,
+    authorizationURL: url.resolve(process.env.OPENID_ISSUER, process.env.OPENID_AUTHORIZATION_URL),
+    tokenURL: url.resolve(process.env.OPENID_ISSUER, process.env.OPENID_TOKEN_URL),
+    userProfileURL: url.resolve(process.env.OPENID_ISSUER, process.env.OPENID_USERINFO_URL),
+    clientID: process.env.CLIENT_ID,
+    clientSecret: process.env.CLIENT_SECRET,
+    callbackURL: process.env.OPENID_REDIRECT_URL,
+    passReqToCallback: true,
+    store: store
+  },
+  function(req, issuer, profile, context, idToken, accessToken, refreshToken, cb) {
+    //var info = { type: 'federated' };
+    //info.provider = issuer;
+    //info.protocol = 'openidconnect';
+    //info.idToken = idToken;
+    
+    //return cb(null, profile, info);
+    return cb(null, profile);
+  });
   
-  // TODO: Old code, remove once not needed
-  // WIP: build "selectors" into electrolyte, so that app can override without this pattern
-  /*
-  return IoC.create('http://i.authnomicon.org/federated/http/IDProviderFactory')
-    .catch(function(err) {
-      
-      return {
-        create: function(provider) {
-          var mods = IoC.components('http://i.authnomicon.org/federated/http/IDProvider')
-            , mod, i, len;
-          for (i = 0, len = mods.length; i < len; ++i) {
-            mod = mods[i];
-            if (mod.a['@provider'] == provider) {
-              return mod.create();
-            }
-          }
-          
-          return Promise.reject(new Error('Unsupported identity provider: ' + provider));
-        }
-      };
-    });
-  */
+  
+  
+  return new LocalIDProviderFactory(idp);
 };
 
 exports['@singleton'] = true;
 exports['@implements'] = 'module:@authnomicon/federated.IDProviderFactory';
 exports['@require'] = [
-  'module:@authnomicon/session.InitiationScheme'
+  'module:passport-openidconnect.StateStore'
 ];

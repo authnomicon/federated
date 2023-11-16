@@ -40,6 +40,7 @@
     "components": [
       "idpfactory",
       "http/service",
+      "http/handlers/terminate",
       "oauth/http/service",
       "oauth/http/requesttokenstore",
       "oauth2/http/service",
@@ -52,8 +53,9 @@
   },
   "dependencies": {
     "express": "^4.17.1",
-    "flowstate": "^0.6.0",
     "filter-obj": "^2.0.2",
+    "flowstate": "^0.6.0",
+    "passport-openidconnect": "^0.1.1",
     "utils-merge": "^1.0.1"
   },
   "devDependencies": {
