@@ -19,13 +19,14 @@ exports = module.exports = function(store) {
     store: store
   },
   function(req, issuer, profile, context, idToken, accessToken, refreshToken, cb) {
-    //var info = { type: 'federated' };
-    //info.provider = issuer;
-    //info.protocol = 'openidconnect';
-    //info.idToken = idToken;
+    var info = {
+      type: 'federated',
+      provider: issuer,
+      protocol: 'openidconnect',
+      idToken: idToken
+    };
     
-    //return cb(null, profile, info);
-    return cb(null, profile);
+    return cb(null, profile, info);
   });
   
   
