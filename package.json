@@ -46,7 +46,8 @@
       "oauth/http/requesttokenstore",
       "oauth2/http/service",
       "oauth2/http/statestore",
-      "openidconnect/http/statestore"
+      "openidconnect/http/statestore",
+      "openidconnect/logout/service"
     ]
   },
   "directories": {
