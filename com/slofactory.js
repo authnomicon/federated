@@ -6,10 +6,6 @@ function SLOServiceFactory() {
 }
 
 SLOServiceFactory.prototype.create = function(provider, protocol) {
-  console.log('CREATE SLO SERVICE');
-  console.log(provider);
-  console.log(protocol);
-  
   var svc = new RPInitiatedService({
     logoutURL: url.resolve(process.env.OPENID_ISSUER, process.env.OPENID_END_SESSION_URL),
     clientID: process.env.CLIENT_ID,
