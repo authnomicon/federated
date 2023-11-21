@@ -5,6 +5,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Added
+- Exposed `http/handlers/terminate` component which implements `module:@authnomicon/federated.SessionTerminationHandler`
+interface.  [`@authnomicon/logout`](https://github.com/authnomicon/logout) has a
+weak dependency on this interface in order to terminate IDP sessions.
+- Initial implementation of post-logout redirect endpoint used in [RP-initiated
+logout](https://openid.net/specs/openid-connect-rpinitiated-1_0.html).
 
 ## [0.0.5] - 2022-10-19
 
