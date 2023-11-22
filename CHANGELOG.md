@@ -8,9 +8,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Exposed `http/handlers/terminate` component which implements `module:@authnomicon/federated.SessionTerminationHandler`
 interface.  [`@authnomicon/logout`](https://github.com/authnomicon/logout) has a
-weak dependency on this interface in order to terminate IDP sessions.
+weak dependency on this interface in order to terminate login sessions at the
+IDP.
+- Exposed `slofactory` component which implements `module:@authnomicon/federated.SLOProviderFactory`
+interface.  Used by `http/handlers/terminate` to initiate single logout at the
+IDP.
 - Initial implementation of post-logout redirect endpoint used in [RP-initiated
 logout](https://openid.net/specs/openid-connect-rpinitiated-1_0.html).
+- Exported `openidconnect.RPInitiatedLogoutService` constructor from package.
+
+### Changed
+- `IDProviderFactory` component no longer requires a component implementing `module:@authnomicon/session.InitiationScheme`
+interface.  Instead, a new `OpenIDConnectStrategy` will be created and
+configured using the `OPENID_ISSUER` and related environment variables.
+
 
 ## [0.0.5] - 2022-10-19
 
