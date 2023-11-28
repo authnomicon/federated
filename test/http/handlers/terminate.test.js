@@ -55,6 +55,61 @@ describe('http/handlers/terminate', function() {
         .listen();
     }); // should terminate session at provider
     
+    it('should not handle request when non-federated authentication method has been used', function(done) {
+      var provider = new Object();
+      provider.logout = sinon.spy(function(ctx, res, next) {
+        res.redirect('https://server.example.com/logout');
+      })
+      var sloFactory = new Object();
+      sloFactory.create = sinon.stub().resolves(provider);
+      
+      var handler = factory(sloFactory);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.authInfo = {
+            methods: [ {
+              type: 'password'
+            } ]
+          };
+        })
+        .next(function(err) {
+          expect(err).to.be.undefined;
+          done();
+        })
+        .listen();
+    }); // should not handle request when non-federated authentication method has been used
+    
+    it('should not handle request when more than one authentication method has been used', function(done) {
+      var provider = new Object();
+      provider.logout = sinon.spy(function(ctx, res, next) {
+        res.redirect('https://server.example.com/logout');
+      })
+      var sloFactory = new Object();
+      sloFactory.create = sinon.stub().resolves(provider);
+      
+      var handler = factory(sloFactory);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.authInfo = {
+            methods: [ {
+              type: 'federated',
+              provider: 'https://server.example.com',
+              protocol: 'openidconnect',
+              idToken: 'eyJhbGci'
+            }, {
+              type: 'password'
+            } ]
+          };
+        })
+        .next(function(err) {
+          expect(err).to.be.undefined;
+          done();
+        })
+        .listen();
+    }); // should not handle request when more than one authentication method has been used
+    
     it('should next with error when provider fails to be created', function(done) {
       var sloFactory = new Object();
       sloFactory.create = sinon.stub().rejects(new Error('something went wrong'));
@@ -72,7 +127,7 @@ describe('http/handlers/terminate', function() {
             } ]
           };
         })
-        .next(function(err, req, res) {
+        .next(function(err) {
           expect(err).to.be.an.instanceOf(Error);
           expect(err.message).to.equal('something went wrong');
           done();
