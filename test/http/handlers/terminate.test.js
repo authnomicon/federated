@@ -55,6 +55,31 @@ describe('http/handlers/terminate', function() {
         .listen();
     }); // should terminate session at provider
     
+    it('should next with error when provider fails to be created', function(done) {
+      var sloFactory = new Object();
+      sloFactory.create = sinon.stub().rejects(new Error('something went wrong'));
+      
+      var handler = factory(sloFactory);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.authInfo = {
+            methods: [ {
+              type: 'federated',
+              provider: 'https://server.example.com',
+              protocol: 'openidconnect',
+              idToken: 'eyJhbGci'
+            } ]
+          };
+        })
+        .next(function(err, req, res) {
+          expect(err).to.be.an.instanceOf(Error);
+          expect(err.message).to.equal('something went wrong');
+          done();
+        })
+        .listen();
+    }); // should next with error when provider fails to be created
+    
   }); // handler
   
 });
