@@ -23,6 +23,13 @@ var defer = typeof setImmediate === 'function'
  *
  * An application can override this component with its own implementation if
  * different behavior is desired.
+ *
+ * Note that this handler is not mounted by a service within this package.
+ * Instead, it is expected to be mounted to by a service in an external package
+ * (for example, `@authnomicon/logout`).  This allows federated session
+ * management functionality to be implemented separately from local session
+ * management, while still terminating a complete logical session using a single
+ * endpoint.
  */
 exports = module.exports = function(sloFactory) {
   
