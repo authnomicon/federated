@@ -2,6 +2,28 @@ var defer = typeof setImmediate === 'function'
   ? setImmediate
   : function(fn){ process.nextTick(fn.bind.apply(fn, arguments)); };
 
+/**
+ * Create federated session termination handler.
+ *
+ * Returns a session termination handler that sends a logout request to the
+ * application's identity provider.
+ *
+ * The implementation of this handler assumes that the application is delegating
+ * authentication to a single, centralized identity provider (IDP).  The IDP
+ * itself is responsible for verifying credentials and may be facilitating
+ * single sign-on (SSO) to a suite of related applications.  As such, the
+ * authentication context must consist of a single, federated authentication
+ * method.  If this assumption holds, a logout request will be sent to the IDP.
+ *
+ * If the assumption does not hold, the handler will pass request processing to
+ * the subsequent handler in the chain.  The subsquent handler will, presumably,
+ * terminate the application's login session but leave the session at the IDP
+ * unterminated (as well as, by association, any sessions at related
+ * applications established via SSO).
+ *
+ * An application can override this component with its own implementation if
+ * different behavior is desired.
+ */
 exports = module.exports = function(sloFactory) {
   
   function federate(req, res, next) {
