@@ -110,6 +110,47 @@ describe('http/handlers/terminate', function() {
         .listen();
     }); // should not handle request when more than one authentication method has been used
     
+    it('should not handle request when authentication method is unknown', function(done) {
+      var provider = new Object();
+      provider.logout = sinon.spy(function(ctx, res, next) {
+        res.redirect('https://server.example.com/logout');
+      })
+      var sloFactory = new Object();
+      sloFactory.create = sinon.stub().resolves(provider);
+      
+      var handler = factory(sloFactory);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+          req.authInfo = {};
+        })
+        .next(function(err) {
+          expect(err).to.be.undefined;
+          done();
+        })
+        .listen();
+    }); // should not handle request when authentication method is unknown
+    
+    it('should not handle request when authentication context is unknown', function(done) {
+      var provider = new Object();
+      provider.logout = sinon.spy(function(ctx, res, next) {
+        res.redirect('https://server.example.com/logout');
+      })
+      var sloFactory = new Object();
+      sloFactory.create = sinon.stub().resolves(provider);
+      
+      var handler = factory(sloFactory);
+      
+      chai.express.use(handler)
+        .request(function(req, res) {
+        })
+        .next(function(err) {
+          expect(err).to.be.undefined;
+          done();
+        })
+        .listen();
+    }); // should not handle request when authentication context is unknown
+    
     it('should next with error when provider fails to be created', function(done) {
       var sloFactory = new Object();
       sloFactory.create = sinon.stub().rejects(new Error('something went wrong'));

@@ -27,7 +27,7 @@ var defer = typeof setImmediate === 'function'
 exports = module.exports = function(sloFactory) {
   
   function federate(req, res, next) {
-    var methods = req.authInfo.methods || [];
+    var methods = (req.authInfo && req.authInfo.methods) || [];
     if (methods.length !== 1) { return next(); }
     
     var method = methods[0];
