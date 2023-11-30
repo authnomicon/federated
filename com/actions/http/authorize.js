@@ -10,8 +10,6 @@ exports = module.exports = function(store, authenticator) {
   }
 
   function exec(req, res, next) {
-    var token = res.locals.token;
-    
     store.store(req.federatedAuthInfo.token, req.state.provider, req.user, function(err, cred) {
       if (err) { return next(err); }
       res.locals.credential = cred;
