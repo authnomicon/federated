@@ -53,7 +53,6 @@ describe('actions/http/authorize', function() {
             'https://server.example.com',
             { id: '248289761001' }
           );
-          
           expect(res.locals.credential).to.deep.equal({ id: 'crd_1' });
           done();
         })
@@ -83,7 +82,7 @@ describe('actions/http/authorize', function() {
           done();
         })
         .listen();
-    });
+    }); // should next with error when token fails to be stored
     
   }); // handler
   
