@@ -19,6 +19,7 @@ exports = module.exports = function(store, authenticator) {
   // TODO: Should probably authenticate completely based on 'state' here, and remove stashAuthInfo
   return [
     stashAuthInfo,
+    // TODO: This should authenticate 'state'
     authenticator.authenticate('session'),
     exec
   ];

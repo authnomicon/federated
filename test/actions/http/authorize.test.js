@@ -8,18 +8,30 @@ describe('actions/http/authorize', function() {
   
   it('should return handler', function() {
     var store = new Object();
-    var handler = factory(store);
+    var authenticator = new Object();
+    authenticator.authenticate = sinon.spy();
+    var handler = factory(store, authenticator);
     
     expect(handler).to.be.an('array');
+    expect(authenticator.authenticate).to.be.calledOnce;
+    expect(authenticator.authenticate).to.be.calledWith('session');
   });
   
   describe('handler', function() {
+    
+    var noopAuthenticator = new Object();
+    noopAuthenticator.authenticate = function(name, options) {
+      return function(req, res, next) {
+        next();
+      };
+    };
+    
     
     it('should store token', function(done) {
       var store = new Object();
       store.store = sinon.stub().yieldsAsync(null, { id: 'crd_1' });
       
-      var handler = factory(store);
+      var handler = factory(store, noopAuthenticator);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -52,7 +64,7 @@ describe('actions/http/authorize', function() {
       var store = new Object();
       store.store = sinon.stub().yieldsAsync(new Error('something went wrong'));
       
-      var handler = factory(store);
+      var handler = factory(store, noopAuthenticator);
       
       chai.express.use(handler)
         .request(function(req, res) {
