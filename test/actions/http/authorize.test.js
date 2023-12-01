@@ -29,7 +29,7 @@ describe('actions/http/authorize', function() {
     
     it('should store token', function(done) {
       var store = new Object();
-      store.store = sinon.stub().yieldsAsync(null, { id: 'crd_1' });
+      store.store = sinon.stub().yieldsAsync(null, { id: 'crd_1234' });
       
       var handler = factory(store, noopAuthenticator);
       
@@ -53,7 +53,7 @@ describe('actions/http/authorize', function() {
             'https://server.example.com',
             { id: '248289761001' }
           );
-          expect(res.locals.credential).to.deep.equal({ id: 'crd_1' });
+          expect(res.locals.credential).to.deep.equal({ id: 'crd_1234' });
           done();
         })
         .listen();
