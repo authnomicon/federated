@@ -1,7 +1,7 @@
 /**
- * Create authorize action.
+ * Create authorize action handler.
  *
- * Returns an action that authorizes the application to operate on behalf of the
+ * Returns a handler that authorizes the application to operate on behalf of the
  * user.
  *
  * This action is executed upon federating with an external service.  In this

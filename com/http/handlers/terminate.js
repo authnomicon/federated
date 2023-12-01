@@ -5,8 +5,8 @@ var defer = typeof setImmediate === 'function'
 /**
  * Create federated session termination handler.
  *
- * Returns a session termination handler that sends a logout request to the
- * application's identity provider.
+ * Returns a handler that sends a logout request to the application's identity
+ * provider.
  *
  * The implementation of this handler assumes that the application is delegating
  * authentication to a single, centralized identity provider (IDP).  The IDP

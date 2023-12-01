@@ -1,7 +1,7 @@
 /**
  * Create login action handler.
  *
- * Returns an HTTP handler that logs in a federated user.
+ * Returns a handler that logs in a federated user.
  *
  * This handler is invoked when handling a redirect back from a federated
  * identity provider (IdP), which typically implements a standard protocol such
