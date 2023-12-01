@@ -100,6 +100,7 @@ exports = module.exports = function(idStore, directory) {
   ];
 };
 
+// Module annotations.
 exports['@require'] = [
   'module:@authnomicon/credentials.FederatedIDStore?',
   'module:@authnomicon/core.Directory?'
