@@ -4,7 +4,7 @@
  * Returns an action that authorizes the application to operate on behalf of the
  * user.
  *
- * This action is executed upon federating with a external service.  In this
+ * This action is executed upon federating with an external service.  In this
  * case, the external service is typically an authorization server implementing
  * a delegated authorization protocol such as OAuth 2.0.  The authorization
  * server issues the application delegation-specific credentials (typically
