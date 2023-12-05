@@ -36,7 +36,7 @@ exports = module.exports = function(store, authenticator) {
   }
   
   
-  // TODO: Should probably authenticate completely based on 'state' here, and remove stashAuthInfo
+  // TODO: Should probably authenticate completely based on 'state' here
   return [
     stashAuthInfo,
     // TODO: This should authenticate 'state'
