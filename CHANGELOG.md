@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.6] - 2023-11-22
 ### Added
+- Exposed `prompt` component which implements `http://i.authnomicon.org/prompts/http/Prompt`,
+for decoupling single-sign on prompts from underlying HTTP semantics.
 - Exposed `http/handlers/terminate` component which implements `module:@authnomicon/federated.SessionTerminationHandler`
 interface.  [`@authnomicon/logout`](https://github.com/authnomicon/logout) has a
 weak dependency on this interface in order to terminate login sessions at the
@@ -18,8 +20,6 @@ IDP.
 - Initial implementation of post-logout redirect endpoint used in [RP-initiated
 logout](https://openid.net/specs/openid-connect-rpinitiated-1_0.html).
 - Exported `openidconnect.RPInitiatedLogoutService` constructor from package.
-- `prompt` component, for decoupling single-sign on prompts from underlying HTTP
-semantics.
 
 ### Changed
 - `IDProviderFactory` component no longer requires a component implementing `module:@authnomicon/session.InitiationScheme`
