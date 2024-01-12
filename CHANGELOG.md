@@ -18,6 +18,8 @@ IDP.
 - Initial implementation of post-logout redirect endpoint used in [RP-initiated
 logout](https://openid.net/specs/openid-connect-rpinitiated-1_0.html).
 - Exported `openidconnect.RPInitiatedLogoutService` constructor from package.
+- `prompt` component, for decoupling single-sign on prompts from underlying HTTP
+semantics.
 
 ### Changed
 - `IDProviderFactory` component no longer requires a component implementing `module:@authnomicon/session.InitiationScheme`
