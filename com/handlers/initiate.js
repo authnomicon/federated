@@ -10,7 +10,11 @@ var defer = typeof setImmediate === 'function'
  * request that conforms to the protocol supported by the IdP (and implemented
  * by the strategy created by the IdP factory).
  *
- * @returns {Function[]}
+ * @param {@authnomicon/federated.IDProviderFactory} idpFactory - Factory which
+ *          creates identity provider-specific authentication strategy.
+ * @param {passport.Authenticator} authenticator - Request authenticator.
+ * @param {flowstate.Store} store - Per-request state store.
+ * @returns {express.RequestHandler[]}
  */
 exports = module.exports = function(idpFactory, authenticator, store) {
   
