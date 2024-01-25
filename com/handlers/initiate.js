@@ -6,9 +6,9 @@ var defer = typeof setImmediate === 'function'
  * Create federated authentication handler.
  *
  * Returns an HTTP handler that initiates authentication with a federated
- * identity provider (IdP).  The user will be redirect to the IdP with a request
- * that conforms to the protocol supported by the IdP (and implemented by the
- * strategy created by the IdP factory).
+ * identity provider (IdP).  The user will be redirected to the IdP with a
+ * request that conforms to the protocol supported by the IdP (and implemented
+ * by the strategy created by the IdP factory).
  *
  * @returns {Function[]}
  */
