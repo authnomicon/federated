@@ -35,10 +35,11 @@ describe('http/handlers/initiate', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp);
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(idpFactory, authenticator, store);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -49,7 +50,7 @@ describe('http/handlers/initiate', function() {
         })
         .finish(function() {
           expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', undefined);
-          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, {
+          expect(authenticator.authenticate).to.be.calledOnceWithExactly(idp, {
             state: {
               provider: 'https://server.example.com'
             }
@@ -67,10 +68,11 @@ describe('http/handlers/initiate', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp);
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(idpFactory, authenticator, store);
         
       chai.express.use(handler)
         .request(function(req, res) {
@@ -82,7 +84,7 @@ describe('http/handlers/initiate', function() {
         })
         .finish(function() {
           expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', 'oauth2');
-          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, {
+          expect(authenticator.authenticate).to.be.calledOnceWithExactly(idp, {
             state: {
               provider: 'https://server.example.com'
             }
@@ -100,10 +102,11 @@ describe('http/handlers/initiate', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp);
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(idpFactory, authenticator, store);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -115,7 +118,7 @@ describe('http/handlers/initiate', function() {
         })
         .finish(function() {
           expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', undefined);
-          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, {
+          expect(authenticator.authenticate).to.be.calledOnceWithExactly(idp, {
             prompt: 'select_account',
             state: {
               provider: 'https://server.example.com'
@@ -134,10 +137,11 @@ describe('http/handlers/initiate', function() {
       var idp = new Object();
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().resolves(idp);
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(idpFactory, authenticator, store);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -149,7 +153,7 @@ describe('http/handlers/initiate', function() {
         })
         .finish(function() {
           expect(idpFactory.create).to.be.calledOnceWithExactly('https://server.example.com', undefined);
-          expect(authenticateSpy).to.be.calledOnceWithExactly(idp, {
+          expect(authenticator.authenticate).to.be.calledOnceWithExactly(idp, {
             loginHint: 'janedoe@example.com',
             state: {
               provider: 'https://server.example.com'
@@ -167,10 +171,11 @@ describe('http/handlers/initiate', function() {
     it('should next with error when identity provider fails to be created', function(done) {
       var idpFactory = new Object();
       idpFactory.create = sinon.stub().rejects(new Error('something went wrong'));
-      var authenticateSpy = sinon.spy(authenticate);
+      var authenticator = new Object();
+      authenticator.authenticate = sinon.spy(authenticate);
       var store = new Object();
       
-      var handler = factory(idpFactory, { authenticate: authenticateSpy }, store);
+      var handler = factory(idpFactory, authenticator, store);
       
       chai.express.use(handler)
         .request(function(req, res) {
@@ -183,7 +188,7 @@ describe('http/handlers/initiate', function() {
           expect(err).to.be.an.instanceOf(Error);
           expect(err.message).to.equal('something went wrong');
           
-          expect(authenticateSpy).to.not.be.called;
+          expect(authenticator.authenticate).to.not.be.called;
           
           done();
         })
