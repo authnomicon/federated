@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Exposed `prompt` component which implements `http://i.authnomicon.org/prompts/http/Prompt`,
 for decoupling single-sign on prompts from underlying HTTP semantics.
 
+### Changed
+- Moved `http/service`, and associated files, to `service`.
+
 ## [0.0.6] - 2023-11-22
 ### Added
 - Exposed `http/handlers/terminate` component which implements `module:@authnomicon/federated.SessionTerminationHandler`

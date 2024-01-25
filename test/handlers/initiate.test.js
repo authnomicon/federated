@@ -2,14 +2,14 @@ var chai = require('chai');
 var expect = require('chai').expect;
 var $require = require('proxyquire');
 var sinon = require('sinon');
-var factory = require('../../../com/http/handlers/initiate');
+var factory = require('../../com/handlers/initiate');
 
 
 describe('http/handlers/initiate', function() {
   
   it('should return handler', function() {
     var flowstateSpy = sinon.spy();
-    var factory = $require('../../../com/http/handlers/initiate', {
+    var factory = $require('../../com/handlers/initiate', {
       'flowstate': flowstateSpy
     });
     

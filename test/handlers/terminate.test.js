@@ -2,7 +2,7 @@ var chai = require('chai');
 var expect = require('chai').expect;
 var $require = require('proxyquire');
 var sinon = require('sinon');
-var factory = require('../../../com/http/handlers/terminate');
+var factory = require('../../com/handlers/terminate');
 
 
 describe('http/handlers/terminate', function() {

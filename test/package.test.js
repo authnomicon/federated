@@ -14,7 +14,7 @@ describe('@authnomicon/federated', function() {
       expect(json.assembly.namespace).to.equal('org.authnomicon/federated');
       
       expect(json.assembly.components).to.have.length(11);
-      expect(json.assembly.components).to.include('http/service');
+      expect(json.assembly.components).to.include('service');
       expect(json.assembly.components).to.include('oauth/http/service');
       expect(json.assembly.components).to.include('oauth/http/requesttokenstore');
       expect(json.assembly.components).to.include('oauth2/http/service');

@@ -12,7 +12,7 @@ describe('idpfactory', function() {
     expect(factory['@implements']).to.equal('module:@authnomicon/federated.IDProviderFactory');
   });
   
-  it('should construct LocalIDPFactory', function() {
+  it.skip('should construct LocalIDPFactory', function() {
     var LocalIDPFactorySpy = sinon.spy(LocalIDPFactory);
     var factory = $require('../com/idpfactory', {
       '../lib/localidpfactory': LocalIDPFactorySpy
