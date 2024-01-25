@@ -39,8 +39,9 @@ var express = require('express');
  * [5]: https://www.w3.org/TR/credential-management-1/
  * [6]: https://www.w3.org/TR/credential-management-1/#federated
  *
- * @param {Function|Function[]} initiateHandler - Initiate handler.
- * @returns {Function}
+ * @param {express.RequestHandler} initiateHandler - Handler which initiates
+ *          federated authentication.
+ * @returns {express.Router}
  */
 exports = module.exports = function(initiateHandler) {
   var router = express.Router();
