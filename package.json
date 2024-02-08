@@ -1,6 +1,6 @@
 {
   "name": "@authnomicon/federated",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Federated identity components for the Authnomicon project.",
   "keywords": [
     "federation",
