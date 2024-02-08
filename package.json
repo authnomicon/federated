@@ -58,7 +58,7 @@
     "express": "^4.17.1",
     "filter-obj": "^2.0.2",
     "flowstate": "^0.6.0",
-    "passport-openidconnect": "^0.1.1",
+    "passport-openidconnect": "^0.1.2",
     "utils-merge": "^1.0.1"
   },
   "devDependencies": {

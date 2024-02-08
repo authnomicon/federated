@@ -6,13 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.8] - 2024-02-08
+### Changed
+- Moved `http/service`, and associated files, to `service`.
+- Updated `passport-openidconnect` dependency from 0.1.1 to 0.1.2.
+
 ## [0.0.7] - 2024-01-12
 ### Added
 - Exposed `prompt` component which implements `http://i.authnomicon.org/prompts/http/Prompt`,
 for decoupling single-sign on prompts from underlying HTTP semantics.
-
-### Changed
-- Moved `http/service`, and associated files, to `service`.
 
 ## [0.0.6] - 2023-11-22
 ### Added
