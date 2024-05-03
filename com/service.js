@@ -46,6 +46,7 @@ var express = require('express');
 exports = module.exports = function(initiateHandler) {
   var router = express.Router();
   router.get('/', initiateHandler);
+  // TODO: allow initiate via POST.  maybe require CSRF on GET?
   
   return router;
 };
