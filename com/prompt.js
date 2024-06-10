@@ -14,5 +14,5 @@ exports = module.exports = function() {
   };
 };
 
-exports['@implements'] = 'http://i.authnomicon.org/prompts/http/Prompt';
+exports['@implements'] = 'module:@authnomicon/prompts.RequestHandler';
 exports['@name'] = 'federated';
